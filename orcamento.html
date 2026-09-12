@@ -198,7 +198,7 @@
   <div class="wrap hero-inner">
     <p class="eyebrow"><span></span>Ferramenta interna · Orçamentos</p>
     <h1>Calculadora de orçamento de social media</h1>
-    <p class="lead">Monte o valor de uma proposta em segundos: escolha um pacote de partida ou monte do zero por quantidade de posts estáticos, carrosséis e vídeos — sempre com legenda inclusa, e vídeos já com captação, edição e roteiro.</p>
+    <p class="lead">Monte o valor de uma proposta em segundos: escolha um pacote de partida ou monte do zero por quantidade de posts estáticos, carrosséis e vídeos — sempre com legenda inclusa, e vídeos já com captação, edição e roteiro. Cobre também cobertura realtime de eventos, por hora.</p>
     <div class="meta-row">
       <div class="meta-item"><span>Legenda</span><b>Inclusa em tudo</b></div>
       <div class="meta-item"><span>Vídeo / Reels</span><b>Captação + edição + roteiro</b></div>
@@ -302,12 +302,63 @@
 
         <div class="note">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
-          <span>Vídeo aqui é o pacote fechado (captação + edição + roteiro + legenda). Se o cliente já enviar o material gravado, ajuste o valor do vídeo no passo 4.</span>
+          <span>Vídeo aqui é o pacote fechado (captação + edição + roteiro + legenda). Se o cliente já enviar o material gravado, ajuste o valor do vídeo no passo 5.</span>
         </div>
       </div>
 
       <div class="block">
-        <div class="step-head"><span class="step-num">03</span><h2>Itens adicionais</h2></div>
+        <div class="step-head"><span class="step-num">03</span><h2>Cobertura realtime — Videomaker / Storymaker</h2></div>
+        <p class="step-desc">Cobertura ao vivo cobrada por hora (contratação mínima de 2h), com edição feita na hora, logos necessárias e vídeo final de até 90 segundos.</p>
+
+        <div class="qty-list">
+          <div class="qty-row">
+            <div class="qty-left">
+              <span class="qty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="12" height="12" rx="2.5"></rect><path d="M15 10l6-3v10l-6-3"></path><circle cx="18.4" cy="5.6" r="1.6" fill="currentColor" stroke="none"></circle></svg></span>
+              <div>
+                <div class="qty-title">Horas de cobertura</div>
+                <div class="qty-badges"><span class="badge">Ao vivo</span><span class="badge">Mínimo 2h</span></div>
+              </div>
+            </div>
+            <div class="stepper">
+              <button type="button" data-step="-1" data-target="realtimeHours" aria-label="Diminuir">−</button>
+              <input type="number" id="realtimeHours" value="0" min="0" step="0.5" inputmode="decimal">
+              <button type="button" data-step="1" data-target="realtimeHours" aria-label="Aumentar">+</button>
+            </div>
+          </div>
+        </div>
+
+        <label class="addon-row" style="display:block;border:1.5px solid var(--ink);border-radius:16px;margin-top:14px">
+          <div class="addon-inner">
+            <input type="checkbox" id="realtimeVideo" checked>
+            <div>
+              <div class="addon-title">Vídeo final editado, até 90 segundos</div>
+              <div class="addon-sub">Edição feita na hora, com as logos necessárias — adicional de R$ 90,00.</div>
+            </div>
+          </div>
+        </label>
+
+        <div class="grid-2" style="margin-top:14px">
+          <div class="field">
+            <label for="realtimeKm">Distância até o evento (km, ida)</label>
+            <input type="number" id="realtimeKm" value="0" min="0" step="0.5">
+          </div>
+          <div class="field">
+            <label for="realtimeRoundTrip">Deslocamento</label>
+            <label style="display:flex;align-items:center;gap:10px;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer">
+              <input type="checkbox" id="realtimeRoundTrip" checked style="width:18px;height:18px;flex:none;accent-color:var(--volt);margin:0">
+              <span style="font-size:.92rem;font-weight:600">Ida e volta</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
+          <span>Com vídeo incluso, o valor mínimo deste serviço (2h + edição) é R$ 250,00 — fora o deslocamento. O valor por km é uma referência da tarifa média Uber X / 99 Pop em Fortaleza; ajuste no passo 5.</span>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="step-head"><span class="step-num">04</span><h2>Itens adicionais</h2></div>
         <p class="step-desc">Marque o que fizer parte deste orçamento.</p>
         <div class="addon-list">
           <label class="addon-row">
@@ -349,7 +400,7 @@
       <div class="block" style="margin-bottom:0">
         <details id="configDetails">
           <summary>
-            <span class="step-head" style="margin-bottom:0"><span class="step-num">04</span><h2>Seus valores por entrega</h2></span>
+            <span class="step-head" style="margin-bottom:0"><span class="step-num">05</span><h2>Seus valores por entrega</h2></span>
             <span class="toggle-label" id="configToggleLabel">editar valores
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
             </span>
@@ -375,6 +426,22 @@
             <div class="price-row">
               <div><div class="name">Deslocamento</div><div class="desc">Valor por diária de captação</div></div>
               <div class="price-field"><span>R$</span><input type="number" id="priceTravel" min="0" step="5"></div>
+            </div>
+            <div class="price-row">
+              <div><div class="name">Realtime — hora</div><div class="desc">Cobertura ao vivo, valor por hora (mín. 2h)</div></div>
+              <div class="price-field"><span>R$</span><input type="number" id="realtimeHourly" min="0" step="5"></div>
+            </div>
+            <div class="price-row">
+              <div><div class="name">Realtime — vídeo até 90s</div><div class="desc">Edição na hora, com logos necessárias</div></div>
+              <div class="price-field"><span>R$</span><input type="number" id="realtimeVideoFee" min="0" step="5"></div>
+            </div>
+            <div class="price-row">
+              <div><div class="name">Realtime — mínimo com vídeo</div><div class="desc">Piso do serviço: 2h de cobertura + vídeo</div></div>
+              <div class="price-field"><span>R$</span><input type="number" id="realtimeMinWithVideo" min="0" step="5"></div>
+            </div>
+            <div class="price-row">
+              <div><div class="name">Realtime — R$/km</div><div class="desc">Referência: tarifa média Uber X / 99 Pop em Fortaleza</div></div>
+              <div class="price-field"><span>R$</span><input type="number" id="realtimeKmRate" min="0" step="0.1"></div>
             </div>
           </div>
           <button type="button" class="reset-link" id="resetPrices">Restaurar valores sugeridos</button>
@@ -445,8 +512,13 @@
     priceCarousel: 130,
     priceVideo: 220,
     priceManagement: 450,
-    priceTravel: 60
+    priceTravel: 60,
+    realtimeHourly: 100,
+    realtimeVideoFee: 90,
+    realtimeMinWithVideo: 250,
+    realtimeKmRate: 1.5
   };
+  var REALTIME_MIN_HOURS = 2;
   var PRESETS = {
     essencial: { qtyStatic: 6, qtyCarousel: 4, qtyVideo: 0, addManagement: true },
     completo:  { qtyStatic: 4, qtyCarousel: 4, qtyVideo: 4, addManagement: true },
@@ -454,9 +526,10 @@
   };
   var STORAGE_KEY = 'dgrOrcamentoPrecos';
 
-  var priceIds = ['priceStatic','priceCarousel','priceVideo','priceManagement','priceTravel'];
+  var priceIds = ['priceStatic','priceCarousel','priceVideo','priceManagement','priceTravel','realtimeHourly','realtimeVideoFee','realtimeMinWithVideo','realtimeKmRate'];
+  var otherIds = ['qtyStatic','qtyCarousel','qtyVideo','addManagement','addTravel','travelDays','discountPct','clientName','notes','realtimeHours','realtimeVideo','realtimeKm','realtimeRoundTrip'];
   var els = {};
-  priceIds.concat(['qtyStatic','qtyCarousel','qtyVideo','addManagement','addTravel','travelDays','discountPct','clientName','notes']).forEach(function(id){
+  priceIds.concat(otherIds).forEach(function(id){
     els[id] = document.getElementById(id);
   });
 
@@ -514,12 +587,33 @@
     var pTravel = num(els.priceTravel.value), addTravel = els.addTravel.checked, travelDays = Math.max(1, num(els.travelDays.value) || 1);
     var discountPct = Math.min(100, num(els.discountPct.value));
 
+    var rtHourly = num(els.realtimeHourly.value);
+    var rtHoursInput = num(els.realtimeHours.value);
+    var rtBillableHours = rtHoursInput > 0 ? Math.max(rtHoursInput, REALTIME_MIN_HOURS) : 0;
+    var rtVideoOn = els.realtimeVideo.checked && rtHoursInput > 0;
+    var rtVideoFee = num(els.realtimeVideoFee.value);
+    var rtMinWithVideo = num(els.realtimeMinWithVideo.value);
+    var rtServiceCost = rtBillableHours * rtHourly + (rtVideoOn ? rtVideoFee : 0);
+    if (rtVideoOn) rtServiceCost = Math.max(rtServiceCost, rtMinWithVideo);
+    var rtKm = num(els.realtimeKm.value);
+    var rtKmRate = num(els.realtimeKmRate.value);
+    var rtRoundTrip = els.realtimeRoundTrip.checked;
+    var rtTravelCost = rtKm * rtKmRate * (rtRoundTrip ? 2 : 1);
+
     var lines = [];
     if (qStatic > 0) lines.push({label: qStatic + 'x Post estático', value: pStatic * qStatic});
     if (qCarousel > 0) lines.push({label: qCarousel + 'x Carrossel', value: pCarousel * qCarousel});
     if (qVideo > 0) lines.push({label: qVideo + 'x Vídeo / Reels', value: pVideo * qVideo});
     if (addManagement) lines.push({label: 'Gestão mensal', value: pManagement});
     if (addTravel) lines.push({label: travelDays + 'x Diária de deslocamento', value: pTravel * travelDays});
+    if (rtHoursInput > 0) {
+      var rtHoursLabel = (rtBillableHours % 1 === 0 ? rtBillableHours : rtBillableHours.toFixed(1).replace('.', ',')) + 'h cobertura realtime' + (rtHoursInput < REALTIME_MIN_HOURS ? ' (mínimo aplicado)' : '') + (rtVideoOn ? ' + vídeo até 90s' : '');
+      lines.push({label: rtHoursLabel, value: rtServiceCost});
+      if (rtTravelCost > 0) {
+        var rtKmLabel = (rtKm % 1 === 0 ? rtKm : rtKm.toFixed(1).replace('.', ',')) + 'km';
+        lines.push({label: 'Deslocamento evento' + (rtRoundTrip ? ' (ida e volta)' : '') + ' — ' + rtKmLabel, value: rtTravelCost});
+      }
+    }
 
     var subtotal = lines.reduce(function(sum, l){ return sum + l.value; }, 0);
     var discount = subtotal * (discountPct / 100);
@@ -580,7 +674,7 @@
 
   document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
 
-  priceIds.concat(['qtyStatic','qtyCarousel','qtyVideo','addManagement','addTravel','travelDays','discountPct','clientName']).forEach(function(id){
+  priceIds.concat(otherIds.filter(function(id){ return id !== 'notes'; })).forEach(function(id){
     els[id].addEventListener('input', render);
     els[id].addEventListener('change', render);
   });
