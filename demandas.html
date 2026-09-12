@@ -500,18 +500,20 @@
     ];
   }
 
+  var DEFAULT_WHATSAPP = '5585991281467';
+
   function loadState(){
     try{
       var raw = localStorage.getItem(LS_KEY);
       if(raw){
         var data = JSON.parse(raw);
         if(data && Array.isArray(data.clients) && Array.isArray(data.demands)){
-          if(!data.settings) data.settings = { whatsapp: '' };
+          if(!data.settings) data.settings = { whatsapp: DEFAULT_WHATSAPP };
           return data;
         }
       }
     }catch(e){}
-    return { clients: seedClients(), demands: [], settings: { whatsapp: '' } };
+    return { clients: seedClients(), demands: [], settings: { whatsapp: DEFAULT_WHATSAPP } };
   }
   function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 
