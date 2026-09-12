@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora de Orçamento — Dgr Creative</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;700;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2100ff; --blue-dark:#160092; --yellow:#f7ff1c;
+    --bg:#f6f9f5; --ink:#000; --muted:rgba(0,0,0,.6); --line:rgba(0,0,0,.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  img{max-width:100%;display:block;}
+  a{color:var(--blue);}
+  ::selection{background:var(--yellow);color:#000;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin:0;}
+  h1,h2,h3{font-family:'Unbounded',sans-serif;letter-spacing:-.03em;margin:0;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,64px);}
+  .card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(22px,3vw,32px);}
+  .field{display:flex;flex-direction:column;gap:8px;}
+  .field label{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:rgba(0,0,0,.55);}
+  .field small{color:rgba(0,0,0,.42);font-size:11.5px;font-weight:500;letter-spacing:0;text-transform:none;}
+  input[type=text], input[type=number]{
+    font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;color:#000;
+    border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;background:#fff;width:100%;
+  }
+  input[type=number]:focus, input[type=text]:focus{outline:none;border-color:var(--blue);}
+  .price-input{position:relative;}
+  .price-input span{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:rgba(0,0,0,.4);}
+  .price-input input{padding-left:38px;}
+  .stepper{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;width:fit-content;}
+  .stepper button{width:38px;height:40px;border:none;background:#fff;font-size:18px;font-weight:700;color:var(--blue);cursor:pointer;font-family:'Manrope',sans-serif;}
+  .stepper button:hover{background:var(--bg);}
+  .stepper input{width:56px;text-align:center;border:none;border-left:1.5px solid var(--line);border-right:1.5px solid var(--line);border-radius:0;font-size:16px;padding:11px 4px;}
+  .item-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);}
+  .item-row:last-child{border-bottom:none;}
+  .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.04em;padding:4px 9px;border-radius:999px;border:1px solid var(--line);color:rgba(0,0,0,.5);margin:2px 6px 0 0;}
+  .checkbox-row{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);}
+  .checkbox-row:last-child{border-bottom:none;}
+  .checkbox-row input[type=checkbox]{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--blue);}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.05em;padding:14px 22px;border-radius:999px;text-decoration:none;border:none;cursor:pointer;transition:transform .16s ease,background .16s ease,box-shadow .16s ease;}
+  .btn-primary{background:var(--blue);color:#fff;}
+  .btn-primary:hover{transform:translateY(-2px);background:var(--blue-dark);}
+  .btn-outline{background:transparent;color:#000;border:1.5px solid var(--line);}
+  .btn-outline:hover{border-color:#000;}
+  .summary-line{display:flex;justify-content:space-between;gap:10px;font-size:.92rem;padding:9px 0;}
+  .summary-line span:first-child{color:rgba(0,0,0,.6);}
+  .summary-line b{font-family:'JetBrains Mono',monospace;font-weight:600;white-space:nowrap;}
+  details summary{cursor:pointer;list-style:none;}
+  details summary::-webkit-details-marker{display:none;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:520px){.grid-2{grid-template-columns:1fr;}}
+  .layout{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:start;}
+  @media (max-width:900px){.layout{grid-template-columns:1fr;}}
+  .summary-sticky{position:sticky;top:24px;}
+  #toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;background:#000;color:var(--yellow);font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.04em;padding:13px 20px;border-radius:999px;transition:opacity .25s ease,transform .25s ease;pointer-events:none;z-index:99;white-space:nowrap;}
+  #toast.show{opacity:1;transform:translate(-50%,0);}
+</style>
+</head>
+<body>
+
+<nav style="position:sticky;top:0;z-index:60;background:rgba(246,249,245,.9);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.12)">
+  <div class="wrap" style="padding-top:12px;padding-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:18px">
+    <a href="index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:#000">
+      <span style="width:44px;height:44px;border-radius:14px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex:none">
+        <img src="assets/logo.png" alt="Dgr Creative" style="width:30px;height:auto">
+      </span>
+      <span style="display:flex;flex-direction:column;line-height:1.05">
+        <span style="font-family:'Unbounded',sans-serif;font-weight:700;font-size:15px;letter-spacing:-.02em">Dgr Creative</span>
+        <span class="mono" style="font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(0,0,0,.45)">Diana Ribeiro</span>
+      </span>
+    </a>
+    <a href="index.html" class="mono" style="font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:rgba(0,0,0,.6)">← Voltar ao site</a>
+  </div>
+</nav>
+
+<header style="background:var(--blue);color:var(--bg);padding:clamp(48px,7vw,72px) 0">
+  <div class="wrap">
+    <p class="mono" style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--yellow);margin:0 0 16px">Ferramenta interna</p>
+    <h1 style="font-weight:900;font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.02;max-width:18ch">Calculadora de orçamento de social media</h1>
+    <p style="margin:18px 0 0;max-width:56ch;font-size:1.02rem;color:rgba(246,249,245,.75)">Monte o valor de uma proposta a partir da sua tabela de preços: quantidade de posts estáticos, carrosséis e vídeos — todos com legenda inclusa, e vídeos já incluindo captação, edição e criação de roteiro.</p>
+  </div>
+</header>
+
+<main class="wrap" style="padding:clamp(36px,6vw,56px) 0 clamp(70px,9vw,110px)">
+  <div class="layout">
+
+    <div style="display:flex;flex-direction:column;gap:22px">
+
+      <div class="card">
+        <details id="configDetails">
+          <summary style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <span>
+              <p class="kicker">Passo 1</p>
+              <h2 style="font-size:clamp(1.2rem,2vw,1.45rem);margin-top:8px">Seus valores por entrega</h2>
+            </span>
+            <span class="mono" id="configToggleLabel" style="font-size:11px;font-weight:600;color:var(--blue);white-space:nowrap">editar valores ▾</span>
+          </summary>
+          <p style="color:rgba(0,0,0,.55);font-size:.92rem;margin:14px 0 22px;max-width:60ch">Estes são valores de referência — ajuste para a sua tabela de preços real. Eles ficam salvos neste navegador e são usados nos cálculos ao lado.</p>
+
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <div class="grid-2">
+              <div class="field">
+                <label>Post estático <small>(inclui legenda)</small></label>
+                <div class="price-input"><span>R$</span><input type="number" id="priceStatic" min="0" step="5"></div>
+              </div>
+              <div class="field">
+                <label>Carrossel <small>(inclui legenda)</small></label>
+                <div class="price-input"><span>R$</span><input type="number" id="priceCarousel" min="0" step="5"></div>
+              </div>
+            </div>
+            <div class="field">
+              <label>Vídeo / Reels <small>(inclui captação, edição, roteiro e legenda)</small></label>
+              <div class="price-input" style="max-width:260px"><span>R$</span><input type="number" id="priceVideo" min="0" step="5"></div>
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <label>Gestão mensal <small>(estratégia + calendário)</small></label>
+                <div class="price-input"><span>R$</span><input type="number" id="priceManagement" min="0" step="10"></div>
+              </div>
+              <div class="field">
+                <label>Deslocamento p/ captação <small>(por diária)</small></label>
+                <div class="price-input"><span>R$</span><input type="number" id="priceTravel" min="0" step="5"></div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline" id="resetPrices" style="margin-top:20px;font-size:11px;padding:10px 16px">Restaurar valores sugeridos</button>
+        </details>
+      </div>
+
+      <div class="card">
+        <p class="kicker">Passo 2</p>
+        <h2 style="font-size:clamp(1.2rem,2vw,1.45rem);margin-top:8px">Entregas do projeto</h2>
+
+        <div class="field" style="margin-top:20px;max-width:420px">
+          <label>Cliente / projeto</label>
+          <input type="text" id="clientName" placeholder="Ex.: Consultório Dra. Ana — pacote mensal">
+        </div>
+
+        <div style="margin-top:14px">
+          <div class="item-row">
+            <div>
+              <b style="font-family:'Unbounded',sans-serif;font-size:1rem">Posts estáticos</b>
+              <div><span class="badge">Legenda inclusa</span></div>
+            </div>
+            <div class="stepper">
+              <button type="button" data-step="-1" data-target="qtyStatic">−</button>
+              <input type="number" id="qtyStatic" value="0" min="0">
+              <button type="button" data-step="1" data-target="qtyStatic">+</button>
+            </div>
+          </div>
+          <div class="item-row">
+            <div>
+              <b style="font-family:'Unbounded',sans-serif;font-size:1rem">Carrosséis</b>
+              <div><span class="badge">Legenda inclusa</span></div>
+            </div>
+            <div class="stepper">
+              <button type="button" data-step="-1" data-target="qtyCarousel">−</button>
+              <input type="number" id="qtyCarousel" value="0" min="0">
+              <button type="button" data-step="1" data-target="qtyCarousel">+</button>
+            </div>
+          </div>
+          <div class="item-row">
+            <div>
+              <b style="font-family:'Unbounded',sans-serif;font-size:1rem">Vídeos / Reels</b>
+              <div>
+                <span class="badge">Captação</span><span class="badge">Edição</span><span class="badge">Roteiro</span><span class="badge">Legenda</span>
+              </div>
+            </div>
+            <div class="stepper">
+              <button type="button" data-step="-1" data-target="qtyVideo">−</button>
+              <input type="number" id="qtyVideo" value="0" min="0">
+              <button type="button" data-step="1" data-target="qtyVideo">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="kicker">Passo 3</p>
+        <h2 style="font-size:clamp(1.2rem,2vw,1.45rem);margin-top:8px">Itens adicionais</h2>
+        <div style="margin-top:10px">
+          <label class="checkbox-row">
+            <input type="checkbox" id="addManagement">
+            <span>
+              <b style="display:block;font-size:.95rem">Gestão mensal de redes sociais</b>
+              <span style="color:rgba(0,0,0,.55);font-size:.88rem">Planejamento, calendário e alinhamento contínuo com o cliente.</span>
+            </span>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" id="addTravel">
+            <span>
+              <b style="display:block;font-size:.95rem">Deslocamento para captação</b>
+              <span style="color:rgba(0,0,0,.55);font-size:.88rem">Cobrado por diária, quando a gravação exige deslocamento.</span>
+            </span>
+          </label>
+        </div>
+        <div class="grid-2" style="margin-top:18px">
+          <div class="field">
+            <label>Diárias de deslocamento</label>
+            <input type="number" id="travelDays" value="1" min="1">
+          </div>
+          <div class="field">
+            <label>Desconto do pacote <small>(%)</small></label>
+            <input type="number" id="discountPct" value="0" min="0" max="100">
+          </div>
+        </div>
+        <div class="field" style="margin-top:18px">
+          <label>Observações <small>(opcional, aparece no orçamento copiado)</small></label>
+          <input type="text" id="notes" placeholder="Ex.: pagamento em 2x, entrega ao longo de 30 dias...">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="summary-sticky">
+      <div class="card" style="background:#000;color:#f6f9f5;border-color:rgba(246,249,245,.14)">
+        <p class="kicker" style="color:var(--yellow)">Resumo</p>
+        <h2 style="color:#f6f9f5;font-size:1.3rem;margin-top:8px" id="summaryClient">Orçamento</h2>
+
+        <div id="summaryLines" style="margin-top:18px;border-top:1px solid rgba(246,249,245,.16)">
+          <!-- filled by JS -->
+        </div>
+
+        <div style="margin-top:12px;padding-top:16px;border-top:1px solid rgba(246,249,245,.22)">
+          <div class="summary-line" id="lineSubtotal" style="color:rgba(246,249,245,.75)"><span>Subtotal</span><b style="color:#f6f9f5">R$ 0,00</b></div>
+          <div class="summary-line" id="lineDiscount" style="display:none;color:rgba(246,249,245,.75)"><span>Desconto</span><b style="color:#f6f9f5">− R$ 0,00</b></div>
+        </div>
+
+        <div style="margin-top:14px;padding-top:16px;border-top:1.5px solid var(--yellow);display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+          <span class="mono" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(246,249,245,.6)">Total</span>
+          <b id="totalValue" style="font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(1.5rem,3vw,2rem);color:var(--yellow)">R$ 0,00</b>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px">
+          <button type="button" class="btn btn-primary" id="copyBtn" style="background:var(--yellow);color:#000">Copiar orçamento</button>
+          <button type="button" class="btn btn-outline" id="printBtn" style="border-color:rgba(246,249,245,.3);color:#f6f9f5">Salvar como PDF</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer style="background:#000;color:rgba(246,249,245,.5);padding:26px 0">
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap" class="mono" style="font-size:11px;letter-spacing:.05em">
+    <span class="mono" style="font-size:11px">© 2026 Dgr Creative</span>
+    <a href="https://www.instagram.com/dgr.creative/" target="_blank" rel="noopener" class="mono" style="font-size:11px;color:rgba(246,249,245,.78);text-decoration:none">@dgr.creative</a>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  var DEFAULTS = {
+    priceStatic: 80,
+    priceCarousel: 130,
+    priceVideo: 220,
+    priceManagement: 450,
+    priceTravel: 60
+  };
+  var STORAGE_KEY = 'dgrOrcamentoPrecos';
+
+  var priceIds = ['priceStatic','priceCarousel','priceVideo','priceManagement','priceTravel'];
+  var els = {};
+  priceIds.concat(['qtyStatic','qtyCarousel','qtyVideo','addManagement','addTravel','travelDays','discountPct','clientName','notes']).forEach(function(id){
+    els[id] = document.getElementById(id);
+  });
+
+  function loadPrices(){
+    var saved = {};
+    try{ saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){}
+    priceIds.forEach(function(id){
+      els[id].value = (saved[id] !== undefined && saved[id] !== null) ? saved[id] : DEFAULTS[id];
+    });
+  }
+  function savePrices(){
+    var out = {};
+    priceIds.forEach(function(id){ out[id] = num(els[id].value); });
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(out)); }catch(e){}
+  }
+  document.getElementById('resetPrices').addEventListener('click', function(){
+    priceIds.forEach(function(id){ els[id].value = DEFAULTS[id]; });
+    savePrices();
+    render();
+    toast('Valores restaurados');
+  });
+
+  function num(v){ var n = parseFloat(v); return isNaN(n) || n < 0 ? 0 : n; }
+  function brl(v){ return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); }
+
+  document.querySelectorAll('.stepper button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = document.getElementById(btn.getAttribute('data-target'));
+      var step = parseInt(btn.getAttribute('data-step'), 10);
+      var next = Math.max(0, num(target.value) + step);
+      target.value = next;
+      render();
+    });
+  });
+
+  function render(){
+    savePrices();
+
+    var pStatic = num(els.priceStatic.value), qStatic = num(els.qtyStatic.value);
+    var pCarousel = num(els.priceCarousel.value), qCarousel = num(els.qtyCarousel.value);
+    var pVideo = num(els.priceVideo.value), qVideo = num(els.qtyVideo.value);
+    var pManagement = num(els.priceManagement.value), addManagement = els.addManagement.checked;
+    var pTravel = num(els.priceTravel.value), addTravel = els.addTravel.checked, travelDays = Math.max(1, num(els.travelDays.value) || 1);
+    var discountPct = Math.min(100, num(els.discountPct.value));
+
+    var lines = [];
+    if (qStatic > 0) lines.push({label: qStatic + 'x Post estático', value: pStatic * qStatic});
+    if (qCarousel > 0) lines.push({label: qCarousel + 'x Carrossel', value: pCarousel * qCarousel});
+    if (qVideo > 0) lines.push({label: qVideo + 'x Vídeo / Reels', value: pVideo * qVideo});
+    if (addManagement) lines.push({label: 'Gestão mensal', value: pManagement});
+    if (addTravel) lines.push({label: travelDays + 'x Diária de deslocamento', value: pTravel * travelDays});
+
+    var subtotal = lines.reduce(function(sum, l){ return sum + l.value; }, 0);
+    var discount = subtotal * (discountPct / 100);
+    var total = subtotal - discount;
+
+    var summaryLines = document.getElementById('summaryLines');
+    if (lines.length === 0) {
+      summaryLines.innerHTML = '<p style="color:rgba(246,249,245,.45);font-size:.88rem;padding:14px 0;margin:0">Adicione quantidades ou itens para ver o orçamento.</p>';
+    } else {
+      summaryLines.innerHTML = lines.map(function(l){
+        return '<div class="summary-line" style="color:rgba(246,249,245,.85)"><span>' + l.label + '</span><b>' + brl(l.value) + '</b></div>';
+      }).join('');
+    }
+
+    document.querySelector('#lineSubtotal b').textContent = brl(subtotal);
+    var discountLine = document.getElementById('lineDiscount');
+    if (discount > 0) {
+      discountLine.style.display = 'flex';
+      discountLine.querySelector('b').textContent = '− ' + brl(discount);
+    } else {
+      discountLine.style.display = 'none';
+    }
+    document.getElementById('totalValue').textContent = brl(total);
+    document.getElementById('summaryClient').textContent = els.clientName.value.trim() || 'Orçamento';
+
+    return { lines: lines, subtotal: subtotal, discount: discount, discountPct: discountPct, total: total };
+  }
+
+  var toastTimer;
+  function toast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var data = render();
+    var client = els.clientName.value.trim() || 'Cliente';
+    var notes = els.notes.value.trim();
+    var text = 'Orçamento — ' + client + '\n\n';
+    data.lines.forEach(function(l){ text += '• ' + l.label + ' — ' + brl(l.value) + '\n'; });
+    text += '\nSubtotal: ' + brl(data.subtotal) + '\n';
+    if (data.discount > 0) text += 'Desconto (' + data.discountPct + '%): − ' + brl(data.discount) + '\n';
+    text += 'Total: ' + brl(data.total) + '\n';
+    if (notes) text += '\nObservações: ' + notes + '\n';
+    text += '\nDgr Creative — @dgr.creative';
+
+    var done = function(){ toast('Orçamento copiado ✓'); };
+    var fail = function(){
+      window.prompt('Copie o texto abaixo:', text);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(fail);
+    } else {
+      fail();
+    }
+  });
+
+  document.getElementById('printBtn').addEventListener('click', function(){
+    window.print();
+  });
+
+  [priceIds, ['qtyStatic','qtyCarousel','qtyVideo','addManagement','addTravel','travelDays','discountPct','clientName']].flat().forEach(function(id){
+    var el = els[id];
+    el.addEventListener('input', render);
+    el.addEventListener('change', render);
+  });
+
+  var summary = document.querySelector('#configDetails summary');
+  document.getElementById('configDetails').addEventListener('toggle', function(e){
+    document.getElementById('configToggleLabel').textContent = e.target.open ? 'ocultar ▴' : 'editar valores ▾';
+  });
+
+  loadPrices();
+  render();
+})();
+</script>
+
+</body>
+</html>
