@@ -87,9 +87,13 @@
   .col-body.drag-over{background:rgba(33,0,255,.08);}
   .empty-hint{margin:14px 6px;font-size:.82rem;color:var(--ink-45);}
 
-  .card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:13px 14px;cursor:grab;transition:border-color .12s ease,box-shadow .12s ease;}
+  .card{background:#fff;border:1.5px solid var(--border);border-left-width:4px;border-radius:14px;padding:13px 14px;cursor:grab;transition:border-color .12s ease,box-shadow .12s ease;}
   .card:hover{border-color:var(--ink);box-shadow:0 10px 22px -16px rgba(0,0,0,.35);}
   .card.dragging{opacity:.4;}
+  .card.prio-baixa{border-left-color:var(--ink-35);}
+  .card.prio-normal{border-left-color:var(--volt);}
+  .card.prio-alta{border-left-color:var(--warn);}
+  .card.prio-urgente{border-left-color:var(--danger);}
   .card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
   .client-chip{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--ink-60);}
   .client-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;flex:none;}
@@ -98,6 +102,9 @@
   .p-normal{background:var(--volt);}
   .p-alta{background:var(--warn);}
   .p-urgente{background:var(--danger);}
+  .priority-pill{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;flex:none;white-space:nowrap;}
+  .priority-pill.p-alta{background:rgba(255,138,0,.16);color:#a15300;}
+  .priority-pill.p-urgente{background:var(--danger);color:#fff;}
   .card-title{font-family:'Unbounded',sans-serif;font-weight:600;font-size:.92rem;line-height:1.32;letter-spacing:-.01em;margin:0 0 8px;}
   .card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .due-tag{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:4px 8px;border-radius:999px;background:var(--paper-dim);color:var(--ink-60);}
@@ -108,6 +115,23 @@
   .icon-btn{border:none;background:transparent;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-45);}
   .icon-btn:hover{background:var(--paper-dim);color:var(--ink);}
   .icon-btn svg{width:13px;height:13px;}
+  .icon-btn.wa-btn:hover{background:rgba(37,211,102,.16);color:#1da851;}
+
+  .urgency-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+  .urg-chip{border:1.5px solid var(--border);background:#fff;padding:7px 14px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;color:var(--ink-60);}
+  .urg-chip.active{background:var(--ink);color:var(--acid);border-color:var(--ink);}
+  .urg-chip[data-urg="urgente"].active{background:var(--danger);border-color:var(--danger);color:#fff;}
+  .urg-chip[data-urg="alta"].active{background:var(--warn);border-color:var(--warn);color:#000;}
+
+  .alert-banner{display:none;background:#fff;border:1.5px solid var(--danger);border-radius:16px;padding:14px 16px;margin-bottom:18px;}
+  .alert-banner.show{display:block;}
+  .alert-banner-head{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--danger);margin-bottom:10px;}
+  .alert-banner-head svg{width:15px;height:15px;}
+  .alert-list{display:flex;flex-direction:column;gap:6px;}
+  .alert-item{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(225,59,59,.06);border-radius:10px;padding:8px 10px;}
+  .alert-item-info{font-size:.85rem;cursor:pointer;flex:1;min-width:0;}
+  .alert-item-info b{font-weight:700;}
+  .alert-item-info span{display:block;font-size:.76rem;color:var(--ink-45);}
 
   .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
   .cal-nav{display:flex;align-items:center;gap:10px;}
@@ -178,6 +202,12 @@
   .day-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
   .day-item{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--paper-dim);border-radius:10px;padding:10px 12px;cursor:pointer;}
   .day-item:hover{background:#e2e9dd;}
+
+  .check-row{display:flex;align-items:flex-start;gap:10px;background:var(--paper-dim);border-radius:12px;padding:12px 14px;margin-bottom:14px;}
+  .check-row input{width:18px;height:18px;margin-top:1px;flex:none;accent-color:#25d366;}
+  .check-row label{font-size:.86rem;color:var(--ink-70);cursor:pointer;}
+  .check-row label b{display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-bottom:2px;}
+  .field-hint{font-size:.78rem;color:var(--ink-45);margin-top:4px;}
 </style>
 </head>
 <body>
@@ -205,7 +235,7 @@
     <div>
       <p class="eyebrow"><span></span>Ferramenta interna · Demandas</p>
       <h1>Central de demandas dos clientes</h1>
-      <p>Cadastre clientes, registre atividades com prazo e briefing, organize tudo em quadro estilo Trello e acompanhe no calendário. Toque no microfone para criar uma demanda falando.</p>
+      <p>Cadastre clientes, registre atividades com prazo, briefing e urgência, organize tudo em quadro estilo Trello e acompanhe no calendário. Toque no microfone para criar uma demanda falando, e avise a si mesma no WhatsApp com um clique.</p>
     </div>
   </div>
 </header>
@@ -222,6 +252,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
         <input type="text" id="searchInput" placeholder="Buscar demanda ou cliente...">
       </div>
+      <button class="btn btn-ghost btn-sm" id="settingsBtn" title="Configurar WhatsApp de alerta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2.06 2.06 0 1 1-2.91 2.91l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2.06 2.06 0 1 1-4.12 0v-.09A1.7 1.7 0 0 0 8.8 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2.06 2.06 0 1 1-2.91-2.91l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H2.7a2.06 2.06 0 1 1 0-4.12h.09A1.7 1.7 0 0 0 4.4 8.8a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2.06 2.06 0 1 1 2.91-2.91l.06.06a1.7 1.7 0 0 0 1.87.34H8.9A1.7 1.7 0 0 0 9.9 2.81V2.7a2.06 2.06 0 1 1 4.12 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2.06 2.06 0 1 1 2.91 2.91l-.06.06a1.7 1.7 0 0 0-.34 1.87v.1a1.7 1.7 0 0 0 1.55 1h.09a2.06 2.06 0 1 1 0 4.12h-.09a1.7 1.7 0 0 0-1.55 1Z"></path></svg>
+        WhatsApp
+      </button>
       <button class="btn btn-ghost btn-sm" id="exportBtn">Exportar</button>
       <button class="btn btn-ghost btn-sm" id="importBtn">Importar</button>
       <input type="file" id="importFile" accept="application/json" hidden>
@@ -233,6 +267,20 @@
   </div>
 
   <section id="viewBoard" class="view active">
+    <div class="alert-banner" id="alertBanner">
+      <div class="alert-banner-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4M12 17h.01"></path></svg>
+        <span id="alertBannerTitle">Demandas urgentes</span>
+      </div>
+      <div class="alert-list" id="alertList"></div>
+    </div>
+    <div class="urgency-filters" id="urgencyFilters">
+      <button class="urg-chip active" data-urg="all">Todas</button>
+      <button class="urg-chip" data-urg="urgente">Urgente</button>
+      <button class="urg-chip" data-urg="alta">Alta</button>
+      <button class="urg-chip" data-urg="normal">Normal</button>
+      <button class="urg-chip" data-urg="baixa">Baixa</button>
+    </div>
     <div class="board-columns" id="boardColumns"></div>
   </section>
 
@@ -327,9 +375,18 @@
       <label for="demandBriefing">Briefing / o que é necessário</label>
       <textarea id="demandBriefing" placeholder="Referências, tom de voz, materiais que o cliente vai enviar, links..."></textarea>
     </div>
+    <div class="check-row">
+      <input type="checkbox" id="demandWhatsAlert">
+      <label for="demandWhatsAlert"><b>Avisar no WhatsApp</b>Ao salvar, abre uma conversa no seu WhatsApp com um lembrete pronto desta demanda.</label>
+    </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" id="demandDeleteBtn" style="color:var(--danger)">Excluir</button>
-      <button class="btn btn-dark" id="demandSaveBtn">Salvar demanda</button>
+      <div style="display:flex;gap:8px">
+        <button class="icon-btn wa-btn" id="demandWaNowBtn" title="Enviar lembrete agora no WhatsApp" style="border:1.5px solid var(--border);width:auto;padding:0 12px;border-radius:999px">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5s-.6-1.5-.9-2c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.3s1 2.7 1.1 2.9c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+        </button>
+        <button class="btn btn-dark" id="demandSaveBtn">Salvar demanda</button>
+      </div>
     </div>
   </div>
 </div>
@@ -371,6 +428,24 @@
     </div>
     <div class="day-list" id="dayList"></div>
     <button class="btn btn-dark" id="dayNewBtn" style="width:100%">+ Nova demanda neste dia</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="settingsModal" hidden>
+  <div class="modal-card" style="max-width:420px">
+    <div class="modal-head">
+      <h2>Alerta no WhatsApp</h2>
+      <button class="modal-close" id="settingsCloseBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+    </div>
+    <div class="field">
+      <label for="settingsWhatsapp">Seu número de WhatsApp</label>
+      <input type="text" id="settingsWhatsapp" placeholder="Ex.: 5585999999999 (DDI + DDD + número)">
+      <p class="field-hint">Ao clicar em "avisar", abrimos uma conversa com esse número já com a mensagem do lembrete pronta — funciona melhor com o seu próprio número, para você se avisar.</p>
+    </div>
+    <div class="field-hint" style="margin-bottom:14px">Isso não envia mensagens automaticamente enquanto a ferramenta está fechada: cada aviso precisa de um clique seu (aqui ou no card) para abrir o WhatsApp com o texto pronto.</div>
+    <div class="modal-foot" style="justify-content:flex-end">
+      <button class="btn btn-dark" id="settingsSaveBtn">Salvar</button>
+    </div>
   </div>
 </div>
 
@@ -430,16 +505,21 @@
       var raw = localStorage.getItem(LS_KEY);
       if(raw){
         var data = JSON.parse(raw);
-        if(data && Array.isArray(data.clients) && Array.isArray(data.demands)) return data;
+        if(data && Array.isArray(data.clients) && Array.isArray(data.demands)){
+          if(!data.settings) data.settings = { whatsapp: '' };
+          return data;
+        }
       }
     }catch(e){}
-    return { clients: seedClients(), demands: [] };
+    return { clients: seedClients(), demands: [], settings: { whatsapp: '' } };
   }
   function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 
+  var PRIORITY_RANK = { urgente: 0, alta: 1, normal: 2, baixa: 3 };
   var state = loadState();
   var currentView = 'board';
   var searchTerm = '';
+  var urgencyFilter = 'all';
   var calMonth = new Date(); calMonth.setDate(1);
   var editingDemandId = null;
   var editingClientId = null;
@@ -470,7 +550,79 @@
     return 'ok';
   }
 
+  function digitsOnly(s){ return String(s || '').replace(/\D/g, ''); }
+
+  function reminderMessage(d){
+    var client = clientById(d.clientId);
+    var lines = ['*Lembrete Dgr Creative*', d.title];
+    if(client) lines.push('Cliente: ' + client.name);
+    if(d.dueDate) lines.push('Prazo: ' + formatDatePt(d.dueDate));
+    lines.push('Prioridade: ' + d.priority);
+    if(d.briefing) lines.push('Briefing: ' + d.briefing);
+    return lines.join('\n');
+  }
+
+  function sendWhatsAppReminder(d){
+    var phone = digitsOnly(state.settings.whatsapp);
+    if(!phone){
+      showToast('Configure seu número de WhatsApp primeiro.');
+      openSettingsModal();
+      return;
+    }
+    var url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(reminderMessage(d));
+    window.open(url, '_blank', 'noopener');
+  }
+
+  function openSettingsModal(){
+    document.getElementById('settingsWhatsapp').value = state.settings.whatsapp || '';
+    document.getElementById('settingsModal').hidden = false;
+  }
+
+  function saveSettingsFromModal(){
+    state.settings.whatsapp = digitsOnly(document.getElementById('settingsWhatsapp').value);
+    saveState();
+    closeModal('settingsModal');
+    showToast('WhatsApp de alerta salvo.');
+  }
+
+  function isUrgentItem(d){
+    if(d.status === 'done') return false;
+    var u = dueUrgency(d.dueDate);
+    return d.priority === 'urgente' || u === 'overdue' || u === 'soon';
+  }
+
+  function renderAlertBanner(){
+    var banner = document.getElementById('alertBanner');
+    var items = state.demands.filter(isUrgentItem).sort(function(a,b){
+      return (PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]) || (a.dueDate || '9999').localeCompare(b.dueDate || '9999');
+    });
+    if(items.length === 0){ banner.classList.remove('show'); return; }
+    banner.classList.add('show');
+    document.getElementById('alertBannerTitle').textContent = items.length + ' demanda(s) urgente(s) ou perto do prazo';
+    var list = document.getElementById('alertList');
+    list.innerHTML = items.map(function(d){
+      var client = clientById(d.clientId);
+      var u = dueUrgency(d.dueDate);
+      var dueText = d.dueDate ? (u === 'overdue' ? 'atrasada — ' : 'prazo ') + formatDatePt(d.dueDate) : 'sem prazo';
+      return '<div class="alert-item">' +
+        '<span class="alert-item-info" data-open="' + d.id + '"><b>' + escapeHtml(d.title) + '</b><span>' + escapeHtml((client ? client.name + ' · ' : '') + dueText) + '</span></span>' +
+        '<button class="icon-btn wa-btn" data-wa="' + d.id + '" title="Avisar no WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5s-.6-1.5-.9-2c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.3s1 2.7 1.1 2.9c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></button>' +
+      '</div>';
+    }).join('');
+    list.querySelectorAll('[data-open]').forEach(function(el){
+      el.addEventListener('click', function(){ openDemandModal(el.dataset.open); });
+    });
+    list.querySelectorAll('[data-wa]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var d = state.demands.find(function(x){ return x.id === btn.dataset.wa; });
+        if(d) sendWhatsAppReminder(d);
+      });
+    });
+  }
+
   function renderAll(){
+    renderAlertBanner();
     renderBoard();
     renderCalendar();
     renderClients();
@@ -485,23 +637,30 @@
     document.getElementById('viewClients').classList.toggle('active', view === 'clients');
   }
 
+  function priorityIndicator(priority){
+    if(priority === 'urgente') return '<span class="priority-pill p-urgente">Urgente</span>';
+    if(priority === 'alta') return '<span class="priority-pill p-alta">Alta</span>';
+    return '<span class="priority-dot p-' + priority + '" title="Prioridade ' + priority + '"></span>';
+  }
+
   function cardHtml(d){
     var client = clientById(d.clientId);
     var urgency = dueUrgency(d.dueDate);
     var dueClass = urgency === 'overdue' ? ' due-overdue' : (urgency === 'soon' ? ' due-soon' : '');
     var dueText = d.dueDate ? formatDatePt(d.dueDate) : 'sem prazo';
     return '' +
-      '<div class="card" draggable="true" data-id="' + d.id + '">' +
+      '<div class="card prio-' + d.priority + '" draggable="true" data-id="' + d.id + '">' +
         '<div class="card-top">' +
           '<span class="client-chip">' +
             (client ? '<span class="client-dot" style="background:' + colorFor(client.id) + '">' + escapeHtml(initials(client.name)) + '</span>' + escapeHtml(client.name) : '<span class="client-dot" style="background:var(--ink-35)">–</span>Sem cliente') +
           '</span>' +
-          '<span class="priority-dot p-' + d.priority + '" title="Prioridade ' + d.priority + '"></span>' +
+          priorityIndicator(d.priority) +
         '</div>' +
         '<p class="card-title">' + escapeHtml(d.title) + '</p>' +
         '<div class="card-meta">' +
           '<span class="due-tag' + dueClass + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>' + escapeHtml(dueText) + '</span>' +
           '<span class="card-actions">' +
+            '<button class="icon-btn wa-btn" data-wa="' + d.id + '" title="Avisar no WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5s-.6-1.5-.9-2c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.3s1 2.7 1.1 2.9c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg></button>' +
             '<button class="icon-btn" data-edit="' + d.id + '" title="Editar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></button>' +
           '</span>' +
         '</div>' +
@@ -513,8 +672,12 @@
     board.innerHTML = '';
     STATUS.forEach(function(col){
       var items = state.demands.filter(function(d){
-        return d.status === col.id && (matchesSearch(d.title) || matchesSearch(d.briefing) || matchesSearch((clientById(d.clientId)||{}).name));
+        return d.status === col.id &&
+          (urgencyFilter === 'all' || d.priority === urgencyFilter) &&
+          (matchesSearch(d.title) || matchesSearch(d.briefing) || matchesSearch((clientById(d.clientId)||{}).name));
       }).sort(function(a,b){
+        var rank = PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
+        if(rank !== 0) return rank;
         if(!a.dueDate) return 1;
         if(!b.dueDate) return -1;
         return a.dueDate.localeCompare(b.dueDate);
@@ -545,7 +708,12 @@
       });
       card.addEventListener('dragend', function(){ card.classList.remove('dragging'); });
       card.addEventListener('click', function(e){
-        if(e.target.closest('[data-edit]')){ openDemandModal(card.dataset.id); return; }
+        if(e.target.closest('[data-wa]')){
+          e.stopPropagation();
+          var d = state.demands.find(function(x){ return x.id === card.dataset.id; });
+          if(d) sendWhatsAppReminder(d);
+          return;
+        }
         openDemandModal(card.dataset.id);
       });
     });
@@ -665,10 +833,21 @@
     document.getElementById('demandDue').value = d.dueDate || '';
     document.getElementById('demandStatus').value = d.status || 'todo';
     document.getElementById('demandBriefing').value = d.briefing || '';
+    document.getElementById('demandWhatsAlert').checked = (d.priority || 'normal') === 'urgente';
     document.getElementById('demandDeleteBtn').style.display = id ? 'inline-flex' : 'none';
     document.getElementById('voiceOriginNote').hidden = !(d.source === 'voz');
     document.getElementById('demandModal').hidden = false;
     document.getElementById('demandTitle').focus();
+  }
+
+  function currentDemandFormValues(){
+    return {
+      clientId: document.getElementById('demandClient').value,
+      title: document.getElementById('demandTitle').value.trim() || '(sem nome)',
+      priority: document.getElementById('demandPriority').value,
+      dueDate: document.getElementById('demandDue').value,
+      briefing: document.getElementById('demandBriefing').value.trim()
+    };
   }
 
   function saveDemandFromModal(){
@@ -683,18 +862,22 @@
       status: document.getElementById('demandStatus').value,
       briefing: document.getElementById('demandBriefing').value.trim()
     };
+    var savedDemand;
     if(editingDemandId){
-      var d = state.demands.find(function(x){ return x.id === editingDemandId; });
-      Object.assign(d, payload);
+      savedDemand = state.demands.find(function(x){ return x.id === editingDemandId; });
+      Object.assign(savedDemand, payload);
     }else{
       payload.id = uid();
       payload.createdAt = new Date().toISOString();
       state.demands.unshift(payload);
+      savedDemand = payload;
     }
     saveState();
+    var wantsAlert = document.getElementById('demandWhatsAlert').checked;
     closeModal('demandModal');
     renderAll();
     showToast('Demanda salva.');
+    if(wantsAlert) sendWhatsAppReminder(savedDemand);
   }
 
   function deleteDemand(){
@@ -939,6 +1122,25 @@
   document.getElementById('demandSaveBtn').addEventListener('click', saveDemandFromModal);
   document.getElementById('demandDeleteBtn').addEventListener('click', deleteDemand);
   document.getElementById('demandModal').addEventListener('click', function(e){ if(e.target === this) closeModal('demandModal'); });
+  document.getElementById('demandPriority').addEventListener('change', function(e){
+    document.getElementById('demandWhatsAlert').checked = e.target.value === 'urgente';
+  });
+  document.getElementById('demandWaNowBtn').addEventListener('click', function(){
+    sendWhatsAppReminder(currentDemandFormValues());
+  });
+
+  document.getElementById('urgencyFilters').addEventListener('click', function(e){
+    var btn = e.target.closest('.urg-chip');
+    if(!btn) return;
+    urgencyFilter = btn.dataset.urg;
+    document.querySelectorAll('.urg-chip').forEach(function(c){ c.classList.toggle('active', c === btn); });
+    renderBoard();
+  });
+
+  document.getElementById('settingsBtn').addEventListener('click', openSettingsModal);
+  document.getElementById('settingsCloseBtn').addEventListener('click', function(){ closeModal('settingsModal'); });
+  document.getElementById('settingsSaveBtn').addEventListener('click', saveSettingsFromModal);
+  document.getElementById('settingsModal').addEventListener('click', function(e){ if(e.target === this) closeModal('settingsModal'); });
 
   document.getElementById('clientCloseBtn').addEventListener('click', function(){ closeModal('clientModal'); });
   document.getElementById('clientSaveBtn').addEventListener('click', saveClientFromModal);
