@@ -119,13 +119,15 @@
   .price-field span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;color:var(--ink-35);}
   .price-field input{width:112px;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:#000;border:1.5px solid var(--border);border-radius:10px;padding:10px 10px 10px 32px;background:#fff;text-align:right;}
   .price-field input:focus{outline:none;border-color:var(--volt);}
+  .qty-price input, .addon-price input{width:92px;}
   .reset-link{margin-top:14px;background:none;border:none;padding:0;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--ink-45);text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
   .reset-link:hover{color:var(--volt);}
 
   /* quantity rows */
   .qty-list{display:flex;flex-direction:column;border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;}
-  .qty-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;}
+  .qty-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;flex-wrap:wrap;}
   .qty-row + .qty-row{border-top:1px solid var(--border);}
+  .qty-controls{display:flex;align-items:center;gap:10px;flex:none;margin-left:auto;}
   .qty-left{display:flex;gap:14px;align-items:flex-start;}
   .qty-icon{width:40px;height:40px;border-radius:11px;background:var(--paper-dim);display:flex;align-items:center;justify-content:center;flex:none;color:var(--volt);}
   .qty-icon svg{width:19px;height:19px;}
@@ -142,10 +144,11 @@
 
   /* addons */
   .addon-list{display:flex;flex-direction:column;gap:0;border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;}
-  .addon-row{display:block;cursor:pointer;}
+  .addon-row{display:flex;align-items:center;justify-content:space-between;gap:14px;}
   .addon-row + .addon-row{border-top:1px solid var(--border);}
-  .addon-inner{display:flex;gap:14px;align-items:flex-start;padding:18px 22px;}
-  .addon-row input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--volt);}
+  .addon-inner{display:flex;gap:14px;align-items:flex-start;padding:18px 22px;cursor:pointer;flex:1;min-width:0;}
+  .addon-inner input[type=checkbox]{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--volt);}
+  .addon-price{flex:none;margin-right:22px;}
   .addon-title{font-weight:700;font-size:.94rem;}
   .addon-sub{color:var(--ink-60);font-size:.85rem;margin-top:3px;}
 
@@ -306,10 +309,13 @@
                   <div class="qty-badges"><span class="badge">Legenda inclusa</span></div>
                 </div>
               </div>
-              <div class="stepper">
-                <button type="button" data-step="-1" data-target="qtyStatic" aria-label="Diminuir">−</button>
-                <input type="number" id="qtyStatic" value="0" min="0" inputmode="numeric">
-                <button type="button" data-step="1" data-target="qtyStatic" aria-label="Aumentar">+</button>
+              <div class="qty-controls">
+                <div class="price-field qty-price"><span>R$</span><input type="number" id="priceStatic" min="0" step="5" aria-label="Valor do post estático"></div>
+                <div class="stepper">
+                  <button type="button" data-step="-1" data-target="qtyStatic" aria-label="Diminuir">−</button>
+                  <input type="number" id="qtyStatic" value="0" min="0" inputmode="numeric">
+                  <button type="button" data-step="1" data-target="qtyStatic" aria-label="Aumentar">+</button>
+                </div>
               </div>
             </div>
             <div class="qty-row">
@@ -320,10 +326,13 @@
                   <div class="qty-badges"><span class="badge">Legenda inclusa</span></div>
                 </div>
               </div>
-              <div class="stepper">
-                <button type="button" data-step="-1" data-target="qtyCarousel" aria-label="Diminuir">−</button>
-                <input type="number" id="qtyCarousel" value="0" min="0" inputmode="numeric">
-                <button type="button" data-step="1" data-target="qtyCarousel" aria-label="Aumentar">+</button>
+              <div class="qty-controls">
+                <div class="price-field qty-price"><span>R$</span><input type="number" id="priceCarousel" min="0" step="5" aria-label="Valor do carrossel"></div>
+                <div class="stepper">
+                  <button type="button" data-step="-1" data-target="qtyCarousel" aria-label="Diminuir">−</button>
+                  <input type="number" id="qtyCarousel" value="0" min="0" inputmode="numeric">
+                  <button type="button" data-step="1" data-target="qtyCarousel" aria-label="Aumentar">+</button>
+                </div>
               </div>
             </div>
             <div class="qty-row">
@@ -334,10 +343,12 @@
                   <div class="qty-badges"><span class="badge">Captação</span><span class="badge">Edição</span><span class="badge">Roteiro</span><span class="badge">Legenda</span></div>
                 </div>
               </div>
-              <div class="stepper">
-                <button type="button" data-step="-1" data-target="qtyVideo" aria-label="Diminuir">−</button>
-                <input type="number" id="qtyVideo" value="0" min="0" inputmode="numeric">
-                <button type="button" data-step="1" data-target="qtyVideo" aria-label="Aumentar">+</button>
+              <div class="qty-controls">
+                <div class="stepper">
+                  <button type="button" data-step="-1" data-target="qtyVideo" aria-label="Diminuir">−</button>
+                  <input type="number" id="qtyVideo" value="0" min="0" inputmode="numeric">
+                  <button type="button" data-step="1" data-target="qtyVideo" aria-label="Aumentar">+</button>
+                </div>
               </div>
             </div>
           </div>
@@ -349,24 +360,26 @@
 
           <p class="subhead spaced">Itens do plano</p>
           <div class="addon-list">
-            <label class="addon-row">
-              <div class="addon-inner">
+            <div class="addon-row">
+              <label class="addon-inner" for="addManagement">
                 <input type="checkbox" id="addManagement">
                 <div>
                   <div class="addon-title">Gestão mensal de redes sociais</div>
                   <div class="addon-sub">Planejamento, calendário e alinhamento contínuo com o cliente.</div>
                 </div>
-              </div>
-            </label>
-            <label class="addon-row">
-              <div class="addon-inner">
+              </label>
+              <div class="price-field addon-price"><span>R$</span><input type="number" id="priceManagement" min="0" step="10" aria-label="Valor da gestão mensal"></div>
+            </div>
+            <div class="addon-row">
+              <label class="addon-inner" for="addTravel">
                 <input type="checkbox" id="addTravel">
                 <div>
                   <div class="addon-title">Deslocamento para captação</div>
                   <div class="addon-sub">Cobrado por diária, quando a gravação exige deslocamento.</div>
                 </div>
-              </div>
-            </label>
+              </label>
+              <div class="price-field addon-price"><span>R$</span><input type="number" id="priceTravel" min="0" step="5" aria-label="Valor por diária de deslocamento"></div>
+            </div>
           </div>
           <div class="field" style="max-width:220px;margin-top:14px">
             <label for="travelDays">Diárias de deslocamento</label>
@@ -464,27 +477,11 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
             </span>
           </summary>
-          <p class="step-desc" style="margin-top:14px">Os valores abaixo são referência — ajuste para a sua tabela real. Ficam salvos neste navegador para os próximos orçamentos.</p>
+          <p class="step-desc" style="margin-top:14px">Valores do vídeo do pacote recorrente e da cobertura realtime. Os demais valores do conteúdo recorrente (post, carrossel, gestão, deslocamento) ficam editáveis direto lá em cima, no Serviço 1. Tudo fica salvo neste navegador.</p>
           <div class="price-list">
-            <div class="price-row">
-              <div><div class="name">Post estático</div><div class="desc">Inclui legenda</div></div>
-              <div class="price-field"><span>R$</span><input type="number" id="priceStatic" min="0" step="5"></div>
-            </div>
-            <div class="price-row">
-              <div><div class="name">Carrossel</div><div class="desc">Inclui legenda</div></div>
-              <div class="price-field"><span>R$</span><input type="number" id="priceCarousel" min="0" step="5"></div>
-            </div>
             <div class="price-row">
               <div><div class="name">Vídeo / Reels</div><div class="desc">Captação, edição, roteiro e legenda</div></div>
               <div class="price-field"><span>R$</span><input type="number" id="priceVideo" min="0" step="5"></div>
-            </div>
-            <div class="price-row">
-              <div><div class="name">Gestão mensal</div><div class="desc">Estratégia e calendário de conteúdo</div></div>
-              <div class="price-field"><span>R$</span><input type="number" id="priceManagement" min="0" step="10"></div>
-            </div>
-            <div class="price-row">
-              <div><div class="name">Deslocamento</div><div class="desc">Valor por diária de captação</div></div>
-              <div class="price-field"><span>R$</span><input type="number" id="priceTravel" min="0" step="5"></div>
             </div>
             <div class="price-row">
               <div><div class="name">Realtime — hora</div><div class="desc">Cobertura ao vivo, valor por hora (mín. 2h)</div></div>
