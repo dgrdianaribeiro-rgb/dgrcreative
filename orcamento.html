@@ -45,7 +45,7 @@
   .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--acid);display:flex;align-items:center;gap:11px;margin:0 0 22px;}
   .eyebrow span{width:26px;height:1.5px;background:var(--acid);display:inline-block;}
   .hero h1{font-weight:800;font-size:clamp(1.9rem,4.2vw,2.9rem);line-height:1.06;max-width:19ch;}
-  .hero p.lead{margin:18px 0 0;max-width:56ch;font-size:1.02rem;color:rgba(246,249,245,.76);}
+  .hero p.lead{margin:18px 0 0;max-width:58ch;font-size:1.02rem;color:rgba(246,249,245,.76);}
   .meta-row{margin-top:clamp(30px,4.5vw,44px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:rgba(246,249,245,.2);border-radius:16px 16px 0 0;overflow:hidden;}
   @media (max-width:680px){.meta-row{grid-template-columns:1fr;}}
   .meta-item{background:var(--volt-deep);padding:18px 22px;}
@@ -53,14 +53,37 @@
   .meta-item b{font-family:'Unbounded',sans-serif;font-weight:600;font-size:.94rem;color:var(--paper);}
 
   main{padding:clamp(40px,6vw,60px) 0 clamp(70px,9vw,110px);}
-  .step-head{display:flex;align-items:baseline;gap:12px;margin-bottom:20px;}
-  .step-num{font-family:'Unbounded',sans-serif;font-weight:900;font-size:1.4rem;color:var(--volt);line-height:1;}
-  .step-head h2{font-size:clamp(1.15rem,2vw,1.4rem);}
   .step-desc{color:var(--ink-60);font-size:.92rem;margin:6px 0 22px;max-width:60ch;}
-
-  .card{background:#fff;border:1.5px solid var(--ink);border-radius:20px;padding:clamp(22px,3vw,32px);}
-  .card + .card-block{margin-top:22px;}
   .block{margin-bottom:26px;}
+
+  /* client field block */
+  .intro-field{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:20px 24px;margin-bottom:22px;}
+  .intro-field label{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-60);}
+  .intro-field p{margin:2px 0 12px;color:var(--ink-45);font-size:.82rem;}
+  .intro-field input{font-family:'Manrope',sans-serif;font-size:1.05rem;font-weight:700;color:#000;border:none;border-bottom:1.5px solid var(--border);background:transparent;padding:6px 2px;width:100%;}
+  .intro-field input:focus{outline:none;border-color:var(--volt);}
+
+  /* service tracks */
+  .track{background:#fff;border:1.5px solid var(--ink);border-radius:22px;padding:clamp(22px,3.4vw,32px);margin-bottom:22px;}
+  .track-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1.5px solid var(--border);margin-bottom:24px;transition:border-color .15s ease;}
+  .track-kicker{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--volt);margin:0;}
+  .track-head h2{font-size:clamp(1.15rem,2.1vw,1.42rem);margin-top:8px;}
+  .track-head .step-desc{margin-top:8px;margin-bottom:0;}
+  .track-switch{display:flex;align-items:center;gap:10px;flex:none;cursor:pointer;padding-top:2px;}
+  .track-switch-text{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--volt);white-space:nowrap;transition:color .15s ease;}
+  .track.off .track-switch-text{color:var(--ink-45);}
+  .switch{position:relative;width:44px;height:26px;flex:none;display:inline-block;}
+  .switch input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer;}
+  .switch-track{position:absolute;inset:0;background:var(--border);border-radius:999px;transition:background .18s ease;pointer-events:none;}
+  .switch-track::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .18s ease;}
+  .switch input:checked ~ .switch-track{background:var(--volt);}
+  .switch input:checked ~ .switch-track::after{transform:translateX(18px);}
+  .switch input:focus-visible ~ .switch-track{outline:2.5px solid var(--volt);outline-offset:3px;}
+  .track.off .track-head{border-bottom-color:var(--border);}
+  .track-body{transition:opacity .15s ease;}
+  .track.off .track-body{opacity:.42;pointer-events:none;}
+  .subhead{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45);margin:0 0 14px;}
+  .subhead.spaced{margin-top:28px;}
 
   /* preset picker */
   .preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
@@ -96,13 +119,15 @@
   .price-field span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;color:var(--ink-35);}
   .price-field input{width:112px;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:#000;border:1.5px solid var(--border);border-radius:10px;padding:10px 10px 10px 32px;background:#fff;text-align:right;}
   .price-field input:focus{outline:none;border-color:var(--volt);}
+  .qty-price input, .addon-price input{width:92px;}
   .reset-link{margin-top:14px;background:none;border:none;padding:0;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--ink-45);text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
   .reset-link:hover{color:var(--volt);}
 
   /* quantity rows */
   .qty-list{display:flex;flex-direction:column;border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;}
-  .qty-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;}
+  .qty-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;flex-wrap:wrap;}
   .qty-row + .qty-row{border-top:1px solid var(--border);}
+  .qty-controls{display:flex;align-items:center;gap:10px;flex:none;margin-left:auto;}
   .qty-left{display:flex;gap:14px;align-items:flex-start;}
   .qty-icon{width:40px;height:40px;border-radius:11px;background:var(--paper-dim);display:flex;align-items:center;justify-content:center;flex:none;color:var(--volt);}
   .qty-icon svg{width:19px;height:19px;}
@@ -112,15 +137,18 @@
   .stepper{display:flex;align-items:center;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;flex:none;}
   .stepper button{width:36px;height:38px;border:none;background:#fff;font-size:17px;font-weight:700;color:var(--volt);cursor:pointer;font-family:'Manrope',sans-serif;}
   .stepper button:hover{background:var(--paper-dim);}
+  .stepper button:disabled{color:var(--ink-35);cursor:default;}
+  .stepper button:disabled:hover{background:#fff;}
   .stepper input{width:48px;text-align:center;border:none;border-left:1.5px solid var(--border);border-right:1.5px solid var(--border);font-size:15px;font-weight:700;padding:9px 4px;font-family:'Manrope',sans-serif;}
   .stepper input:focus{outline:none;}
 
   /* addons */
   .addon-list{display:flex;flex-direction:column;gap:0;border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;}
-  .addon-row{display:block;cursor:pointer;}
+  .addon-row{display:flex;align-items:center;justify-content:space-between;gap:14px;}
   .addon-row + .addon-row{border-top:1px solid var(--border);}
-  .addon-inner{display:flex;gap:14px;align-items:flex-start;padding:18px 22px;}
-  .addon-row input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--volt);}
+  .addon-inner{display:flex;gap:14px;align-items:flex-start;padding:18px 22px;cursor:pointer;flex:1;min-width:0;}
+  .addon-inner input[type=checkbox]{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--volt);}
+  .addon-price{flex:none;margin-right:22px;}
   .addon-title{font-weight:700;font-size:.94rem;}
   .addon-sub{color:var(--ink-60);font-size:.85rem;margin-top:3px;}
 
@@ -128,11 +156,14 @@
   .field label{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-60);}
   .field input[type=text], .field input[type=number]{font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;color:#000;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;background:#fff;width:100%;}
   .field input:focus{outline:none;border-color:var(--volt);}
+  .field input:disabled{color:var(--ink-35);background:var(--paper-dim);}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   @media (max-width:520px){.grid-2{grid-template-columns:1fr;}}
 
   .note{margin-top:20px;padding:16px 18px;border-radius:14px;background:var(--paper-dim);font-size:.86rem;color:var(--ink-60);display:flex;gap:12px;align-items:flex-start;}
   .note svg{width:17px;height:17px;flex:none;color:var(--volt);margin-top:2px;}
+
+  .closing{background:transparent;border:1.5px dashed var(--border);border-radius:18px;padding:clamp(20px,3vw,26px);}
 
   /* layout + summary */
   .layout{display:grid;grid-template-columns:1.55fr 1fr;gap:24px;align-items:start;}
@@ -141,12 +172,13 @@
   .summary-card{background:var(--ink);color:var(--paper);border-radius:22px;padding:clamp(24px,3vw,32px);}
   .summary-card .eyebrow2{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--acid);margin:0;}
   .summary-title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:1.25rem;color:#fff;margin-top:8px;word-break:break-word;}
-  .summary-lines{margin-top:18px;padding-top:4px;}
-  .summary-line{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;padding:10px 0;border-top:1px solid rgba(246,249,245,.14);color:rgba(246,249,245,.8);}
-  .summary-line:first-child{border-top:none;}
+  .summary-groups{margin-top:18px;}
+  .summary-group + .summary-group{margin-top:16px;padding-top:14px;border-top:1px solid rgba(246,249,245,.14);}
+  .summary-group-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(246,249,245,.4);margin-bottom:6px;}
+  .summary-line{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;padding:6px 0;color:rgba(246,249,245,.8);}
   .summary-line b{font-family:'JetBrains Mono',monospace;font-weight:600;color:#fff;white-space:nowrap;}
   .summary-empty{color:rgba(246,249,245,.4);font-size:.86rem;padding:16px 0;margin:0;}
-  .summary-totals{margin-top:6px;padding-top:14px;border-top:1px solid rgba(246,249,245,.22);}
+  .summary-totals{margin-top:14px;padding-top:14px;border-top:1px solid rgba(246,249,245,.22);}
   .total-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:16px;padding-top:16px;border-top:1.5px solid var(--acid);}
   .total-row span{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(246,249,245,.6);}
   .total-row b{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(1.5rem,3vw,1.95rem);color:var(--acid);}
@@ -198,7 +230,7 @@
   <div class="wrap hero-inner">
     <p class="eyebrow"><span></span>Ferramenta interna · Orçamentos</p>
     <h1>Calculadora de orçamento de social media</h1>
-    <p class="lead">Monte o valor de uma proposta em segundos: escolha um pacote de partida ou monte do zero por quantidade de posts estáticos, carrosséis e vídeos — sempre com legenda inclusa, e vídeos já com captação, edição e roteiro.</p>
+    <p class="lead">Ative os serviços que fizerem parte deste orçamento — conteúdo recorrente para redes sociais e/ou cobertura de evento em tempo real — e ajuste as quantidades. O resumo ao lado atualiza sozinho.</p>
     <div class="meta-row">
       <div class="meta-item"><span>Legenda</span><b>Inclusa em tudo</b></div>
       <div class="meta-item"><span>Vídeo / Reels</span><b>Captação + edição + roteiro</b></div>
@@ -212,169 +244,260 @@
 
     <div>
 
-      <div class="block">
-        <div class="step-head"><span class="step-num">01</span><h2>Ponto de partida</h2></div>
-        <p class="step-desc">Escolha um pacote comum para preencher as quantidades automaticamente, ou comece do zero em "Personalizado".</p>
-        <div class="preset-grid">
-          <label class="preset">
-            <input type="radio" name="preset" value="essencial">
-            <span class="preset-card">
-              <span class="preset-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>
-              <span class="tag">Manutenção</span>
-              <h3>Essencial</h3>
-              <p>Feed ativo sem vídeo: posts e carrosséis mensais com legenda.</p>
-            </span>
-          </label>
-          <label class="preset">
-            <input type="radio" name="preset" value="completo" checked>
-            <span class="preset-card">
-              <span class="preset-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>
-              <span class="tag">Mais pedido</span>
-              <h3>Completo</h3>
-              <p>Feed + vídeos com captação, edição e roteiro, mais gestão mensal.</p>
-            </span>
-          </label>
-          <label class="preset">
-            <input type="radio" name="preset" value="custom">
-            <span class="preset-card">
-              <span class="preset-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>
-              <span class="tag">Do zero</span>
-              <h3>Personalizado</h3>
-              <p>Zera as quantidades para você montar o orçamento manualmente.</p>
-            </span>
-          </label>
-        </div>
+      <div class="intro-field">
+        <label for="clientName">Cliente / projeto</label>
+        <p>Para quem é este orçamento? Aparece no resumo e no texto copiado.</p>
+        <input type="text" id="clientName" placeholder="Ex.: Consultório Dra. Ana, ou Casamento Ana &amp; Pedro">
       </div>
 
-      <div class="block">
-        <div class="step-head"><span class="step-num">02</span><h2>Entregas do projeto</h2></div>
-        <p class="step-desc">Ajuste a quantidade de cada entrega. Legenda já está inclusa em todas; vídeos incluem captação, edição e roteiro.</p>
-
-        <div class="field" style="max-width:440px;margin-bottom:18px">
-          <label for="clientName">Cliente / projeto</label>
-          <input type="text" id="clientName" placeholder="Ex.: Consultório Dra. Ana — pacote mensal">
-        </div>
-
-        <div class="qty-list">
-          <div class="qty-row">
-            <div class="qty-left">
-              <span class="qty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="M4 16l4.5-4.5a2 2 0 0 1 2.6-.1L20 18"></path></svg></span>
-              <div>
-                <div class="qty-title">Posts estáticos</div>
-                <div class="qty-badges"><span class="badge">Legenda inclusa</span></div>
-              </div>
-            </div>
-            <div class="stepper">
-              <button type="button" data-step="-1" data-target="qtyStatic" aria-label="Diminuir">−</button>
-              <input type="number" id="qtyStatic" value="0" min="0" inputmode="numeric">
-              <button type="button" data-step="1" data-target="qtyStatic" aria-label="Aumentar">+</button>
-            </div>
+      <!-- TRACK A — Conteúdo recorrente -->
+      <div class="track" id="trackA">
+        <div class="track-head">
+          <div>
+            <p class="track-kicker">Serviço 1</p>
+            <h2>Conteúdo recorrente para redes sociais</h2>
+            <p class="step-desc">Posts, carrosséis e vídeos — sempre com legenda; vídeos já incluem captação, edição e roteiro.</p>
           </div>
-          <div class="qty-row">
-            <div class="qty-left">
-              <span class="qty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="13" height="12" rx="2.4"></rect><rect x="14" y="9" width="8" height="8.5" rx="2"></rect></svg></span>
-              <div>
-                <div class="qty-title">Carrosséis</div>
-                <div class="qty-badges"><span class="badge">Legenda inclusa</span></div>
-              </div>
-            </div>
-            <div class="stepper">
-              <button type="button" data-step="-1" data-target="qtyCarousel" aria-label="Diminuir">−</button>
-              <input type="number" id="qtyCarousel" value="0" min="0" inputmode="numeric">
-              <button type="button" data-step="1" data-target="qtyCarousel" aria-label="Aumentar">+</button>
-            </div>
-          </div>
-          <div class="qty-row">
-            <div class="qty-left">
-              <span class="qty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="14" rx="3"></rect><path d="M17 10.5l4-2.5v8l-4-2.5"></path></svg></span>
-              <div>
-                <div class="qty-title">Vídeos / Reels</div>
-                <div class="qty-badges"><span class="badge">Captação</span><span class="badge">Edição</span><span class="badge">Roteiro</span><span class="badge">Legenda</span></div>
-              </div>
-            </div>
-            <div class="stepper">
-              <button type="button" data-step="-1" data-target="qtyVideo" aria-label="Diminuir">−</button>
-              <input type="number" id="qtyVideo" value="0" min="0" inputmode="numeric">
-              <button type="button" data-step="1" data-target="qtyVideo" aria-label="Aumentar">+</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="note">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
-          <span>Vídeo aqui é o pacote fechado (captação + edição + roteiro + legenda). Se o cliente já enviar o material gravado, ajuste o valor do vídeo no passo 4.</span>
-        </div>
-      </div>
-
-      <div class="block">
-        <div class="step-head"><span class="step-num">03</span><h2>Itens adicionais</h2></div>
-        <p class="step-desc">Marque o que fizer parte deste orçamento.</p>
-        <div class="addon-list">
-          <label class="addon-row">
-            <div class="addon-inner">
-              <input type="checkbox" id="addManagement">
-              <div>
-                <div class="addon-title">Gestão mensal de redes sociais</div>
-                <div class="addon-sub">Planejamento, calendário e alinhamento contínuo com o cliente.</div>
-              </div>
-            </div>
-          </label>
-          <label class="addon-row">
-            <div class="addon-inner">
-              <input type="checkbox" id="addTravel">
-              <div>
-                <div class="addon-title">Deslocamento para captação</div>
-                <div class="addon-sub">Cobrado por diária, quando a gravação exige deslocamento.</div>
-              </div>
-            </div>
+          <label class="track-switch" for="trackAToggle">
+            <span class="track-switch-text" id="trackALabel">Incluído</span>
+            <span class="switch">
+              <input type="checkbox" id="trackAToggle" checked>
+              <span class="switch-track"></span>
+            </span>
           </label>
         </div>
 
-        <div class="grid-2" style="margin-top:18px">
-          <div class="field">
+        <div class="track-body">
+          <p class="subhead">Pacote de partida</p>
+          <div class="preset-grid">
+            <label class="preset">
+              <input type="radio" name="preset" value="essencial">
+              <span class="preset-card">
+                <span class="preset-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>
+                <span class="tag">Manutenção</span>
+                <h3>Essencial</h3>
+                <p>Feed ativo sem vídeo: posts e carrosséis mensais com legenda.</p>
+              </span>
+            </label>
+            <label class="preset">
+              <input type="radio" name="preset" value="completo" checked>
+              <span class="preset-card">
+                <span class="preset-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>
+                <span class="tag">Mais pedido</span>
+                <h3>Completo</h3>
+                <p>Feed + vídeos com captação, edição e roteiro, mais gestão mensal.</p>
+              </span>
+            </label>
+            <label class="preset">
+              <input type="radio" name="preset" value="custom">
+              <span class="preset-card">
+                <span class="preset-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>
+                <span class="tag">Do zero</span>
+                <h3>Personalizado</h3>
+                <p>Zera as quantidades para você montar o orçamento manualmente.</p>
+              </span>
+            </label>
+          </div>
+
+          <p class="subhead spaced">Quantidade de entregas</p>
+          <div class="qty-list">
+            <div class="qty-row">
+              <div class="qty-left">
+                <span class="qty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"></rect><circle cx="9" cy="10" r="1.6"></circle><path d="M4 16l4.5-4.5a2 2 0 0 1 2.6-.1L20 18"></path></svg></span>
+                <div>
+                  <div class="qty-title">Posts estáticos</div>
+                  <div class="qty-badges"><span class="badge">Legenda inclusa</span></div>
+                </div>
+              </div>
+              <div class="qty-controls">
+                <div class="price-field qty-price"><span>R$</span><input type="number" id="priceStatic" min="0" step="5" aria-label="Valor do post estático"></div>
+                <div class="stepper">
+                  <button type="button" data-step="-1" data-target="qtyStatic" aria-label="Diminuir">−</button>
+                  <input type="number" id="qtyStatic" value="0" min="0" inputmode="numeric">
+                  <button type="button" data-step="1" data-target="qtyStatic" aria-label="Aumentar">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="qty-row">
+              <div class="qty-left">
+                <span class="qty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="13" height="12" rx="2.4"></rect><rect x="14" y="9" width="8" height="8.5" rx="2"></rect></svg></span>
+                <div>
+                  <div class="qty-title">Carrosséis</div>
+                  <div class="qty-badges"><span class="badge">Legenda inclusa</span></div>
+                </div>
+              </div>
+              <div class="qty-controls">
+                <div class="price-field qty-price"><span>R$</span><input type="number" id="priceCarousel" min="0" step="5" aria-label="Valor do carrossel"></div>
+                <div class="stepper">
+                  <button type="button" data-step="-1" data-target="qtyCarousel" aria-label="Diminuir">−</button>
+                  <input type="number" id="qtyCarousel" value="0" min="0" inputmode="numeric">
+                  <button type="button" data-step="1" data-target="qtyCarousel" aria-label="Aumentar">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="qty-row">
+              <div class="qty-left">
+                <span class="qty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="14" rx="3"></rect><path d="M17 10.5l4-2.5v8l-4-2.5"></path></svg></span>
+                <div>
+                  <div class="qty-title">Vídeos / Reels</div>
+                  <div class="qty-badges"><span class="badge">Captação</span><span class="badge">Edição</span><span class="badge">Roteiro</span><span class="badge">Legenda</span></div>
+                </div>
+              </div>
+              <div class="qty-controls">
+                <div class="stepper">
+                  <button type="button" data-step="-1" data-target="qtyVideo" aria-label="Diminuir">−</button>
+                  <input type="number" id="qtyVideo" value="0" min="0" inputmode="numeric">
+                  <button type="button" data-step="1" data-target="qtyVideo" aria-label="Aumentar">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
+            <span>Vídeo aqui é o pacote fechado (captação + edição + roteiro + legenda). Se o cliente já enviar o material gravado, ajuste o valor em "Seus valores por entrega", no fim da página.</span>
+          </div>
+
+          <p class="subhead spaced">Itens do plano</p>
+          <div class="addon-list">
+            <div class="addon-row">
+              <label class="addon-inner" for="addManagement">
+                <input type="checkbox" id="addManagement">
+                <div>
+                  <div class="addon-title">Gestão mensal de redes sociais</div>
+                  <div class="addon-sub">Planejamento, calendário e alinhamento contínuo com o cliente.</div>
+                </div>
+              </label>
+              <div class="price-field addon-price"><span>R$</span><input type="number" id="priceManagement" min="0" step="10" aria-label="Valor da gestão mensal"></div>
+            </div>
+            <div class="addon-row">
+              <label class="addon-inner" for="addTravel">
+                <input type="checkbox" id="addTravel">
+                <div>
+                  <div class="addon-title">Deslocamento para captação</div>
+                  <div class="addon-sub">Cobrado por diária, quando a gravação exige deslocamento.</div>
+                </div>
+              </label>
+              <div class="price-field addon-price"><span>R$</span><input type="number" id="priceTravel" min="0" step="5" aria-label="Valor por diária de deslocamento"></div>
+            </div>
+          </div>
+          <div class="field" style="max-width:220px;margin-top:14px">
             <label for="travelDays">Diárias de deslocamento</label>
             <input type="number" id="travelDays" value="1" min="1">
           </div>
+        </div>
+      </div>
+
+      <!-- TRACK B — Cobertura realtime -->
+      <div class="track off" id="trackB">
+        <div class="track-head">
+          <div>
+            <p class="track-kicker">Serviço 2</p>
+            <h2>Cobertura de evento — Realtime</h2>
+            <p class="step-desc">Videomaker / Storymaker ao vivo, cobrado por hora (mínimo 2h), com edição feita na hora e vídeo final de até 90 segundos.</p>
+          </div>
+          <label class="track-switch" for="trackBToggle">
+            <span class="track-switch-text" id="trackBLabel">Não incluído</span>
+            <span class="switch">
+              <input type="checkbox" id="trackBToggle">
+              <span class="switch-track"></span>
+            </span>
+          </label>
+        </div>
+
+        <div class="track-body">
+          <div class="qty-list">
+            <div class="qty-row">
+              <div class="qty-left">
+                <span class="qty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="12" height="12" rx="2.5"></rect><path d="M15 10l6-3v10l-6-3"></path><circle cx="18.4" cy="5.6" r="1.6" fill="currentColor" stroke="none"></circle></svg></span>
+                <div>
+                  <div class="qty-title">Horas de cobertura</div>
+                  <div class="qty-badges"><span class="badge">Ao vivo</span><span class="badge">Mínimo 2h</span></div>
+                </div>
+              </div>
+              <div class="stepper">
+                <button type="button" data-step="-1" data-target="realtimeHours" aria-label="Diminuir">−</button>
+                <input type="number" id="realtimeHours" value="2" min="0" step="0.5" inputmode="decimal">
+                <button type="button" data-step="1" data-target="realtimeHours" aria-label="Aumentar">+</button>
+              </div>
+            </div>
+          </div>
+
+          <label class="addon-row" style="display:block;border:1.5px solid var(--ink);border-radius:16px;margin-top:14px">
+            <div class="addon-inner">
+              <input type="checkbox" id="realtimeVideo" checked>
+              <div>
+                <div class="addon-title">Vídeo final editado, até 90 segundos</div>
+                <div class="addon-sub">Edição feita na hora, com as logos necessárias — adicional de R$ 90,00.</div>
+              </div>
+            </div>
+          </label>
+
+          <div class="grid-2" style="margin-top:14px">
+            <div class="field">
+              <label for="realtimeKm">Distância até o evento (km, ida)</label>
+              <input type="number" id="realtimeKm" value="0" min="0" step="0.5">
+            </div>
+            <div class="field">
+              <label for="realtimeRoundTrip">Deslocamento</label>
+              <label style="display:flex;align-items:center;gap:10px;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer">
+                <input type="checkbox" id="realtimeRoundTrip" checked style="width:18px;height:18px;flex:none;accent-color:var(--volt);margin:0">
+                <span style="font-size:.92rem;font-weight:600">Ida e volta</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
+            <span>Com vídeo incluso, o valor mínimo deste serviço (2h + edição) é R$ 250,00 — fora o deslocamento. O valor por km é uma referência da tarifa média Uber X / 99 Pop em Fortaleza; ajuste em "Seus valores por entrega".</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fechamento (compartilhado) -->
+      <div class="block closing">
+        <p class="subhead" style="margin-bottom:16px">Fechamento do orçamento</p>
+        <div class="grid-2">
           <div class="field">
             <label for="discountPct">Desconto do pacote (%)</label>
             <input type="number" id="discountPct" value="0" min="0" max="100">
           </div>
-        </div>
-        <div class="field" style="margin-top:14px">
-          <label for="notes">Observações <span style="text-transform:none;font-weight:500;color:var(--ink-45)">(opcional, aparece no orçamento copiado)</span></label>
-          <input type="text" id="notes" placeholder="Ex.: pagamento em 2x, entrega ao longo de 30 dias...">
+          <div class="field">
+            <label for="notes">Observações <span style="text-transform:none;font-weight:500;color:var(--ink-45)">(opcional)</span></label>
+            <input type="text" id="notes" placeholder="Ex.: pagamento em 2x...">
+          </div>
         </div>
       </div>
 
       <div class="block" style="margin-bottom:0">
         <details id="configDetails">
           <summary>
-            <span class="step-head" style="margin-bottom:0"><span class="step-num">04</span><h2>Seus valores por entrega</h2></span>
+            <h2 style="font-size:clamp(1.1rem,1.9rem,1.3rem)">Seus valores por entrega</h2>
             <span class="toggle-label" id="configToggleLabel">editar valores
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
             </span>
           </summary>
-          <p class="step-desc" style="margin-top:14px">Os valores abaixo são referência — ajuste para a sua tabela real. Ficam salvos neste navegador para os próximos orçamentos.</p>
+          <p class="step-desc" style="margin-top:14px">Valores do vídeo do pacote recorrente e da cobertura realtime. Os demais valores do conteúdo recorrente (post, carrossel, gestão, deslocamento) ficam editáveis direto lá em cima, no Serviço 1. Tudo fica salvo neste navegador.</p>
           <div class="price-list">
-            <div class="price-row">
-              <div><div class="name">Post estático</div><div class="desc">Inclui legenda</div></div>
-              <div class="price-field"><span>R$</span><input type="number" id="priceStatic" min="0" step="5"></div>
-            </div>
-            <div class="price-row">
-              <div><div class="name">Carrossel</div><div class="desc">Inclui legenda</div></div>
-              <div class="price-field"><span>R$</span><input type="number" id="priceCarousel" min="0" step="5"></div>
-            </div>
             <div class="price-row">
               <div><div class="name">Vídeo / Reels</div><div class="desc">Captação, edição, roteiro e legenda</div></div>
               <div class="price-field"><span>R$</span><input type="number" id="priceVideo" min="0" step="5"></div>
             </div>
             <div class="price-row">
-              <div><div class="name">Gestão mensal</div><div class="desc">Estratégia e calendário de conteúdo</div></div>
-              <div class="price-field"><span>R$</span><input type="number" id="priceManagement" min="0" step="10"></div>
+              <div><div class="name">Realtime — hora</div><div class="desc">Cobertura ao vivo, valor por hora (mín. 2h)</div></div>
+              <div class="price-field"><span>R$</span><input type="number" id="realtimeHourly" min="0" step="5"></div>
             </div>
             <div class="price-row">
-              <div><div class="name">Deslocamento</div><div class="desc">Valor por diária de captação</div></div>
-              <div class="price-field"><span>R$</span><input type="number" id="priceTravel" min="0" step="5"></div>
+              <div><div class="name">Realtime — vídeo até 90s</div><div class="desc">Edição na hora, com logos necessárias</div></div>
+              <div class="price-field"><span>R$</span><input type="number" id="realtimeVideoFee" min="0" step="5"></div>
+            </div>
+            <div class="price-row">
+              <div><div class="name">Realtime — mínimo com vídeo</div><div class="desc">Piso do serviço: 2h de cobertura + vídeo</div></div>
+              <div class="price-field"><span>R$</span><input type="number" id="realtimeMinWithVideo" min="0" step="5"></div>
+            </div>
+            <div class="price-row">
+              <div><div class="name">Realtime — R$/km</div><div class="desc">Referência: tarifa média Uber X / 99 Pop em Fortaleza</div></div>
+              <div class="price-field"><span>R$</span><input type="number" id="realtimeKmRate" min="0" step="0.1"></div>
             </div>
           </div>
           <button type="button" class="reset-link" id="resetPrices">Restaurar valores sugeridos</button>
@@ -388,7 +511,7 @@
         <p class="eyebrow2">Resumo do orçamento</p>
         <h2 class="summary-title" id="summaryClient">Orçamento</h2>
 
-        <div class="summary-lines" id="summaryLines"></div>
+        <div class="summary-groups" id="summaryLines"></div>
 
         <div class="summary-totals">
           <div class="summary-line" id="lineSubtotal"><span>Subtotal</span><b>R$ 0,00</b></div>
@@ -445,8 +568,13 @@
     priceCarousel: 130,
     priceVideo: 220,
     priceManagement: 450,
-    priceTravel: 60
+    priceTravel: 60,
+    realtimeHourly: 100,
+    realtimeVideoFee: 90,
+    realtimeMinWithVideo: 250,
+    realtimeKmRate: 1.5
   };
+  var REALTIME_MIN_HOURS = 2;
   var PRESETS = {
     essencial: { qtyStatic: 6, qtyCarousel: 4, qtyVideo: 0, addManagement: true },
     completo:  { qtyStatic: 4, qtyCarousel: 4, qtyVideo: 4, addManagement: true },
@@ -454,11 +582,19 @@
   };
   var STORAGE_KEY = 'dgrOrcamentoPrecos';
 
-  var priceIds = ['priceStatic','priceCarousel','priceVideo','priceManagement','priceTravel'];
+  var priceIds = ['priceStatic','priceCarousel','priceVideo','priceManagement','priceTravel','realtimeHourly','realtimeVideoFee','realtimeMinWithVideo','realtimeKmRate'];
+  var otherIds = ['qtyStatic','qtyCarousel','qtyVideo','addManagement','addTravel','travelDays','discountPct','clientName','notes','realtimeHours','realtimeVideo','realtimeKm','realtimeRoundTrip'];
   var els = {};
-  priceIds.concat(['qtyStatic','qtyCarousel','qtyVideo','addManagement','addTravel','travelDays','discountPct','clientName','notes']).forEach(function(id){
+  priceIds.concat(otherIds).forEach(function(id){
     els[id] = document.getElementById(id);
   });
+
+  var trackA = document.getElementById('trackA');
+  var trackAToggle = document.getElementById('trackAToggle');
+  var trackALabel = document.getElementById('trackALabel');
+  var trackB = document.getElementById('trackB');
+  var trackBToggle = document.getElementById('trackBToggle');
+  var trackBLabel = document.getElementById('trackBLabel');
 
   function num(v){ var n = parseFloat(v); return isNaN(n) || n < 0 ? 0 : n; }
   function brl(v){ return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); }
@@ -480,6 +616,23 @@
     savePrices();
     render();
     toast('Valores restaurados');
+  });
+
+  function setTrackState(trackEl, toggleEl, labelEl, onText, offText, on){
+    trackEl.classList.toggle('off', !on);
+    labelEl.textContent = on ? onText : offText;
+    trackEl.querySelectorAll('.track-body input, .track-body button').forEach(function(el){
+      el.disabled = !on;
+    });
+  }
+
+  trackAToggle.addEventListener('change', function(){
+    setTrackState(trackA, trackAToggle, trackALabel, 'Incluído', 'Não incluído', trackAToggle.checked);
+    render();
+  });
+  trackBToggle.addEventListener('change', function(){
+    setTrackState(trackB, trackBToggle, trackBLabel, 'Incluído', 'Não incluído', trackBToggle.checked);
+    render();
   });
 
   document.querySelectorAll('.stepper button').forEach(function(btn){
@@ -507,6 +660,9 @@
   function render(){
     savePrices();
 
+    var trackAOn = trackAToggle.checked;
+    var trackBOn = trackBToggle.checked;
+
     var pStatic = num(els.priceStatic.value), qStatic = num(els.qtyStatic.value);
     var pCarousel = num(els.priceCarousel.value), qCarousel = num(els.qtyCarousel.value);
     var pVideo = num(els.priceVideo.value), qVideo = num(els.qtyVideo.value);
@@ -514,24 +670,59 @@
     var pTravel = num(els.priceTravel.value), addTravel = els.addTravel.checked, travelDays = Math.max(1, num(els.travelDays.value) || 1);
     var discountPct = Math.min(100, num(els.discountPct.value));
 
-    var lines = [];
-    if (qStatic > 0) lines.push({label: qStatic + 'x Post estático', value: pStatic * qStatic});
-    if (qCarousel > 0) lines.push({label: qCarousel + 'x Carrossel', value: pCarousel * qCarousel});
-    if (qVideo > 0) lines.push({label: qVideo + 'x Vídeo / Reels', value: pVideo * qVideo});
-    if (addManagement) lines.push({label: 'Gestão mensal', value: pManagement});
-    if (addTravel) lines.push({label: travelDays + 'x Diária de deslocamento', value: pTravel * travelDays});
+    var rtHourly = num(els.realtimeHourly.value);
+    var rtHoursInput = num(els.realtimeHours.value);
+    var rtBillableHours = rtHoursInput > 0 ? Math.max(rtHoursInput, REALTIME_MIN_HOURS) : 0;
+    var rtVideoOn = els.realtimeVideo.checked && rtHoursInput > 0;
+    var rtVideoFee = num(els.realtimeVideoFee.value);
+    var rtMinWithVideo = num(els.realtimeMinWithVideo.value);
+    var rtServiceCost = rtBillableHours * rtHourly + (rtVideoOn ? rtVideoFee : 0);
+    if (rtVideoOn) rtServiceCost = Math.max(rtServiceCost, rtMinWithVideo);
+    var rtKm = num(els.realtimeKm.value);
+    var rtKmRate = num(els.realtimeKmRate.value);
+    var rtRoundTrip = els.realtimeRoundTrip.checked;
+    var rtTravelCost = rtKm * rtKmRate * (rtRoundTrip ? 2 : 1);
 
+    var groupA = [];
+    if (trackAOn) {
+      if (qStatic > 0) groupA.push({label: qStatic + 'x Post estático', value: pStatic * qStatic});
+      if (qCarousel > 0) groupA.push({label: qCarousel + 'x Carrossel', value: pCarousel * qCarousel});
+      if (qVideo > 0) groupA.push({label: qVideo + 'x Vídeo / Reels', value: pVideo * qVideo});
+      if (addManagement) groupA.push({label: 'Gestão mensal', value: pManagement});
+      if (addTravel) groupA.push({label: travelDays + 'x Diária de deslocamento', value: pTravel * travelDays});
+    }
+
+    var groupB = [];
+    if (trackBOn && rtHoursInput > 0) {
+      var rtHoursLabel = (rtBillableHours % 1 === 0 ? rtBillableHours : rtBillableHours.toFixed(1).replace('.', ',')) + 'h cobertura realtime' + (rtHoursInput < REALTIME_MIN_HOURS ? ' (mínimo aplicado)' : '') + (rtVideoOn ? ' + vídeo até 90s' : '');
+      groupB.push({label: rtHoursLabel, value: rtServiceCost});
+      if (rtTravelCost > 0) {
+        var rtKmLabel = (rtKm % 1 === 0 ? rtKm : rtKm.toFixed(1).replace('.', ',')) + 'km';
+        groupB.push({label: 'Deslocamento evento' + (rtRoundTrip ? ' (ida e volta)' : '') + ' — ' + rtKmLabel, value: rtTravelCost});
+      }
+    }
+
+    var lines = groupA.concat(groupB);
     var subtotal = lines.reduce(function(sum, l){ return sum + l.value; }, 0);
     var discount = subtotal * (discountPct / 100);
     var total = subtotal - discount;
 
     var summaryLines = document.getElementById('summaryLines');
     if (lines.length === 0) {
-      summaryLines.innerHTML = '<p class="summary-empty">Adicione quantidades ou itens para ver o orçamento.</p>';
+      summaryLines.innerHTML = '<p class="summary-empty">Ative um serviço e adicione quantidades para ver o orçamento.</p>';
     } else {
-      summaryLines.innerHTML = lines.map(function(l){
-        return '<div class="summary-line"><span>' + l.label + '</span><b>' + brl(l.value) + '</b></div>';
-      }).join('');
+      var html = '';
+      if (groupA.length) {
+        html += '<div class="summary-group"><div class="summary-group-label">Conteúdo recorrente</div>' +
+          groupA.map(function(l){ return '<div class="summary-line"><span>' + l.label + '</span><b>' + brl(l.value) + '</b></div>'; }).join('') +
+          '</div>';
+      }
+      if (groupB.length) {
+        html += '<div class="summary-group"><div class="summary-group-label">Cobertura realtime</div>' +
+          groupB.map(function(l){ return '<div class="summary-line"><span>' + l.label + '</span><b>' + brl(l.value) + '</b></div>'; }).join('') +
+          '</div>';
+      }
+      summaryLines.innerHTML = html;
     }
 
     document.querySelector('#lineSubtotal b').textContent = brl(subtotal);
@@ -580,7 +771,7 @@
 
   document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
 
-  priceIds.concat(['qtyStatic','qtyCarousel','qtyVideo','addManagement','addTravel','travelDays','discountPct','clientName']).forEach(function(id){
+  priceIds.concat(otherIds.filter(function(id){ return id !== 'notes'; })).forEach(function(id){
     els[id].addEventListener('input', render);
     els[id].addEventListener('change', render);
   });
@@ -595,6 +786,7 @@
   els.qtyCarousel.value = initial.qtyCarousel;
   els.qtyVideo.value = initial.qtyVideo;
   els.addManagement.checked = initial.addManagement;
+  setTrackState(trackB, trackBToggle, trackBLabel, 'Incluído', 'Não incluído', false);
   render();
 })();
 </script>
