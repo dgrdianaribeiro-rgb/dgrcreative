@@ -165,6 +165,16 @@
   .field-inline-btn input{flex:1;}
   .form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;flex-wrap:wrap;}
   .form-note{background:var(--paper-dim);border-radius:12px;padding:12px 14px;font-size:.82rem;color:var(--ink-60);margin-top:6px;}
+  .itens-box{background:var(--paper-dim);border-radius:14px;padding:14px;}
+  .itens-box .item-row{display:flex;gap:6px;margin-bottom:7px;flex-wrap:wrap;}
+  .itens-box .item-row select, .itens-box .item-row input{font-family:'Manrope',sans-serif;font-size:.85rem;padding:8px 9px;border:1.5px solid var(--border);border-radius:8px;background:#fff;color:#000;}
+  .itens-box select.it-marca{flex:0 0 96px;}
+  .itens-box select.it-produto{flex:1 1 150px;min-width:120px;}
+  .itens-box input.it-qtd{flex:0 0 50px;text-align:center;}
+  .itens-box input.it-preco{flex:0 0 84px;}
+  .itens-box button.it-remove{flex:0 0 34px;height:36px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;color:var(--danger);}
+  .itens-box button.it-remove:hover{background:var(--danger);color:#fff;border-color:var(--danger);}
+  .itens-total{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;}
   .stepper-row{display:flex;align-items:center;gap:10px;}
   .stepper-row button{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-weight:700;}
   .stepper-row button:hover{background:var(--paper-dim);}
@@ -233,6 +243,7 @@
     <button class="tab-btn active" data-tab="resumo">Resumo</button>
     <button class="tab-btn" data-tab="cobrancas">Cobranças<span class="dot" id="dotCobrancas" style="display:none"></span></button>
     <button class="tab-btn" data-tab="clientes">Clientes</button>
+    <button class="tab-btn" data-tab="produtos">Produtos</button>
     <button class="tab-btn" data-tab="vendas">Vendas</button>
     <button class="tab-btn" data-tab="pagamentos">Pagamentos</button>
     <button class="tab-btn" data-tab="contas">Minhas Contas</button>
@@ -288,6 +299,24 @@
       <thead><tr><th>Nome</th><th>Telefone</th><th class="num">Em aberto (mês)</th><th></th></tr></thead>
       <tbody></tbody>
     </table></div>
+  </section>
+
+  <!-- PRODUTOS -->
+  <section class="tabpanel" id="tab-produtos">
+    <div class="panel-head">
+      <div>
+        <h2>Catálogo de produtos</h2>
+        <p>Itens das marcas que você revende, com o preço da tabela atual. Ao lançar uma venda, escolha da lista e ajuste só o que mudou de ciclo.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg><input id="buscaProdutos" placeholder="Buscar produto…"></div>
+        <button class="btn primary" onclick="openProdutoForm()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Novo produto
+        </button>
+      </div>
+    </div>
+    <div id="produtosGroups"></div>
   </section>
 
   <!-- VENDAS -->
@@ -375,6 +404,7 @@
     <button class="fab-item" onclick="closeFab(); openPagamentoForm();"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg></span>Registrar pagamento</button>
     <button class="fab-item" onclick="closeFab(); openVendaForm();"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="3" y="6" width="18" height="14" rx="2"></rect><path d="M3 10h18"></path></svg></span>Nova venda</button>
     <button class="fab-item" onclick="closeFab(); openClienteForm();"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg></span>Novo cliente</button>
+    <button class="fab-item" onclick="closeFab(); openProdutoForm();"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L3 13V3h10l7.59 7.59a2 2 0 0 1 0 2.82Z"></path><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"></circle></svg></span>Novo produto</button>
     <button class="fab-item" onclick="closeFab(); openContaForm();"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18"></path></svg></span>Nova conta</button>
   </div>
   <button class="fab" id="fabBtn" aria-label="Ações rápidas">
@@ -406,12 +436,13 @@ function todayMidnight(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
 
 /* ===================== STORE ===================== */
 const STORE_KEY='dgrVendasControle_v1';
+const SEED_PRODUTOS = [{"id": "pr1", "marca": "Avon", "nome": "ADP", "preco": 0}, {"id": "pr2", "marca": "Avon", "nome": "Attraction", "preco": 0}, {"id": "pr3", "marca": "Avon", "nome": "Far Away", "preco": 0}, {"id": "pr4", "marca": "Avon", "nome": "Loção Corporal Avon Care Leite de Amêndoas e Cereja", "preco": 37.99}, {"id": "pr5", "marca": "Avon", "nome": "On Duty", "preco": 0}, {"id": "pr6", "marca": "Avon", "nome": "Petit Attitude", "preco": 0}, {"id": "pr7", "marca": "Avon", "nome": "Renew", "preco": 0}, {"id": "pr8", "marca": "Boticário", "nome": "Arabian Oásis", "preco": 234.9}, {"id": "pr9", "marca": "Boticário", "nome": "Baby Doll", "preco": 34.0}, {"id": "pr10", "marca": "Boticário", "nome": "Batom Líquido", "preco": 0}, {"id": "pr11", "marca": "Boticário", "nome": "Baunilha", "preco": 0}, {"id": "pr12", "marca": "Boticário", "nome": "Body Ameixa", "preco": 0}, {"id": "pr13", "marca": "Boticário", "nome": "Body Ameixa Negra", "preco": 0}, {"id": "pr14", "marca": "Boticário", "nome": "Body Baunilha", "preco": 0}, {"id": "pr15", "marca": "Boticário", "nome": "Body Jasmim", "preco": 0}, {"id": "pr16", "marca": "Boticário", "nome": "Body Rosas Secretas", "preco": 0}, {"id": "pr17", "marca": "Boticário", "nome": "Body Splash DeLeite", "preco": 0}, {"id": "pr18", "marca": "Boticário", "nome": "Clash", "preco": 179.0}, {"id": "pr19", "marca": "Boticário", "nome": "Club 6", "preco": 154.9}, {"id": "pr20", "marca": "Boticário", "nome": "Club 6 Cassino", "preco": 154.9}, {"id": "pr21", "marca": "Boticário", "nome": "Coffee Man", "preco": 0}, {"id": "pr22", "marca": "Boticário", "nome": "Coffee Unique", "preco": 0}, {"id": "pr23", "marca": "Boticário", "nome": "Coffee Woman", "preco": 0}, {"id": "pr24", "marca": "Boticário", "nome": "Coffee Woman Adctive", "preco": 189.9}, {"id": "pr25", "marca": "Boticário", "nome": "Cuide-se Bem Hidratante", "preco": 0}, {"id": "pr26", "marca": "Boticário", "nome": "Egeo", "preco": 0}, {"id": "pr27", "marca": "Boticário", "nome": "Egeo Blue", "preco": 0}, {"id": "pr28", "marca": "Boticário", "nome": "Egeo Bomb", "preco": 159.9}, {"id": "pr29", "marca": "Boticário", "nome": "Egeo Bomb Black", "preco": 154.9}, {"id": "pr30", "marca": "Boticário", "nome": "Egeo Dolce", "preco": 0}, {"id": "pr31", "marca": "Boticário", "nome": "Egeo Man", "preco": 0}, {"id": "pr32", "marca": "Boticário", "nome": "Egeo Original", "preco": 0}, {"id": "pr33", "marca": "Boticário", "nome": "Egeo Vanilla", "preco": 0}, {"id": "pr34", "marca": "Boticário", "nome": "Elysée", "preco": 0}, {"id": "pr35", "marca": "Boticário", "nome": "Essencial Supreme", "preco": 169.9}, {"id": "pr36", "marca": "Boticário", "nome": "Eudora Magnific", "preco": 0}, {"id": "pr37", "marca": "Boticário", "nome": "Floratta", "preco": 0}, {"id": "pr38", "marca": "Boticário", "nome": "Floratta Blue", "preco": 0}, {"id": "pr39", "marca": "Boticário", "nome": "Floratta Flores", "preco": 0}, {"id": "pr40", "marca": "Boticário", "nome": "Floratta Gold", "preco": 0}, {"id": "pr41", "marca": "Boticário", "nome": "Floratta Red", "preco": 174.9}, {"id": "pr42", "marca": "Boticário", "nome": "Floratta Red Passion", "preco": 229.9}, {"id": "pr43", "marca": "Boticário", "nome": "Floratta SUCREE", "preco": 194.9}, {"id": "pr44", "marca": "Boticário", "nome": "Floratta Sucré", "preco": 0}, {"id": "pr45", "marca": "Boticário", "nome": "Glamour Black", "preco": 0}, {"id": "pr46", "marca": "Boticário", "nome": "Glamour Secret", "preco": 199.9}, {"id": "pr47", "marca": "Boticário", "nome": "Her Code Body Splash", "preco": 0}, {"id": "pr48", "marca": "Boticário", "nome": "Hidratante", "preco": 0}, {"id": "pr49", "marca": "Boticário", "nome": "Hidratante Noire", "preco": 0}, {"id": "pr50", "marca": "Boticário", "nome": "Hidratante Quinoa", "preco": 0}, {"id": "pr51", "marca": "Boticário", "nome": "Hidratante Relaxante", "preco": 0}, {"id": "pr52", "marca": "Boticário", "nome": "Hoje", "preco": 119.9}, {"id": "pr53", "marca": "Boticário", "nome": "Ilía", "preco": 0}, {"id": "pr54", "marca": "Boticário", "nome": "Ilía Secreto", "preco": 0}, {"id": "pr55", "marca": "Boticário", "nome": "Insensatez", "preco": 0}, {"id": "pr56", "marca": "Boticário", "nome": "Intention Strong", "preco": 128.9}, {"id": "pr57", "marca": "Boticário", "nome": "Jasmim Sabac", "preco": 0}, {"id": "pr58", "marca": "Boticário", "nome": "Kit Essencial Safran", "preco": 0}, {"id": "pr59", "marca": "Boticário", "nome": "Kit Liz", "preco": 0}, {"id": "pr60", "marca": "Boticário", "nome": "Kit Malbec Tradicional", "preco": 250.0}, {"id": "pr61", "marca": "Boticário", "nome": "Kit Natura", "preco": 0}, {"id": "pr62", "marca": "Boticário", "nome": "Kit Palo Santo", "preco": 214.9}, {"id": "pr63", "marca": "Boticário", "nome": "Lily Tradicional", "preco": 0}, {"id": "pr64", "marca": "Boticário", "nome": "Linda", "preco": 0}, {"id": "pr65", "marca": "Boticário", "nome": "Liz", "preco": 169.9}, {"id": "pr66", "marca": "Boticário", "nome": "Liz D'Essenze", "preco": 0}, {"id": "pr67", "marca": "Boticário", "nome": "Liz Sublime", "preco": 0}, {"id": "pr68", "marca": "Boticário", "nome": "Malbec", "preco": 0}, {"id": "pr69", "marca": "Boticário", "nome": "Malbec Black", "preco": 0}, {"id": "pr70", "marca": "Boticário", "nome": "Malbec Eau Perfum", "preco": 0}, {"id": "pr71", "marca": "Boticário", "nome": "Malbec Signature", "preco": 341.9}, {"id": "pr72", "marca": "Boticário", "nome": "Malbec X", "preco": 259.9}, {"id": "pr73", "marca": "Boticário", "nome": "Mascara Capilar", "preco": 72.99}, {"id": "pr74", "marca": "Boticário", "nome": "Match", "preco": 0}, {"id": "pr75", "marca": "Boticário", "nome": "Máscara", "preco": 0}, {"id": "pr76", "marca": "Boticário", "nome": "Máscara Capilar", "preco": 0}, {"id": "pr77", "marca": "Boticário", "nome": "Máscara de Cílios", "preco": 0}, {"id": "pr78", "marca": "Boticário", "nome": "Nativa Baunilha", "preco": 0}, {"id": "pr79", "marca": "Boticário", "nome": "Nativa SPA Ameixa", "preco": 0}, {"id": "pr80", "marca": "Boticário", "nome": "Nativa SPA Banho de Flores", "preco": 0}, {"id": "pr81", "marca": "Boticário", "nome": "Natura Essencial", "preco": 0}, {"id": "pr82", "marca": "Boticário", "nome": "Orquídea Noire", "preco": 0}, {"id": "pr83", "marca": "Boticário", "nome": "Paleta", "preco": 89.9}, {"id": "pr84", "marca": "Boticário", "nome": "Palo Santo", "preco": 0}, {"id": "pr85", "marca": "Boticário", "nome": "Pincel Contorno", "preco": 0}, {"id": "pr86", "marca": "Boticário", "nome": "Pincel Pro Corretivo", "preco": 0}, {"id": "pr87", "marca": "Boticário", "nome": "Portinari", "preco": 194.9}, {"id": "pr88", "marca": "Boticário", "nome": "Quasar", "preco": 0}, {"id": "pr89", "marca": "Boticário", "nome": "Red Passion", "preco": 199.9}, {"id": "pr90", "marca": "Boticário", "nome": "Refil (Promoção)", "preco": 0}, {"id": "pr91", "marca": "Boticário", "nome": "Refil Ameixa", "preco": 0}, {"id": "pr92", "marca": "Boticário", "nome": "Refil Ameixa Negra", "preco": 0}, {"id": "pr93", "marca": "Boticário", "nome": "Refil DeLeite", "preco": 0}, {"id": "pr94", "marca": "Boticário", "nome": "Refil Hidrat Lily", "preco": 0}, {"id": "pr95", "marca": "Boticário", "nome": "Refil Nativa SPA", "preco": 0}, {"id": "pr96", "marca": "Boticário", "nome": "Refil Óleo", "preco": 0}, {"id": "pr97", "marca": "Boticário", "nome": "Shampoo", "preco": 0}, {"id": "pr98", "marca": "Boticário", "nome": "Shampoo Cauterização", "preco": 0}, {"id": "pr99", "marca": "Boticário", "nome": "Signature", "preco": 0}, {"id": "pr100", "marca": "Boticário", "nome": "Uomini", "preco": 0}, {"id": "pr101", "marca": "Boticário", "nome": "Viagem Encantada", "preco": 219.8}, {"id": "pr102", "marca": "Boticário", "nome": "Óleo de Rosa Mosqueta", "preco": 0}, {"id": "pr103", "marca": "Eudora", "nome": "Creme Hidratante Facial", "preco": 76.99}, {"id": "pr104", "marca": "Eudora", "nome": "Delas", "preco": 0}, {"id": "pr105", "marca": "Eudora", "nome": "Esfoliante", "preco": 59.99}, {"id": "pr106", "marca": "Eudora", "nome": "Extraordinário", "preco": 0}, {"id": "pr107", "marca": "Eudora", "nome": "Hidratante Gel Ácido Hialurônico", "preco": 107.99}, {"id": "pr108", "marca": "Eudora", "nome": "Magnific", "preco": 0}, {"id": "pr109", "marca": "Eudora", "nome": "Mouse de Limpeza", "preco": 72.99}, {"id": "pr110", "marca": "Eudora", "nome": "Nuah", "preco": 0}, {"id": "pr111", "marca": "Natura", "nome": "Body Splash Natura Luna Fascinante", "preco": 64.9}, {"id": "pr112", "marca": "Natura", "nome": "Desodorante Colônia Kaiak Pulso Masculino", "preco": 124.9}, {"id": "pr113", "marca": "Natura", "nome": "Ekos", "preco": 0}, {"id": "pr114", "marca": "Natura", "nome": "Essencial Feminino", "preco": 0}, {"id": "pr115", "marca": "Natura", "nome": "Essencial Masculino", "preco": 0}, {"id": "pr116", "marca": "Natura", "nome": "Hoje", "preco": 109.9}, {"id": "pr117", "marca": "Natura", "nome": "Humor", "preco": 0}, {"id": "pr118", "marca": "Natura", "nome": "Illia Completa", "preco": 199.9}, {"id": "pr119", "marca": "Natura", "nome": "Kaiak Feminino", "preco": 0}, {"id": "pr120", "marca": "Natura", "nome": "Liz D’Essenze", "preco": 174.9}, {"id": "pr121", "marca": "Natura", "nome": "Luna", "preco": 0}, {"id": "pr122", "marca": "Natura", "nome": "Máscara Capilar", "preco": 79.0}, {"id": "pr123", "marca": "Natura", "nome": "Natura Illia Frutal", "preco": 149.9}, {"id": "pr124", "marca": "Natura", "nome": "Natura Tododia", "preco": 98.9}, {"id": "pr125", "marca": "Natura", "nome": "OUI Scapin", "preco": 389.0}, {"id": "pr126", "marca": "Natura", "nome": "Tododia Sabonete", "preco": 0}, {"id": "pr127", "marca": "Natura", "nome": "Una", "preco": 0}];
 let DB = loadDB();
 
 function loadDB(){
   let raw=null;
   try{ raw=JSON.parse(localStorage.getItem(STORE_KEY)); }catch(e){}
-  const base={ compras:[], contas:[], pagamentos:[], clientes:[], mesAtual: currentYM(), pixKey:'', diasVencimento:5 };
+  const base={ compras:[], contas:[], pagamentos:[], clientes:[], produtos: SEED_PRODUTOS.slice(), mesAtual: currentYM(), pixKey:'', diasVencimento:5 };
   return Object.assign(base, raw||{});
 }
 function saveDB(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(DB)); }catch(e){ toast('Não foi possível salvar (armazenamento cheio ou bloqueado).'); } }
@@ -421,6 +452,17 @@ function nomeCliente(id){ const c=getCliente(id); return c? c.nome : '(cliente r
 function clienteOptions(selectedId){
   return DB.clientes.slice().sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'))
     .map(c=>`<option value="${esc(c.id)}" ${c.id===selectedId?'selected':''}>${esc(c.nome)}</option>`).join('');
+}
+
+function getProduto(id){ return DB.produtos.find(p=>p.id===id); }
+const MARCAS = ['Boticário','Natura','Eudora','Avon','Outra'];
+function produtosPorMarca(marca){
+  return DB.produtos.filter(p=>p.marca===marca).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+}
+function produtoOptions(marca, selectedId){
+  const lista = produtosPorMarca(marca);
+  const opts = lista.map(p=>`<option value="${esc(p.id)}" data-preco="${p.preco}" ${p.id===selectedId?'selected':''}>${esc(p.nome)}</option>`).join('');
+  return `<option value="">Escolha um produto…</option>` + opts;
 }
 
 /* ===================== COMPUTE (regras de negócio) ===================== */
@@ -622,6 +664,65 @@ function renderClientes(){
 }
 document.getElementById('buscaClientes').addEventListener('input', renderClientes);
 
+/* ===================== PRODUTOS (catálogo) ===================== */
+function openProdutoForm(id){
+  const p = id ? getProduto(id) : {id:'', marca:'Boticário', nome:'', preco:''};
+  openModal(`
+    <div class="modal-head"><h3>${id?'Editar produto':'Novo produto'}</h3><button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div>
+    <form id="formProduto" class="form-grid">
+      <div class="field"><label>Marca</label>
+        <select name="marca">${MARCAS.map(m=>`<option ${m===p.marca?'selected':''}>${m}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Preço atual (R$)</label><input type="number" step="0.01" min="0" name="preco" value="${p.preco}"></div>
+      <div class="field span2"><label>Nome do produto*</label><input required name="nome" value="${esc(p.nome)}" autofocus></div>
+      <div class="form-actions" style="grid-column:1/-1">
+        ${id?`<button type="button" class="btn danger" onclick="deleteProduto('${id}')">Excluir</button>`:''}
+        <button type="button" class="btn ghost" onclick="closeModal()">Cancelar</button>
+        <button type="submit" class="btn primary">Salvar</button>
+      </div>
+    </form>
+  `);
+  document.getElementById('formProduto').addEventListener('submit', e=>{
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const nome = (f.get('nome')||'').trim();
+    if(!nome){ toast('Digite o nome do produto.'); return; }
+    const data = { marca: f.get('marca'), nome, preco: round2(parseFloat(f.get('preco'))||0) };
+    if (id){ Object.assign(p, data); } else { DB.produtos.push(Object.assign({id:uid()}, data)); }
+    saveDB(); closeModal(); renderAll(); toast('Produto salvo.');
+  });
+}
+window.openProdutoForm = openProdutoForm;
+window.deleteProduto = function(id){
+  if(!confirm('Excluir este produto do catálogo?')) return;
+  DB.produtos = DB.produtos.filter(p=>p.id!==id);
+  saveDB(); closeModal(); renderAll(); toast('Produto excluído.');
+};
+
+function renderProdutos(){
+  const wrap = document.getElementById('produtosGroups');
+  const busca = (document.getElementById('buscaProdutos').value||'').toLowerCase();
+  const filtered = DB.produtos.filter(p=>p.nome.toLowerCase().includes(busca));
+  if(!filtered.length){
+    wrap.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18"></path></svg><p>Nenhum produto encontrado.</p></div>`;
+    return;
+  }
+  const groups = {};
+  filtered.forEach(p=>{ (groups[p.marca]=groups[p.marca]||[]).push(p); });
+  const order = MARCAS.filter(m=>groups[m]);
+  wrap.innerHTML = order.map(marca=>{
+    const rows = groups[marca].sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR')).map(p=>`
+      <tr>
+        <td data-label="Produto"><b>${esc(p.nome)}</b></td>
+        <td data-label="Preço" class="num">${brl(p.preco)}</td>
+        <td class="actions"><button class="btn sm ghost" onclick="openProdutoForm('${p.id}')">Editar</button></td>
+      </tr>`).join('');
+    return `<div class="section-title" style="margin-top:22px">${esc(marca)} · ${groups[marca].length}</div>
+      <div class="table-wrap"><table class="table"><thead><tr><th>Produto</th><th class="num">Preço</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  }).join('');
+}
+document.getElementById('buscaProdutos').addEventListener('input', renderProdutos);
+
 /* ===================== VENDAS (Compras) ===================== */
 function openVendaForm(id){
   const v = id ? DB.compras.find(x=>x.id===id) : {id:'', clienteId:'', produto:'', marca:'Boticário', dataCompra:new Date().toISOString().slice(0,10), total:'', parcelas:1, valorParcela:'', mesPrimeira:DB.mesAtual, apelido:'', obs:''};
@@ -638,6 +739,17 @@ function openVendaForm(id){
         <div class="field-inline-btn">
           <select required name="clienteId">${clienteOptions(v.clienteId)}</select>
           <button type="button" class="btn sm ghost" onclick="openClienteForm()">+ novo</button>
+        </div>
+      </div>
+      <div class="field span2">
+        <label>Itens do catálogo (opcional)</label>
+        <div class="itens-box">
+          <div id="itensRows"></div>
+          <button type="button" class="btn sm ghost" id="btnAddItem">+ item</button>
+          <div class="itens-total">
+            <span class="hint" style="margin:0">Itens somam: <b id="itensTotal">R$ 0,00</b></span>
+            <button type="button" class="btn sm primary" id="btnUsarItens">Usar nos campos abaixo</button>
+          </div>
         </div>
       </div>
       <div class="field span2"><label>Produto(s)</label><textarea name="produto" placeholder="Ex: Hidratante Quinoa + Malbec Signature">${esc(v.produto)}</textarea></div>
@@ -668,6 +780,57 @@ function openVendaForm(id){
     </form>
   `);
   const form = document.getElementById('formVenda');
+
+  let formItens = [];
+  function renderItensRows(){
+    const box = document.getElementById('itensRows');
+    box.innerHTML = formItens.map((it,idx)=>`
+      <div class="item-row" data-idx="${idx}">
+        <select class="it-marca">${MARCAS.slice(0,4).map(m=>`<option ${m===it.marca?'selected':''}>${m}</option>`).join('')}</select>
+        <select class="it-produto">${produtoOptions(it.marca, it.produtoId)}</select>
+        <input type="number" class="it-qtd" min="1" step="1" value="${it.qtd}" title="Quantidade">
+        <input type="number" class="it-preco" min="0" step="0.01" value="${it.preco}" title="Preço unitário">
+        <button type="button" class="it-remove" title="Remover">×</button>
+      </div>`).join('');
+    box.querySelectorAll('.item-row').forEach(row=>{
+      const idx = Number(row.dataset.idx);
+      row.querySelector('.it-marca').addEventListener('change', e=>{
+        formItens[idx].marca = e.target.value; formItens[idx].produtoId=''; formItens[idx].nome=''; formItens[idx].preco=0;
+        renderItensRows();
+      });
+      row.querySelector('.it-produto').addEventListener('change', e=>{
+        const opt = e.target.selectedOptions[0];
+        formItens[idx].produtoId = e.target.value;
+        formItens[idx].nome = opt && opt.value ? opt.textContent : '';
+        formItens[idx].preco = opt && opt.dataset.preco ? parseFloat(opt.dataset.preco) : 0;
+        renderItensRows();
+      });
+      row.querySelector('.it-qtd').addEventListener('input', e=>{ formItens[idx].qtd = Math.max(1, parseInt(e.target.value)||1); updateItensTotal(); });
+      row.querySelector('.it-preco').addEventListener('input', e=>{ formItens[idx].preco = parseFloat(e.target.value)||0; updateItensTotal(); });
+      row.querySelector('.it-remove').addEventListener('click', ()=>{ formItens.splice(idx,1); renderItensRows(); });
+    });
+    updateItensTotal();
+  }
+  function updateItensTotal(){
+    document.getElementById('itensTotal').textContent = brl(round2(formItens.reduce((s,it)=>s+it.qtd*it.preco,0)));
+  }
+  document.getElementById('btnAddItem').addEventListener('click', ()=>{
+    formItens.push({marca: form.marca.value || 'Boticário', produtoId:'', nome:'', qtd:1, preco:0});
+    renderItensRows();
+  });
+  document.getElementById('btnUsarItens').addEventListener('click', ()=>{
+    const validItens = formItens.filter(it=>it.nome);
+    if(!validItens.length){ toast('Escolha ao menos um produto na lista.'); return; }
+    const produtoText = validItens.map(it=> (it.qtd>1? it.qtd+'x ':'') + it.nome).join(' + ');
+    const total = round2(validItens.reduce((s,it)=>s+it.qtd*it.preco,0));
+    form.produto.value = produtoText;
+    form.total.value = total;
+    if (validItens.length===1) { form.marca.value = validItens[0].marca; if(!form.apelido.value) form.apelido.value = validItens[0].nome; }
+    updatePreview();
+    toast('Produto(s) e total preenchidos — confira as parcelas.');
+  });
+  renderItensRows();
+
   function updatePreview(){
     const f = new FormData(form);
     const total = parseFloat(f.get('total'))||0;
@@ -1101,7 +1264,7 @@ document.getElementById('btnSettings').addEventListener('click', ()=>{
         const data = JSON.parse(reader.result);
         if(!data || typeof data!=='object') throw new Error('formato inválido');
         if(!confirm('Importar vai substituir todos os dados atuais deste navegador. Continuar?')) return;
-        DB = Object.assign({ compras:[], contas:[], pagamentos:[], clientes:[], mesAtual: currentYM(), pixKey:'', diasVencimento:5 }, data);
+        DB = Object.assign({ compras:[], contas:[], pagamentos:[], clientes:[], produtos: SEED_PRODUTOS.slice(), mesAtual: currentYM(), pixKey:'', diasVencimento:5 }, data);
         saveDB(); closeModal(); renderAll(); toast('Dados importados com sucesso.');
       }catch(err){ toast('Arquivo inválido.'); }
     };
@@ -1110,7 +1273,7 @@ document.getElementById('btnSettings').addEventListener('click', ()=>{
   document.getElementById('btnWipe').addEventListener('click', ()=>{
     if(!confirm('Isso apaga TODOS os dados deste navegador. Tem certeza?')) return;
     if(!confirm('Confirma mesmo? Não tem como desfazer.')) return;
-    DB = { compras:[], contas:[], pagamentos:[], clientes:[], mesAtual: currentYM(), pixKey:'', diasVencimento:5 };
+    DB = { compras:[], contas:[], pagamentos:[], clientes:[], produtos: SEED_PRODUTOS.slice(), mesAtual: currentYM(), pixKey:'', diasVencimento:5 };
     saveDB(); closeModal(); renderAll(); toast('Todos os dados foram apagados.');
   });
 });
@@ -1126,6 +1289,7 @@ function renderAll(){
   renderResumo();
   renderCobrancas();
   renderClientes();
+  renderProdutos();
   renderVendas();
   renderPagamentos();
   renderContas();
