@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jovens Pela Diferença — Manual do Voluntário &amp; ONG</title>
+<meta name="description" content="Associação Civil Jovens Pela Diferença — a maior ONG jovem de Fortaleza. Conheça nossa história, nossas ações, os níveis de voluntariado e como se tornar parceiro.">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#1FC1E0;
+    --cyan-2:#12A6C6;
+    --cyan-deep:#0C7F9C;
+    --navy:#0A3345;
+    --ink:#0B2430;
+    --paper:#F3FCFD;
+    --paper-2:#E4F7FA;
+    --purple:#6B3FF0;
+    --purple-2:#4A22C4;
+    --green:#16C98D;
+    --white:#FFFFFF;
+    --shadow: 0 20px 46px -22px rgba(10,51,69,.35);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Nunito',ui-sans-serif,system-ui,sans-serif;
+    font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  img{max-width:100%;display:block;}
+  h1,h2,h3,h4{font-family:'Baloo 2',ui-sans-serif,sans-serif;margin:0;color:var(--navy);}
+  p{margin:0;}
+  a{color:inherit;}
+  ::selection{background:var(--green);color:#fff;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,5vw,56px);}
+  .eyebrow{
+    font-family:'Baloo 2',sans-serif;font-weight:600;font-size:13px;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--cyan-deep);display:inline-flex;align-items:center;gap:10px;margin:0 0 14px;
+  }
+  .eyebrow::before{content:"";width:26px;height:4px;border-radius:4px;background:var(--cyan);display:inline-block;}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;font-family:'Baloo 2',sans-serif;font-weight:600;
+    font-size:15px;padding:14px 26px;border-radius:999px;text-decoration:none;border:2px solid transparent;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-3px);}
+  .btn-primary{background:var(--navy);color:#fff;box-shadow:0 16px 30px -14px rgba(10,51,69,.55);}
+  .btn-primary:hover{background:var(--cyan-deep);}
+  .btn-cyan{background:var(--cyan);color:#04303c;box-shadow:0 16px 30px -14px rgba(31,193,224,.6);}
+  .btn-cyan:hover{background:var(--white);}
+  .btn-outline{border-color:rgba(10,51,69,.25);color:var(--navy);background:transparent;}
+  .btn-outline:hover{border-color:var(--cyan-deep);color:var(--cyan-deep);}
+  .btn-outline-light{border-color:rgba(255,255,255,.5);color:#fff;background:transparent;}
+  .btn-outline-light:hover{border-color:#fff;background:rgba(255,255,255,.12);}
+  .btn-white{background:#fff;color:var(--purple-2);box-shadow:0 16px 30px -14px rgba(0,0,0,.35);}
+  .btn-white:hover{background:var(--green);color:#04301f;}
+  .pill{font-family:'Baloo 2',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.03em;padding:8px 15px;border-radius:999px;display:inline-block;}
+  section{position:relative;}
+  .torn{position:absolute;pointer-events:none;z-index:0;}
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+  @keyframes floaty{0%,100%{transform:translate(0,0) rotate(0deg);}50%{transform:translate(-18px,20px) rotate(8deg);}}
+  @keyframes floaty2{0%,100%{transform:translate(0,0) rotate(0deg);}50%{transform:translate(16px,-18px) rotate(-6deg);}}
+  @keyframes marq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(31,193,224,.45);}70%{box-shadow:0 0 0 16px rgba(31,193,224,0);}100%{box-shadow:0 0 0 0 rgba(31,193,224,0);}}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}*{animation:none !important;transition-duration:.001ms !important;}}
+
+  /* NAV */
+  header.topbar{position:sticky;top:0;z-index:100;background:rgba(243,252,253,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(10,51,69,.08);transition:box-shadow .2s ease;}
+  header.topbar.scrolled{box-shadow:0 8px 24px -18px rgba(10,51,69,.4);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px clamp(20px,5vw,56px);max-width:1240px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;}
+  .brand img{width:40px;height:40px;}
+  .brand-text{display:flex;flex-direction:column;line-height:1.08;}
+  .brand-text b{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;color:var(--navy);}
+  .brand-text span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan-deep);font-weight:700;}
+  nav.links{display:flex;align-items:center;gap:clamp(10px,1.6vw,22px);}
+  nav.links a{font-family:'Baloo 2',sans-serif;font-weight:600;font-size:14px;text-decoration:none;color:var(--navy);padding:6px 2px;border-bottom:2px solid transparent;transition:color .15s ease,border-color .15s ease;white-space:nowrap;}
+  nav.links a:hover{color:var(--cyan-deep);border-color:var(--cyan);}
+  .nav-cta{display:flex;align-items:center;gap:12px;}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;}
+  .burger span{width:24px;height:3px;border-radius:3px;background:var(--navy);}
+  .mobile-menu{display:none;position:fixed;inset:0;z-index:99;background:var(--paper);padding:100px 28px 40px;flex-direction:column;gap:6px;overflow-y:auto;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:22px;color:var(--navy);text-decoration:none;padding:14px 0;border-bottom:1px solid rgba(10,51,69,.1);}
+
+  /* HERO */
+  .hero{position:relative;background:linear-gradient(180deg,#E9FAFC 0%,var(--paper) 100%);overflow:hidden;padding:clamp(48px,7vw,80px) 0 0;}
+  .hero .blob{width:460px;height:460px;top:-160px;right:-140px;background:var(--cyan);border-radius:41% 59% 63% 37% / 45% 41% 59% 55%;opacity:.22;animation:floaty 16s ease-in-out infinite;}
+  .hero .blob2{width:260px;height:260px;bottom:-40px;left:-100px;background:var(--purple);border-radius:59% 41% 38% 62% / 55% 63% 37% 45%;opacity:.14;animation:floaty2 14s ease-in-out infinite;}
+  .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,5vw,50px);align-items:center;}
+  .hero-copy .quote-badge{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1.5px solid rgba(10,51,69,.1);border-radius:999px;padding:8px 16px 8px 8px;font-size:12.5px;font-weight:700;color:var(--navy);box-shadow:var(--shadow);margin-bottom:22px;}
+  .quote-badge .dot{width:30px;height:30px;border-radius:50%;background:var(--cyan);display:flex;align-items:center;justify-content:center;flex:none;}
+  h1.hero-title{font-weight:800;font-size:clamp(2.5rem,5.6vw,4.1rem);line-height:.98;letter-spacing:-.02em;color:var(--navy);max-width:14ch;}
+  h1.hero-title em{font-style:normal;color:var(--cyan-deep);position:relative;}
+  .hero-copy p.lead{margin:22px 0 0;max-width:46ch;font-size:1.08rem;color:rgba(10,36,48,.72);}
+  .hero-ctas{margin-top:32px;display:flex;flex-wrap:wrap;gap:14px;}
+  .hero-stats{margin-top:clamp(38px,6vw,54px);display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(10,51,69,.08);border-radius:20px;overflow:hidden;max-width:560px;}
+  .hero-stats div{background:var(--white);padding:18px 16px;}
+  .hero-stats b{display:block;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(1.5rem,2.4vw,2rem);color:var(--cyan-deep);line-height:1;}
+  .hero-stats span{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(10,36,48,.55);}
+  .hero-visual{position:relative;}
+  .hero-photo-frame{position:relative;border-radius:32px;overflow:hidden;aspect-ratio:4/4.6;box-shadow:0 34px 70px -30px rgba(10,51,69,.45);}
+  .hero-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top;}
+  .hero-photo-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,36,48,0) 55%,rgba(6,28,38,.55) 100%);}
+  .hero-float-card{position:absolute;left:-6%;bottom:8%;background:#fff;border-radius:18px;padding:14px 18px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;max-width:230px;animation:floaty2 9s ease-in-out infinite;}
+  .hero-float-card .ic{width:38px;height:38px;border-radius:50%;background:var(--paper-2);display:flex;align-items:center;justify-content:center;flex:none;animation:pulseRing 2.6s ease-in-out infinite;}
+  .hero-float-card b{display:block;font-family:'Baloo 2',sans-serif;font-size:14px;color:var(--navy);}
+  .hero-float-card span{font-size:11.5px;color:rgba(10,36,48,.6);}
+  .ribbon{position:relative;z-index:2;background:var(--navy);color:#fff;overflow:hidden;padding:12px 0;margin-top:clamp(44px,7vw,70px);}
+  .ribbon .track{display:flex;width:max-content;animation:marq 30s linear infinite;}
+  .ribbon .seg{display:flex;white-space:nowrap;}
+  .ribbon .seg span{padding:0 20px;font-family:'Baloo 2',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);}
+  .ribbon .seg span.dim{color:rgba(255,255,255,.5);}
+
+  /* SECTION HEADER */
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:26px;flex-wrap:wrap;margin-bottom:clamp(34px,5vw,54px);}
+  .sec-head h2{font-weight:700;font-size:clamp(1.9rem,3.6vw,2.7rem);letter-spacing:-.01em;max-width:18ch;}
+  .sec-head .desc{max-width:38ch;color:rgba(10,36,48,.6);font-size:.98rem;}
+
+  section.light{padding:clamp(64px,9vw,110px) 0;background:var(--paper);}
+  section.tint{padding:clamp(64px,9vw,110px) 0;background:var(--paper-2);}
+  section.dark{padding:clamp(64px,9vw,110px) 0;background:var(--navy);color:#fff;}
+  section.dark h2, section.dark h3{color:#fff;}
+
+  /* SOBRE */
+  .sobre-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,64px);align-items:center;}
+  .sobre-card{background:#fff;border-radius:26px;padding:clamp(28px,4vw,42px);box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .sobre-card img{border-radius:18px;width:100%;}
+  .mission-strip{margin-top:26px;background:var(--navy);color:#fff;border-radius:18px;padding:22px 26px;font-family:'Baloo 2',sans-serif;font-weight:600;font-size:1.05rem;line-height:1.4;}
+  .mission-strip b{color:var(--cyan);}
+
+  /* HISTORIA */
+  .historia-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,60px);align-items:start;}
+  .timeline{display:flex;flex-direction:column;gap:22px;}
+  .tl-item{display:flex;gap:16px;}
+  .tl-dot{width:14px;height:14px;border-radius:50%;background:var(--cyan);margin-top:6px;flex:none;box-shadow:0 0 0 4px var(--paper-2);}
+  .tl-item b{font-family:'Baloo 2',sans-serif;font-size:14px;color:var(--cyan-deep);display:block;margin-bottom:4px;}
+  .tl-item p{color:rgba(10,36,48,.68);font-size:.95rem;}
+  .stat-cards{display:flex;flex-direction:column;gap:14px;}
+  .stat-card{position:relative;border-radius:20px;overflow:hidden;padding:24px 26px;color:#fff;min-height:96px;display:flex;flex-direction:column;justify-content:center;}
+  .stat-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+  .stat-card::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(9,120,150,.88),rgba(12,175,205,.72));z-index:1;}
+  .stat-card .inner{position:relative;z-index:2;}
+  .stat-card b{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(1.8rem,3vw,2.4rem);line-height:1;display:block;}
+  .stat-card span{font-size:.9rem;font-weight:700;opacity:.92;}
+
+  /* CARDS GRID GENERIC */
+  .grid5{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
+  .photo-card{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:3/4;box-shadow:var(--shadow);transition:transform .25s ease,box-shadow .25s ease;}
+  .photo-card:hover{transform:translateY(-8px);box-shadow:0 30px 54px -24px rgba(10,51,69,.5);}
+  .photo-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .photo-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,44,58,0) 38%,rgba(6,28,38,.88) 100%);}
+  .photo-card .pc-body{position:absolute;left:0;right:0;bottom:0;padding:20px;z-index:2;color:#fff;}
+  .photo-card .pc-tag{font-family:'Baloo 2',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:6px;}
+  .photo-card h3{color:#fff;font-size:1.2rem;margin-bottom:6px;}
+  .photo-card p{font-size:.85rem;color:rgba(255,255,255,.82);line-height:1.45;}
+
+  /* DIRECAO */
+  .lead-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+  .lead-card{background:#fff;border-radius:24px;padding:26px;display:flex;gap:18px;box-shadow:var(--shadow);transition:transform .22s ease;}
+  .lead-card:hover{transform:translateY(-6px);}
+  .lead-card .ph{width:96px;height:120px;border-radius:16px;overflow:hidden;flex:none;background:var(--paper-2);}
+  .lead-card .ph img{width:100%;height:100%;object-fit:cover;object-position:top;}
+  .lead-card h3{font-size:1.15rem;margin-bottom:2px;}
+  .lead-card .role{font-family:'Baloo 2',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cyan-deep);display:block;margin-bottom:10px;}
+  .lead-card p{font-size:.85rem;color:rgba(10,36,48,.62);line-height:1.5;}
+
+  /* EQUIPES / SETORES TABS */
+  .tabbar{display:inline-flex;background:#fff;border-radius:999px;padding:6px;gap:4px;box-shadow:var(--shadow);margin-bottom:34px;}
+  .tabbar button{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13.5px;padding:11px 22px;border-radius:999px;border:none;background:transparent;color:var(--navy);cursor:pointer;transition:background .18s ease,color .18s ease;}
+  .tabbar button.active{background:var(--navy);color:#fff;}
+  .tabpanel{display:none;}
+  .tabpanel.active{display:block;}
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+  .team-card{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:3/3.6;box-shadow:var(--shadow);}
+  .team-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .team-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,44,58,.05) 30%,rgba(6,28,38,.85) 100%);}
+  .team-card .tc-body{position:absolute;left:0;right:0;bottom:0;padding:18px;z-index:2;color:#fff;}
+  .team-card h3{color:#fff;font-size:1.05rem;}
+  .team-card p{font-size:.78rem;color:rgba(255,255,255,.85);margin-top:4px;}
+  .team-card .coords{margin-top:8px;font-family:'Baloo 2',sans-serif;font-size:10.5px;letter-spacing:.03em;color:var(--cyan);}
+  .sector-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+  .sector-card{background:linear-gradient(155deg,var(--cyan-2),var(--cyan-deep));color:#fff;border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:10px;min-height:150px;}
+  .sector-card .ic{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;}
+  .sector-card h3{color:#fff;font-size:1.1rem;}
+  .sector-card p{font-size:.86rem;color:rgba(255,255,255,.85);}
+
+  /* JORNADA */
+  .integr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:44px;}
+  .integr-card{border-radius:22px;padding:26px;background:#fff;box-shadow:var(--shadow);}
+  .integr-card .tag{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--cyan-deep);}
+  .integr-card p{margin-top:10px;font-size:.92rem;color:rgba(10,36,48,.68);}
+  .levels{display:flex;flex-direction:column;gap:0;position:relative;}
+  .level{position:relative;display:grid;grid-template-columns:52px 1fr;gap:20px;padding-bottom:34px;}
+  .level:last-child{padding-bottom:0;}
+  .level .col-line{position:relative;display:flex;justify-content:center;}
+  .level .col-line::before{content:"";position:absolute;top:44px;bottom:-34px;width:2px;background:rgba(10,51,69,.12);}
+  .level:last-child .col-line::before{display:none;}
+  .level .num{width:44px;height:44px;border-radius:50%;background:var(--paper-2);border:2px solid var(--cyan);color:var(--cyan-deep);font-family:'Baloo 2',sans-serif;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none;z-index:1;}
+  .level.current .num{background:var(--cyan);color:#fff;animation:pulseRing 2.4s ease-in-out infinite;}
+  .level-card{background:#fff;border-radius:20px;padding:22px 24px;box-shadow:var(--shadow);}
+  .level-card h3{font-size:1.15rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .here-badge{font-family:'Baloo 2',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--navy);color:#fff;padding:4px 10px;border-radius:999px;}
+  .level-card p.d{margin-top:8px;font-size:.92rem;color:rgba(10,36,48,.65);}
+  .level-card ul{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;}
+  .level-card li{font-size:.86rem;color:rgba(10,36,48,.72);display:flex;gap:8px;align-items:flex-start;}
+  .level-card li::before{content:"✓";color:var(--green);font-weight:900;flex:none;}
+
+  .rules-grid{margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
+  .rule-card{background:#fff;border-radius:18px;padding:20px 22px;box-shadow:var(--shadow);}
+  .rule-card h4{font-size:1rem;color:var(--navy);margin-bottom:8px;}
+  .rule-card p{font-size:.85rem;color:rgba(10,36,48,.65);}
+  .expect-list{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+  .expect-item{display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);}
+  .expect-item .n{font-family:'Baloo 2',sans-serif;font-weight:800;color:var(--cyan);font-size:1.3rem;flex:none;}
+  .expect-item p{font-size:.88rem;color:rgba(10,36,48,.7);}
+
+  /* BENEFICIOS */
+  .benef-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;}
+
+  /* PARCEIRO */
+  .parceiro{position:relative;background:linear-gradient(135deg,var(--purple-2) 0%,var(--purple) 45%,var(--green) 100%);color:#fff;padding:clamp(64px,9vw,110px) 0;overflow:hidden;}
+  .parceiro .blob{width:420px;height:420px;top:-140px;right:-120px;background:rgba(255,255,255,.12);border-radius:44% 56% 60% 40% / 46% 40% 60% 54%;}
+  .parceiro .blob2{width:300px;height:300px;bottom:-120px;left:-80px;background:rgba(255,255,255,.1);border-radius:50%;}
+  .parceiro-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(30px,5vw,56px);align-items:center;}
+  .parceiro-copy .pill-top{background:var(--green);color:#04301f;}
+  .parceiro-copy h2{color:#fff;font-weight:800;font-size:clamp(2.2rem,4.4vw,3.3rem);letter-spacing:-.02em;margin:18px 0 0;max-width:12ch;}
+  .parceiro-copy p.lead{margin-top:18px;max-width:52ch;color:rgba(255,255,255,.88);font-size:1.02rem;}
+  .steps{margin-top:30px;display:flex;flex-direction:column;gap:14px;}
+  .step{display:flex;gap:14px;align-items:flex-start;}
+  .step .n{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;flex:none;}
+  .step p{font-size:.95rem;color:rgba(255,255,255,.92);}
+  .step b{color:#fff;}
+  .parceiro-benefits{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .pbn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:12px 14px;font-size:.83rem;font-weight:700;font-family:'Baloo 2',sans-serif;}
+  .parceiro-ctas{margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;}
+  .parceiro-photo{position:relative;border-radius:26px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 34px 70px -26px rgba(0,0,0,.5);}
+  .parceiro-photo img{width:100%;height:100%;object-fit:cover;}
+
+  /* LINKS / CONTATO */
+  .links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+  .link-row{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#fff;border-radius:16px;padding:16px 20px;box-shadow:var(--shadow);}
+  .link-row .lbl{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:.95rem;color:var(--navy);}
+  .link-row .go{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12.5px;color:var(--cyan-deep);text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;}
+  .link-row .go:hover{color:var(--purple-2);}
+  .link-row .go.disabled{color:rgba(10,36,48,.35);cursor:default;}
+  .laic-note{margin-top:34px;background:var(--paper-2);border-radius:18px;padding:22px 26px;font-size:.88rem;color:rgba(10,36,48,.68);max-width:80ch;}
+
+  /* FOOTER CTA */
+  .cta-final{position:relative;background:var(--cyan);color:#04303c;padding:clamp(70px,10vw,120px) 0 clamp(50px,7vw,70px);overflow:hidden;}
+  .cta-final .blob{width:360px;height:360px;background:var(--navy);opacity:.12;right:-100px;top:-100px;border-radius:44% 56% 60% 40% / 46% 40% 60% 54%;}
+  .cta-final h2{font-weight:800;font-size:clamp(2.1rem,5vw,3.6rem);line-height:1.02;letter-spacing:-.02em;max-width:16ch;position:relative;z-index:2;}
+  .cta-final p{margin:18px 0 0;max-width:50ch;color:rgba(4,48,60,.72);font-size:1.02rem;position:relative;z-index:2;}
+  .cta-final .hero-ctas{position:relative;z-index:2;}
+
+  footer.site{background:var(--navy);color:rgba(255,255,255,.62);padding:36px 0;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;font-size:13px;}
+  .foot-brand{display:flex;align-items:center;gap:12px;}
+  .foot-brand img{width:40px;}
+  .foot-brand b{color:#fff;font-family:'Baloo 2',sans-serif;}
+
+  @media (max-width:980px){
+    nav.links{display:none;}
+    .burger{display:flex;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{order:-1;max-width:420px;margin:0 auto;}
+    .sobre-grid{grid-template-columns:1fr;}
+    .historia-grid{grid-template-columns:1fr;}
+    .parceiro-grid{grid-template-columns:1fr;}
+    .parceiro-photo{max-width:420px;margin:0 auto;}
+  }
+  @media (max-width:560px){
+    .hero-stats{grid-template-columns:1fr 1fr;}
+    .parceiro-benefits{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <div class="nav-row">
+    <a href="#top" class="brand">
+      <img src="assets/logo.png" alt="Jovens Pela Diferença">
+      <span class="brand-text"><b>Jovens Pela Diferença</b><span>ONG · Fortaleza, CE</span></span>
+    </a>
+    <nav class="links">
+      <a href="#sobre">Sobre</a>
+      <a href="#historia">História</a>
+      <a href="#o-que-fazemos">O que fazemos</a>
+      <a href="#direcao">Direção</a>
+      <a href="#equipes">Equipes</a>
+      <a href="#jornada">Jornada</a>
+      <a href="#beneficios">Benefícios</a>
+      <a href="#parceiro">Seja parceiro</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="https://www.instagram.com/jovenspeladiferenca" target="_blank" rel="noopener" class="btn btn-cyan" style="padding:11px 20px;font-size:13.5px;">Quero ser voluntário</a>
+      <button class="burger" id="burgerBtn" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#sobre">Sobre</a>
+  <a href="#historia">História</a>
+  <a href="#o-que-fazemos">O que fazemos</a>
+  <a href="#direcao">Direção</a>
+  <a href="#equipes">Equipes &amp; setores</a>
+  <a href="#jornada">Jornada do voluntário</a>
+  <a href="#beneficios">Benefícios</a>
+  <a href="#parceiro">Seja parceiro</a>
+  <a href="#contato">Links &amp; contato</a>
+  <a href="https://www.instagram.com/jovenspeladiferenca" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:18px;justify-content:center;">Quero ser voluntário</a>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="torn blob"></span>
+    <span class="torn blob2"></span>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="quote-badge"><span class="dot">💙</span> Associação Civil Jovens Pela Diferença</span>
+        <h1 class="hero-title">Agora você faz parte da <em>família azul</em>.</h1>
+        <p class="lead">"O pouco que fazemos juntos é a diferença que move o mundo." Somos a maior ONG jovem de Fortaleza, com foco total em protagonismo juvenil — transformando a vida de quem recebe e de quem doa.</p>
+        <div class="hero-ctas">
+          <a href="https://www.instagram.com/jovenspeladiferenca" target="_blank" rel="noopener" class="btn btn-primary">Quero ser voluntário</a>
+          <a href="#jornada" class="btn btn-outline">Como funciona a jornada ↓</a>
+        </div>
+        <div class="hero-stats">
+          <div><b class="counter" data-target="11">0</b><span>Anos de história</span></div>
+          <div><b class="counter" data-target="10000" data-suffix="+">0</b><span>Pessoas impactadas</span></div>
+          <div><b style="font-size:clamp(1rem,1.6vw,1.3rem)">Nº 1</b><span>ONG jovem de Fortaleza</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-photo-frame">
+          <img src="assets/hero-cover.png" alt="Voluntária do JPD com criança acolhida em uma ação social">
+        </div>
+        <div class="hero-float-card">
+          <span class="ic">🗓️</span>
+          <div><b>Ações todo fim de semana</b><span>Participe 1x a cada 3 meses</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="ribbon">
+      <div class="track">
+        <span class="seg"><span>Crianças</span><span class="dim">·</span><span>Idosos</span><span class="dim">·</span><span>Animais</span><span class="dim">·</span><span>Pessoas em situação de rua</span><span class="dim">·</span><span>Ações socioambientais</span><span class="dim">·</span><span>Fortaleza · CE</span><span class="dim">·</span></span>
+        <span class="seg"><span>Crianças</span><span class="dim">·</span><span>Idosos</span><span class="dim">·</span><span>Animais</span><span class="dim">·</span><span>Pessoas em situação de rua</span><span class="dim">·</span><span>Ações socioambientais</span><span class="dim">·</span><span>Fortaleza · CE</span><span class="dim">·</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre" class="light">
+    <div class="wrap sobre-grid">
+      <div class="reveal">
+        <p class="eyebrow">Boas-vindas ao JPD</p>
+        <h2 style="font-size:clamp(1.7rem,3.2vw,2.4rem);max-width:16ch;">Neste manual você entende tudo sobre a nossa ONG.</h2>
+        <p style="margin-top:18px;color:rgba(10,36,48,.68);max-width:52ch;">Nossa história, nossa estrutura, os níveis de voluntariado e as normas que organizam o nosso trabalho — tudo em um só lugar. Seja bem-vindo(a) à Associação Civil Jovens Pela Diferença. Em caso de dúvidas, estamos sempre à disposição.</p>
+        <div class="mission-strip">Nossa missão é <b>transformar a vida de quem recebe e de quem doa</b>, com foco total em protagonismo juvenil.</div>
+      </div>
+      <div class="sobre-card reveal">
+        <img src="assets/hero-group.png" alt="Grupo de voluntários do JPD acenando e sorrindo, reunidos após uma ação social" style="background:var(--paper-2)">
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORIA -->
+  <section id="historia" class="tint">
+    <span class="torn" style="width:220px;height:220px;top:-40px;left:-90px;background:var(--cyan);opacity:.14;border-radius:40% 60% 55% 45%/50% 45% 55% 50%;"></span>
+    <div class="wrap historia-grid">
+      <div class="reveal">
+        <p class="eyebrow">De uma adolescente a uma família</p>
+        <h2 style="font-size:clamp(1.8rem,3.4vw,2.5rem);margin-bottom:26px;">Nossa história</h2>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-dot"></span><div><b>15/04/2015</b><p>Fundado por uma jovem adolescente que experimentou o voluntariado e quis levar a experiência a amigos e conhecidos.</p></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Maio/2015</b><p>Primeira ação social, no Lar Santa Gianna — abrigo de crianças.</p></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>2015 em diante</b><p>Novas ações com crianças e início dos jantares solidários na Praça do Ferreira.</p></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Ao longo dos anos</b><p>Fomos crescendo e nos profissionalizando, criando estruturas e nos consagrando como a maior ONG jovem de Fortaleza.</p></div></div>
+        </div>
+      </div>
+      <div class="stat-cards reveal">
+        <div class="stat-card"><img src="assets/comunidade-grupo.jpg" alt="Comunidade de voluntários reunida"><div class="inner"><b class="counter" data-target="11">0</b><span>anos de história</span></div></div>
+        <div class="stat-card"><img src="assets/hero-group.png" alt="Voluntários impactando a comunidade" style="object-position:top"><div class="inner"><b class="counter" data-target="10000" data-suffix="+">0</b><span>pessoas impactadas em Fortaleza</span></div></div>
+        <div class="stat-card"><img src="assets/publico-socioambiental.jpg" alt="Ação socioambiental do JPD"><div class="inner"><b style="font-size:1.4rem">Maior ONG jovem de Fortaleza</b><span>Foco em protagonismo juvenil</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- O QUE FAZEMOS -->
+  <section id="o-que-fazemos" class="light">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow">Como funciona o JPD?</p>
+          <h2>5 públicos, um mesmo cuidado</h2>
+        </div>
+        <p class="desc">Realizamos ações praticamente todos os fins de semana — você só precisa participar de pelo menos 1 a cada 3 meses.</p>
+      </div>
+      <div class="grid5 reveal">
+        <div class="photo-card">
+          <img src="assets/publico-criancas.jpg" alt="Voluntária do JPD abraçando uma criança em ação social">
+          <div class="pc-body"><span class="pc-tag">Prioridade</span><h3>Crianças</h3><p>Nossa maior prioridade. Ações de recreação, nas quais nos dividimos em 4 equipes.</p></div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/publico-idosos.jpg" alt="Voluntários do JPD conversando com idosos">
+          <div class="pc-body"><span class="pc-tag">Escuta</span><h3>Idosos</h3><p>Ações de escuta, atividades lúdicas e presença.</p></div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/publico-animais.jpg" alt="Voluntário do JPD com um cachorro em mutirão de banho e limpeza">
+          <div class="pc-body"><span class="pc-tag">Cuidado</span><h3>Animais</h3><p>Mutirões de banho e limpeza.</p></div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/publico-rua.jpg" alt="Voluntária servindo pessoas em situação de rua">
+          <div class="pc-body"><span class="pc-tag">Acolhimento</span><h3>Pessoas em situação de rua</h3><p>Jantares e cafés solidários.</p></div>
+        </div>
+        <div class="photo-card">
+          <img src="assets/publico-socioambiental.jpg" alt="Voluntários do JPD em limpeza de praia">
+          <div class="pc-body"><span class="pc-tag">Meio ambiente</span><h3>Socioambientais</h3><p>Limpezas de praia e ações de conscientização.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIREÇÃO -->
+  <section id="direcao" class="tint">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow">Direção</p>
+          <h2>A Associação conta com 3 administradores</h2>
+        </div>
+        <p class="desc">Conheça nossos diretores.</p>
+      </div>
+      <div class="lead-grid reveal">
+        <div class="lead-card">
+          <div class="ph"><img src="assets/diretor-ester.png" alt="Ester Farias, Presidente do JPD"></div>
+          <div><h3>Ester Farias</h3><span class="role">Presidente</span><p>Voluntária há 11 anos, cofundou os Jovens Pela Diferença e é a responsável por toda a estrutura organizacional desde o início. Trabalha na execução e gestão da equipe de Direção.</p></div>
+        </div>
+        <div class="lead-card">
+          <div class="ph"><img src="assets/diretor-wagner.png" alt="Wagner Lindemberg, Vice-presidente do JPD"></div>
+          <div><h3>Wagner Lindemberg</h3><span class="role">Vice-presidente</span><p>Voluntário desde os 7 anos. Desde sua entrada tem ajudado nas mais diversas frentes até chegar à Direção, onde é coordenador de área hoje. Engenheiro de Telecomunicações.</p></div>
+        </div>
+        <div class="lead-card">
+          <div class="ph"><img src="assets/diretor-talinna.png" alt="Talinna Menezes, Coordenadora Geral do JPD"></div>
+          <div><h3>Talinna Menezes</h3><span class="role">Coord. Geral</span><p>Voluntária há 5 anos, iniciou na ONG nas ações até subir à equipe de Brincadeiras Livres. Responsável por desenvolver habilidades técnicas e interpessoais de liderança na Direção.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPES / SETORES -->
+  <section id="equipes" class="light">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow">Estrutura</p>
+          <h2>Equipes &amp; setores</h2>
+        </div>
+        <p class="desc">As equipes atuam nas ações; os setores cuidam da gestão interna da ONG.</p>
+      </div>
+
+      <div class="tabbar reveal">
+        <button class="active" data-tab="equipes-tab">Equipes</button>
+        <button data-tab="setores-tab">Setores</button>
+      </div>
+
+      <div class="tabpanel active reveal" id="equipes-tab">
+        <p style="max-width:70ch;color:rgba(10,36,48,.65);margin-bottom:24px;">As equipes atuam nas ações, levando atividades específicas de entretenimento para as crianças dos locais que visitamos. Todos os voluntários escolhem sua equipe de atuação no dia da integração.</p>
+        <div class="team-grid">
+          <div class="team-card"><img src="assets/equipe-salao.jpg" alt="Equipe Salão de Beleza pintando as unhas de uma criança"><div class="tc-body"><h3>Salão de Beleza</h3><p>Atividades de beleza e autoestima.</p><span class="coords">Ana Júlya Pinheiro · Lânia Silva</span></div></div>
+          <div class="team-card"><img src="assets/equipe-brincadeiras.jpg" alt="Voluntário da equipe Brincadeiras Livres se divertindo com fantasia"><div class="tc-body"><h3>Brincadeiras Livres</h3><p>Atividades esportivas e de energia.</p><span class="coords">Manuela Alcântara · Cleiton Xavier</span></div></div>
+          <div class="team-card"><img src="assets/equipe-brinquedoteca.jpg" alt="Criança brincando com blocos na Brinquedoteca do JPD"><div class="tc-body"><h3>Brinquedoteca</h3><p>Atividades lúdicas e de aprendizado.</p><span class="coords">Yago Vieira · Letícia Narayanah</span></div></div>
+          <div class="team-card"><img src="assets/equipe-pintura.jpg" alt="Criança com o rosto pintado de super-herói pela equipe de Pintura"><div class="tc-body"><h3>Pintura</h3><p>Pintura de rosto e corpo.</p><span class="coords">Gabriela Meneses · Gleice Kele Moura</span></div></div>
+        </div>
+      </div>
+
+      <div class="tabpanel reveal" id="setores-tab">
+        <p style="max-width:70ch;color:rgba(10,36,48,.65);margin-bottom:24px;">Os setores atuam na gestão interna da ONG. São administrados apenas por voluntários aprovados em Processos Seletivos, abertos semestralmente — fique de olho nos nossos grupos oficiais!</p>
+        <div class="sector-grid">
+          <div class="sector-card"><span class="ic">📣</span><h3>Endomarketing</h3><p>Engajamento entre membros, cultura organizacional e cuidado com os voluntários.</p></div>
+          <div class="sector-card"><span class="ic">💰</span><h3>Gestão de Recursos</h3><p>Recursos financeiros, captação e vendas da Lojinha.</p></div>
+          <div class="sector-card"><span class="ic">📱</span><h3>Comunicação</h3><p>Marketing e divulgação online das atividades.</p></div>
+          <div class="sector-card"><span class="ic">🎯</span><h3>Planejamento</h3><p>Marca, gerencia e divulga as ações; capacita as coordenações.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JORNADA -->
+  <section id="jornada" class="tint">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow">Sua trajetória no JPD</p>
+          <h2>Como será a jornada a partir daqui?</h2>
+        </div>
+        <p class="desc">Integração, níveis de voluntariado e o que esperamos de você.</p>
+      </div>
+
+      <div class="integr-grid reveal">
+        <div class="integr-card"><span class="tag">Integração · FDS 1 · Obrigatório</span><p>Sábado presencial, para nos conhecermos e conhecer as equipes; domingo online, para aprofundar os conhecimentos sobre a ONG (se não puder, é preciso avisar a Ester).</p></div>
+        <div class="integr-card"><span class="tag">Integração · FDS 2 · Opcional</span><p>4 opções de ações exclusivas para novatos viverem sua primeira ação. Mais informações são sempre passadas no grupo e na própria integração.</p></div>
+      </div>
+
+      <h3 style="font-size:1.4rem;margin-bottom:24px;" class="reveal">Os níveis de voluntariado</h3>
+      <div class="levels reveal">
+        <div class="level current">
+          <div class="col-line"><span class="num">1</span></div>
+          <div class="level-card">
+            <h3>Experiência <span class="here-badge">você está aqui</span></h3>
+            <p class="d">É quando você entra, vive os 3 meses e cumpre dois requisitos. Não cumpriu no prazo? Você pode se inscrever novamente, até 3 vezes.</p>
+            <ul><li>Fazer pelo menos 1 dia de integração</li><li>Fazer ações com 2 dos 5 públicos</li></ul>
+          </div>
+        </div>
+        <div class="level">
+          <div class="col-line"><span class="num">2</span></div>
+          <div class="level-card">
+            <h3>Efetivo</h3>
+            <p class="d">Voluntariado pleno, com autonomia e responsabilidades compatíveis com a função. Desempenho acompanhado pela Direção.</p>
+            <ul><li>1 ação a cada 2 meses</li><li>Após 6 meses, pode tornar-se Associado</li></ul>
+          </div>
+        </div>
+        <div class="level">
+          <div class="col-line"><span class="num">3</span></div>
+          <div class="level-card">
+            <h3>Associado</h3>
+            <p class="d">Assina o Termo de Adesão (Lei nº 9.608/98), integra oficialmente a Assembleia e representa o JPD.</p>
+            <ul><li>7 ações no semestre</li><li>Coordenar ao menos 1 ação</li><li>6 meses em coordenação, setor ou apadrinhamento</li><li>Sem faltas injustificadas</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="rules-grid reveal">
+        <div class="rule-card"><h4>Frequência</h4><p>Participar pelo menos 1 ação a cada 3 meses. Ausência de emergência: até 20h da própria data da ação.</p></div>
+        <div class="rule-card"><h4>Atrasos</h4><p>Até 15min: ok. Entre 15-25min: 1 atraso. Acima de 25min: falta. 3 atrasos viram 1 falta.</p></div>
+        <div class="rule-card"><h4>Faltas</h4><p>Falta sem aviso = 1 falta. 2 faltas = advertência. 3 faltas = desligamento. Zeradas todo ano.</p></div>
+        <div class="rule-card"><h4>Lanche</h4><p>Contribua com o lanche levado aos beneficiados em todas as ações.</p></div>
+        <div class="rule-card"><h4>Ações obrigatórias</h4><p>Assembleia (fev e ago), Oficina da equipe (1x/semestre) e Workshop (outubro).</p></div>
+      </div>
+
+      <h3 style="font-size:1.4rem;margin:52px 0 6px;" class="reveal">O que esperamos de você?</h3>
+      <p class="reveal" style="max-width:70ch;color:rgba(10,36,48,.65);">A postura de um voluntário do JPD passa por compromisso, ética e cuidado com quem recebemos e com quem doa junto com a gente.</p>
+      <div class="expect-list reveal">
+        <div class="expect-item"><span class="n">01</span><p>Comprometimento com as ações em que se inscrever, avisando com antecedência quando não puder ir.</p></div>
+        <div class="expect-item"><span class="n">02</span><p>Respeito e cuidado no trato com beneficiados, colegas e coordenações.</p></div>
+        <div class="expect-item"><span class="n">03</span><p>Postura ética e alinhada à missão do JPD dentro e fora das ações.</p></div>
+        <div class="expect-item"><span class="n">04</span><p>Participação ativa e proatividade nas equipes, setores e ações.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section id="beneficios" class="light">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow">Do outro lado do que pedimos</p>
+          <h2>Benefícios de ser voluntário do JPD</h2>
+        </div>
+        <p class="desc">Está o que oferecemos.</p>
+      </div>
+      <div class="benef-grid reveal">
+        <div class="photo-card"><img src="assets/beneficio-amizades.jpg" alt="Grupo de voluntários amigos do JPD"><div class="pc-body"><h3>Novas amizades</h3><p>E o contato com realidades que talvez você ainda não conhecesse.</p></div></div>
+        <div class="photo-card"><img src="assets/beneficio-apadrinhamento.jpg" alt="Voluntário sorrindo durante apadrinhamento"><div class="pc-body"><h3>Apadrinhamento</h3><p>Um voluntário mais experiente acompanha seus 3 primeiros meses.</p></div></div>
+        <div class="photo-card"><img src="assets/beneficio-revo.jpg" alt="Criança sorrindo em ação do JPD"><div class="pc-body"><h3>REVO</h3><p>Reconhecimento mensal de quem mais participou e subiu de patente.</p></div></div>
+        <div class="photo-card"><img src="assets/beneficio-curriculo.jpg" alt="Voluntária vestida de unicórnio em ação divertida"><div class="pc-body"><h3>Currículo &amp; desenvolvimento</h3><p>Reconhecimento mensal de quem mais participou e subiu de patente.</p></div></div>
+        <div class="photo-card"><img src="assets/beneficio-lideranca.jpg" alt="Grupo de voluntários líderes do JPD"><div class="pc-body"><h3>Liderança &amp; mentoria</h3><p>Oportunidades de liderança e orientação profissional ao se engajar em um setor.</p></div></div>
+        <div class="photo-card"><img src="assets/beneficio-solidario.jpg" alt="Voluntário fantasiado abraçando uma criança"><div class="pc-body"><h3>JPD Solidário</h3><p>Suporte a voluntários em vulnerabilidade: cestas básicas, passagens e ajuda com o lanche.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARCEIRO -->
+  <section id="parceiro" class="parceiro">
+    <span class="torn blob"></span>
+    <span class="torn blob2"></span>
+    <div class="wrap parceiro-grid">
+      <div class="parceiro-copy reveal">
+        <span class="pill pill-top">Torne-se um Parceiro JPD</span>
+        <h2>Faça parte da mudança.</h2>
+        <p class="lead">Uma iniciativa de contribuição mensal que ajuda a manter as atividades da nossa ONG funcionando com qualidade, impacto e amor. Todos podem ser Parceiros — é uma forma de apoiar além do voluntariado.</p>
+        <div class="steps">
+          <div class="step"><span class="n">1</span><p><b>Acesse</b> apoia.se/parceirojpd</p></div>
+          <div class="step"><span class="n">2</span><p><b>Escolha</b> um plano de apoio e clique em "Apoiar".</p></div>
+          <div class="step"><span class="n">3</span><p><b>Faça login</b> ou crie sua conta.</p></div>
+          <div class="step"><span class="n">4</span><p><b>Informe</b> seus dados de pagamento — aceitamos cartão de crédito, pix e boleto bancário!</p></div>
+        </div>
+        <p style="margin-top:26px;font-weight:800;font-family:'Baloo 2',sans-serif;">Ser um apoiador te dá benefícios exclusivos:</p>
+        <div class="parceiro-benefits">
+          <div class="pbn">Vagas prioritárias em ações da ONG</div>
+          <div class="pbn">Acesso à Newsletter mensal da ONG</div>
+          <div class="pbn">Mensagem personalizada de aniversário</div>
+          <div class="pbn">Mimos exclusivos da Lojinha</div>
+        </div>
+        <div class="parceiro-ctas">
+          <a href="https://apoia.se/parceirojpd" target="_blank" rel="noopener" class="btn btn-white">Quero ser Parceiro JPD</a>
+          <a href="#contato" class="btn btn-outline-light">Ver todos os canais</a>
+        </div>
+      </div>
+      <div class="parceiro-photo reveal">
+        <img src="assets/parceiro-cta.jpg" alt="Voluntário do JPD sorrindo com as mãos pintadas em ação social noturna">
+      </div>
+    </div>
+  </section>
+
+  <!-- LINKS / CONTATO -->
+  <section id="contato" class="light">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow">Essencial</p>
+          <h2>Todos os links conectados ao JPD</h2>
+        </div>
+        <p class="desc">Você encontra aqui.</p>
+      </div>
+      <div class="links-grid reveal">
+        <div class="link-row"><span class="lbl">Instagram @jovenspeladiferenca</span><a href="https://www.instagram.com/jovenspeladiferenca" target="_blank" rel="noopener" class="go">Siga a gente →</a></div>
+        <div class="link-row"><span class="lbl">Parceiro JPD</span><a href="https://apoia.se/parceirojpd" target="_blank" rel="noopener" class="go">Torne-se parceiro →</a></div>
+        <div class="link-row"><span class="lbl">Google Drive · Nossos Registros</span><span class="go disabled">Disponível para voluntários</span></div>
+        <div class="link-row"><span class="lbl">Fale com o Vassourinha</span><span class="go disabled">Comunique sua ausência no grupo</span></div>
+        <div class="link-row"><span class="lbl">Portarias</span><span class="go disabled">Confira no grupo oficial</span></div>
+        <div class="link-row"><span class="lbl">Aplicativo JPD</span><span class="go disabled">Acompanhe suas ações</span></div>
+      </div>
+      <p class="laic-note reveal">O Jovens Pela Diferença é uma instituição laica e sem nenhum tipo de ligação ou preferência por religião. Como instituição, temos parcerias profissionais e respeitosas com projetos que por vezes são ligados a religiões e que contam com nossa ajuda e respeito.</p>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final">
+    <span class="torn blob"></span>
+    <div class="wrap">
+      <h2 class="reveal">Prepare-se para ser Jovem Pela Diferença!</h2>
+      <p class="reveal">É garantido: todo o esforço e responsabilidade compensam e valem a pena nas ações — momentos que fazem valer todo o nosso comprometimento. Muito do amor que temos pra dar é direcionado a você, voluntário, cuja trajetória acompanharemos de perto.</p>
+      <div class="hero-ctas reveal" style="margin-top:30px;">
+        <a href="https://www.instagram.com/jovenspeladiferenca" target="_blank" rel="noopener" class="btn btn-primary">Falar no Instagram</a>
+        <a href="#top" class="btn btn-outline">Voltar ao topo</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap foot-row">
+    <div class="foot-brand"><img src="assets/logo.png" alt="Jovens Pela Diferença"><b>Jovens Pela Diferença</b></div>
+    <span>© 2026 Jovens Pela Diferença · Manual do Voluntário</span>
+    <span>Fortaleza, CE · <a href="https://www.instagram.com/jovenspeladiferenca" target="_blank" rel="noopener" style="color:rgba(255,255,255,.85);text-decoration:none;">@jovenspeladiferenca</a></span>
+  </div>
+</footer>
+
+<script>
+  // Sticky nav shadow
+  const topbar = document.getElementById('topbar');
+  window.addEventListener('scroll', () => {
+    topbar.classList.toggle('scrolled', window.scrollY > 8);
+  });
+
+  // Mobile menu
+  const burgerBtn = document.getElementById('burgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burgerBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+  // Tabs (equipes / setores)
+  document.querySelectorAll('.tabbar button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tabbar button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tabpanel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Scroll reveal
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+
+  // Counters
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || '';
+    const dur = 1400;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(target * eased);
+      el.textContent = val.toLocaleString('pt-BR') + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  if ('IntersectionObserver' in window) {
+    const counters = document.querySelectorAll('.counter');
+    const cio = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { animateCounter(e.target); cio.unobserve(e.target); }
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(c => cio.observe(c));
+  }
+</script>
+</body>
+</html>
