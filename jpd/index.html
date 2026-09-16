@@ -105,8 +105,8 @@
   .hero-stats b{display:block;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(1.5rem,2.4vw,2rem);color:var(--cyan-deep);line-height:1;}
   .hero-stats span{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(10,36,48,.55);}
   .hero-visual{position:relative;}
-  .hero-photo-frame{position:relative;border-radius:32px;overflow:hidden;aspect-ratio:4/4.6;box-shadow:0 34px 70px -30px rgba(10,51,69,.45);}
-  .hero-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top;}
+  .hero-photo-frame{position:relative;border-radius:32px;overflow:hidden;aspect-ratio:4/4.6;box-shadow:0 34px 70px -30px rgba(10,51,69,.45);background:linear-gradient(165deg,var(--cyan-deep),var(--navy));}
+  .hero-photo-frame img{display:block;width:auto;height:96%;max-width:92%;object-fit:contain;margin:4% auto 0;}
   .hero-photo-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,36,48,0) 55%,rgba(6,28,38,.55) 100%);}
   .hero-float-card{position:absolute;left:-6%;bottom:8%;background:#fff;border-radius:18px;padding:14px 18px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;max-width:230px;animation:floaty2 9s ease-in-out infinite;}
   .hero-float-card .ic{width:38px;height:38px;border-radius:50%;background:var(--paper-2);display:flex;align-items:center;justify-content:center;flex:none;animation:pulseRing 2.6s ease-in-out infinite;}
@@ -191,6 +191,24 @@
   .sector-card h3{color:#fff;font-size:1.1rem;}
   .sector-card p{font-size:.86rem;color:rgba(255,255,255,.85);}
 
+  /* ORGANOGRAMA */
+  .org-direcao{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(24px,5vw,64px);margin-bottom:clamp(40px,6vw,64px);}
+  .org-lead{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;}
+  .org-lead img{width:92px;height:92px;border-radius:50%;object-fit:cover;object-position:top;border:3px solid var(--cyan);box-shadow:var(--shadow);}
+  .org-lead b{font-family:'Baloo 2',sans-serif;font-size:1rem;color:var(--navy);}
+  .org-lead span{font-family:'Baloo 2',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--cyan-deep);}
+  .org-columns{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,40px);}
+  .org-col-label{display:block;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid rgba(10,51,69,.12);}
+  .org-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .org-card{background:#fff;border-radius:18px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:flex-start;gap:6px;}
+  .org-card .org-icon{width:56px;height:56px;object-fit:contain;margin-bottom:4px;}
+  .org-card h4{font-size:.98rem;color:var(--navy);}
+  .org-coords{display:flex;flex-direction:column;gap:2px;margin-top:2px;}
+  .org-coords span{font-size:.8rem;font-weight:700;color:rgba(10,36,48,.78);}
+  .org-coords em{font-style:normal;font-weight:600;font-size:.7rem;color:var(--cyan-deep);margin-left:4px;}
+  .org-card p{font-size:.76rem;color:rgba(10,36,48,.55);margin-top:4px;}
+  .org-note{margin-top:28px;font-size:.8rem;color:rgba(10,36,48,.5);max-width:70ch;}
+
   /* JORNADA */
   .integr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:44px;}
   .integr-card{border-radius:22px;padding:26px;background:#fff;box-shadow:var(--shadow);}
@@ -274,10 +292,12 @@
     .historia-grid{grid-template-columns:1fr;}
     .parceiro-grid{grid-template-columns:1fr;}
     .parceiro-photo{max-width:420px;margin:0 auto;}
+    .org-columns{grid-template-columns:1fr;}
   }
   @media (max-width:560px){
     .hero-stats{grid-template-columns:1fr 1fr;}
     .parceiro-benefits{grid-template-columns:1fr;}
+    .org-grid{grid-template-columns:1fr;}
   }
 </style>
 </head>
@@ -295,6 +315,7 @@
       <a href="#o-que-fazemos">O que fazemos</a>
       <a href="#direcao">Direção</a>
       <a href="#equipes">Equipes</a>
+      <a href="#organograma">Organograma</a>
       <a href="#jornada">Jornada</a>
       <a href="#beneficios">Benefícios</a>
       <a href="#parceiro">Seja parceiro</a>
@@ -314,6 +335,7 @@
   <a href="#o-que-fazemos">O que fazemos</a>
   <a href="#direcao">Direção</a>
   <a href="#equipes">Equipes &amp; setores</a>
+  <a href="#organograma">Organograma</a>
   <a href="#jornada">Jornada do voluntário</a>
   <a href="#beneficios">Benefícios</a>
   <a href="#parceiro">Seja parceiro</a>
@@ -493,6 +515,87 @@
           <div class="sector-card"><span class="ic">🎯</span><h3>Planejamento</h3><p>Marca, gerencia e divulga as ações; capacita as coordenações.</p></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ORGANOGRAMA -->
+  <section id="organograma" class="tint">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow">Membros Auxiliares</p>
+          <h2>Organograma</h2>
+        </div>
+        <p class="desc">A Direção conta com o auxílio de voluntários que lideram as equipes e os setores da ONG. Todas as equipes têm dois coordenadores, os setores um — eles são a linha de frente do JPD.</p>
+      </div>
+
+      <div class="org-direcao reveal">
+        <div class="org-lead"><img src="assets/diretor-ester.png" alt="Ester Farias"><b>Ester Farias</b><span>Presidente</span></div>
+        <div class="org-lead"><img src="assets/diretor-wagner.png" alt="Wagner Lindemberg"><b>Wagner Lindemberg</b><span>Vice-presidente</span></div>
+        <div class="org-lead"><img src="assets/diretor-talinna.png" alt="Talinna Menezes"><b>Talinna Menezes</b><span>Coord. Geral</span></div>
+      </div>
+
+      <div class="org-columns">
+        <div class="org-col reveal">
+          <span class="org-col-label">Setores</span>
+          <div class="org-grid">
+            <div class="org-card">
+              <img src="assets/org/icon-planejamento.png" alt="" class="org-icon">
+              <h4>Planejamento</h4>
+              <div class="org-coords"><span>Larissa Santana <em>Coord. PLNJ</em></span><span>Amanda Martins <em>Coord. PLNJ</em></span></div>
+              <p>Pré-ação · Durante a ação · Pós ação</p>
+            </div>
+            <div class="org-card">
+              <img src="assets/org/icon-comunicacao.png" alt="" class="org-icon">
+              <h4>Comunicação</h4>
+              <div class="org-coords"><span>José Neto <em>Coord. CMNC</em></span><span>Larissa Casemiro <em>Coord. CMNC</em></span></div>
+              <p>Social Media · Videomakers · Design · Campanhas</p>
+            </div>
+            <div class="org-card">
+              <img src="assets/org/icon-endomarketing.png" alt="" class="org-icon">
+              <h4>Endomarketing</h4>
+              <div class="org-coords"><span>Gabriel Aquiles <em>Coord. ENDO</em></span><span>Giselle Rocha <em>Coord. ENDO</em></span></div>
+              <p>Projetos de engajamento diversos</p>
+            </div>
+            <div class="org-card">
+              <img src="assets/org/icon-gestao-recursos.png" alt="" class="org-icon">
+              <h4>Gestão de Recursos</h4>
+              <div class="org-coords"><span>John Ferreira <em>Coord. GR</em></span><span>Ruth da Silva <em>Coord. GR</em></span></div>
+              <p>Compliance · Jurídico · Comercial · Financeiro</p>
+            </div>
+          </div>
+        </div>
+        <div class="org-col reveal">
+          <span class="org-col-label">Equipes</span>
+          <div class="org-grid">
+            <div class="org-card">
+              <img src="assets/org/icon-salao-beleza.png" alt="" class="org-icon">
+              <h4>Salão de Beleza</h4>
+              <div class="org-coords"><span>Lânia Silva <em>Coord. SB</em></span><span>Ana Júlya Pinheiro <em>Coord. SB</em></span></div>
+              <p>Atividades de beleza e autoestima</p>
+            </div>
+            <div class="org-card">
+              <img src="assets/org/icon-brinquedoteca.png" alt="" class="org-icon">
+              <h4>Brinquedoteca</h4>
+              <div class="org-coords"><span>Yago Vieira <em>Coord. BQ</em></span><span>Letícia Narayanah <em>Coord. BQ</em></span></div>
+              <p>Atividades lúdicas e de aprendizado</p>
+            </div>
+            <div class="org-card">
+              <img src="assets/org/icon-brincadeiras-livres.png" alt="" class="org-icon">
+              <h4>Brincadeiras Livres</h4>
+              <div class="org-coords"><span>Cleiton Xavier <em>Coord. BL</em></span><span>Manuela Alcântara <em>Coord. BL</em></span></div>
+              <p>Atividades esportivas e de energia</p>
+            </div>
+            <div class="org-card">
+              <img src="assets/org/icon-pintura.png" alt="" class="org-icon">
+              <h4>Pintura</h4>
+              <div class="org-coords"><span>Mabi Menezes <em>Coord. PR</em></span><span>Cecy <em>Coord. PR</em></span></div>
+              <p>Atividades de pintura de rosto e corpo</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="org-note">Os nomes de coordenadores de equipe podem variar entre esta página e a seção "Equipes" quando houver troca recente de coordenação — sempre confira o grupo oficial para a informação mais atual.</p>
     </div>
   </section>
 
