@@ -1,6 +1,6 @@
 /* Gerado automaticamente a partir das revistas do ciclo. Edite 'config' para mudar nome e WhatsApp. */
 window.CATALOGO = {
-  config: {"nomeVendedora": "Diana Ribeiro", "whatsapp": "5585991281467", "limiteImperdivel": 40, "exemplo": false, "parcelamento": [{"min": 300, "max": 4}, {"min": 400, "max": 6}, {"min": 500, "max": 7}]},
+  config: {"nomeVendedora": "Diana Ribeiro", "whatsapp": "5585991281467", "limiteImperdivel": 40, "exemplo": false, "parcelamento": [{"min": 300, "max": 4}, {"min": 400, "max": 6}, {"min": 500, "max": 7}], "cashback": {"min": 200, "pct": 2, "validadeDias": 90}, "aniversario": {"pct": 5}},
   ciclos: {"Boticário": {"nome": "Ciclo 16", "validoAte": "2026-11-30"}, "Eudora": {"nome": "Ciclo 16", "validoAte": "2026-11-30"}},
   produtos: [
     {"codigo": "56156", "marca": "Boticário", "nome": "BANDEJA DOLOMITE", "categoria": "Acessórios", "preco": 119.9, "promo": 83.9, "imagem": "img/bot-56156.webp", "pagina": "Parte 1, pág. 13"},

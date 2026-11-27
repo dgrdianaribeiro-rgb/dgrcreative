@@ -80,7 +80,7 @@ json.dump(lst,open(f"{S}/produtos.json","w"),ensure_ascii=False,indent=0)
 print(len(lst),"produtos;",sum(1 for o in lst if o['promo']),"promo;",sum(1 for o in lst if 'imagem' in o),"com foto")
 import collections;print(collections.Counter((o['marca'],o['categoria']) for o in lst))
 
-cfg={"nomeVendedora":"Diana Ribeiro","whatsapp":"5585991281467","limiteImperdivel":40,"exemplo":False,"parcelamento":[{"min":300,"max":4},{"min":400,"max":6},{"min":500,"max":7}]}
+cfg={"nomeVendedora":"Diana Ribeiro","whatsapp":"5585991281467","limiteImperdivel":40,"exemplo":False,"parcelamento":[{"min":300,"max":4},{"min":400,"max":6},{"min":500,"max":7}],"cashback":{"min":200,"pct":2,"validadeDias":90},"aniversario":{"pct":5}}
 ciclos={"Boticário":{"nome":"Ciclo 16","validoAte":"2026-11-30"},"Eudora":{"nome":"Ciclo 16","validoAte":"2026-11-30"}}
 js="/* Gerado automaticamente a partir das revistas do ciclo. Edite 'config' para mudar nome e WhatsApp. */\n"
 js+="window.CATALOGO = {\n  config: "+json.dumps(cfg,ensure_ascii=False)+",\n  ciclos: "+json.dumps(ciclos,ensure_ascii=False)+",\n  produtos: [\n"

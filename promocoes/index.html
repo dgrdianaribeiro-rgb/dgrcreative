@@ -172,13 +172,22 @@ footer.foot{color:var(--muted);font-size:12.5px;padding-block:8px 24px;display:g
 .line .t{min-width:0}
 .line .t b{display:block;font-size:14px;font-weight:600;line-height:1.3}
 .line .t small{color:var(--muted);font-size:12px}
-.line .t .flag{display:inline-block;margin-top:3px;color:var(--warn);font-size:11.5px;font-weight:700}
+.line .t .flag{display:block;margin-top:3px;color:var(--warn);font-size:11.5px;font-weight:700}
 .line .r{display:grid;justify-items:end;gap:6px}
 .line .r .p{font-weight:700;font-size:14px}
 .mini-step{display:flex;align-items:center;gap:6px;background:var(--surface-2);border-radius:var(--r-pill);padding:2px}
 .mini-step button{border:0;width:28px;height:28px;border-radius:50%;background:var(--surface);color:var(--primary);font-weight:800}
 .mini-step output{min-width:18px;text-align:center;font-weight:700;font-size:13px}
 
+#resumo{display:grid;gap:14px}
+.cash{display:flex;gap:10px;align-items:flex-start;background:var(--warn-soft);border-radius:var(--r-md);padding:12px 14px}
+.cash svg{color:var(--star);flex:none;filter:drop-shadow(0 1px 0 rgba(0,0,0,.08))}
+.cash b{display:block;font-size:14px;color:var(--ink)}
+.cash small{display:block;font-size:12.5px;color:var(--muted)}
+.hint{font-weight:400;font-size:12px;color:var(--muted)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:600;cursor:pointer}
+.check input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--primary);flex:none}
+.check small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
 .parc{border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;display:grid;gap:10px}
 .parc-head{display:flex;justify-content:space-between;align-items:center;font-size:14px}
 .parc-head span{background:var(--primary-soft);color:var(--primary-deep);font-weight:700;font-size:12px;padding:3px 9px;border-radius:var(--r-pill)}
@@ -426,8 +435,16 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
   function totais(){
     let total=0,cheio=0,n=0;
     for (const {p,q} of itensCesta()){ total+=p.precoFinal*q; cheio+=p.preco*q; n+=q; }
-    return {total,economia:cheio-total,n};
+    const r2 = v => Math.round(v*100)/100;
+    const descNiver = ehMesNiver() ? r2(total*NIVER.pct/100) : 0;
+    const final = r2(total-descNiver);
+    const cashback = final >= CASH.min-0.004 ? r2(final*CASH.pct/100) : 0;
+    return {subtotal:total,total:final,descNiver,cashback,economia:cheio-final,n};
   }
+  const CASH = Object.assign({min:200,pct:2,validadeDias:90},CFG.cashback||{});
+  const NIVER = Object.assign({pct:5},CFG.aniversario||{});
+  function niverValido(s){ const m=/^(\d{2})\/(\d{2})$/.exec(s||""); if(!m) return null; const d=+m[1],mo=+m[2]; return (d>=1&&d<=31&&mo>=1&&mo<=12)?{d,mo}:null; }
+  function ehMesNiver(){ const v=niverValido(cliente.niver); return !!v && v.mo===new Date().getMonth()+1; }
   function salvar(){ store.set("vitrine.cesta",cesta); }
   const PARC = (CFG.parcelamento||[{min:300,max:4},{min:400,max:6},{min:500,max:7}]).slice().sort((a,b)=>a.min-b.min);
   function maxParcelas(total){ let m=1; PARC.forEach(f=>{ if(total>=f.min-0.004) m=Math.max(m,f.max); }); return m; }
@@ -463,8 +480,12 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
       });
       m += `\n`;
     });
+    if (t.descNiver>0) m += `Subtotal: ${brl.format(t.subtotal)}\nDesconto de aniversário (${NIVER.pct}%): -${brl.format(t.descNiver)}\n`;
     m += `*Valor total: ${brl.format(t.total)}* (${t.n} ${t.n===1?"item":"itens"})`;
     if (t.economia>0.009) m += `\nEconomia: ${brl.format(t.economia)}`;
+    if (t.cashback>0) m += `\n*Cashback a receber: ${brl.format(t.cashback)}* (${CASH.pct}%)`;
+    if (cliente.usarCash) m += `\n*Quero usar meu saldo de cashback neste pedido*`;
+    if (niverValido(cliente.niver)) m += `\nAniversário: ${cliente.niver}`;
     const np = parcelaEscolhida(t.total), mx = maxParcelas(t.total);
     m += np>1 ? `\n*Pagamento: ${np}x de ${brl.format(t.total/np)}*` : `\n*Pagamento: à vista*`;
     if (mx>1 && np<mx) m += ` (pode parcelar em até ${mx}x)`;
@@ -501,13 +522,11 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
         <div class="r"><span class="p num">${brl.format(p.precoFinal*q)}</span>
           <div class="mini-step"><button data-dec="${esc(p.id)}" aria-label="Tirar um">−</button><output class="num">${q}</output><button data-inc="${esc(p.id)}" aria-label="Pôr mais um">+</button></div></div>
       </div>`).join("")}</div>
-      <div class="totals num">
-        <div><span>${t.n} ${t.n===1?"item":"itens"}</span><span class="big">${brl.format(t.total)}</span></div>
-        ${t.economia>0.009?`<div class="save"><span>Você economiza</span><span>${brl.format(t.economia)}</span></div>`:""}
-      </div>
-      ${blocoParcelas(t.total)}
+      <div id="resumo">${resumoHTML(t)}</div>
       ${temImperdivel?`<div class="notice warn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg><span>Seu pedido tem ofertas imperdíveis. ${esc(primeiroNome)} vai confirmar se ainda há estoque.</span></div>`:""}
       <label class="field" for="cliNome">Seu nome<input id="cliNome" type="text" placeholder="Como você quer ser chamada" value="${esc(cliente.nome)}" autocomplete="name"></label>
+      <label class="field" for="cliNiver">Seu aniversário (dia/mês)<input id="cliNiver" type="text" inputmode="numeric" maxlength="5" placeholder="dd/mm" value="${esc(cliente.niver||"")}"><small class="hint">No mês do seu aniversário você ganha ${NIVER.pct}% de desconto.</small></label>
+      <label class="check" for="cliCash"><input id="cliCash" type="checkbox" ${cliente.usarCash?"checked":""}><span>Quero usar meu saldo de cashback neste pedido<small>${esc(primeiroNome)} confirma o seu saldo pelo WhatsApp.</small></span></label>
       <label class="field" for="cliObs">Observação (opcional)<textarea id="cliObs" rows="2" placeholder="Ex.: cor do batom, cartão ou Pix, entrega">${esc(cliente.obs)}</textarea></label>`;
     $("#cActions").innerHTML = `
       <a class="btn wa block" id="enviar" href="${fones?esc(linkPedido()):"#"}" target="_blank" rel="noopener" ${fones?"":'aria-disabled="true"'}>
@@ -518,6 +537,28 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
     const atualizar = ()=>{ store.set("vitrine.cliente",cliente); const a=$("#enviar"); if(a&&fones) a.href=linkPedido(); };
     $("#cliNome").addEventListener("input",e=>{cliente.nome=e.target.value;atualizar();});
     $("#cliObs").addEventListener("input",e=>{cliente.obs=e.target.value;atualizar();});
+    $("#cliCash").addEventListener("change",e=>{cliente.usarCash=e.target.checked;atualizar();});
+    $("#cliNiver").addEventListener("input",e=>{
+      let v=e.target.value.replace(/\D/g,"").slice(0,4);
+      if(v.length>2) v=v.slice(0,2)+"/"+v.slice(2);
+      e.target.value=v; cliente.niver=v; atualizar();
+      $("#resumo").innerHTML = resumoHTML(totais()); renderCartBar();
+    });
+  }
+  function resumoHTML(t){
+    let h = `<div class="totals num">`;
+    if (t.descNiver>0) h += `<div><span>Subtotal</span><span>${brl.format(t.subtotal)}</span></div><div class="save"><span>Desconto de aniversário (${NIVER.pct}%)</span><span>-${brl.format(t.descNiver)}</span></div>`;
+    h += `<div><span>${t.n} ${t.n===1?"item":"itens"}</span><span class="big">${brl.format(t.total)}</span></div>`;
+    if (t.economia>0.009) h += `<div class="save"><span>Você economiza</span><span>${brl.format(t.economia)}</span></div>`;
+    h += `</div>`;
+    h += `<div class="cash"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z"/></svg><div>`;
+    h += t.cashback>0
+      ? `<b>Você ganha ${brl.format(t.cashback)} de cashback</b><small>Para usar na próxima compra, em até ${CASH.validadeDias} dias.</small>`
+      : `<b>Faltam ${brl.format(CASH.min-t.total)} para ganhar ${CASH.pct}% de cashback</b><small>Compras a partir de ${brl.format(CASH.min).replace(",00","")} ganham ${CASH.pct}% de volta para a próxima compra.</small>`;
+    h += `</div></div>`;
+    h += blocoParcelas(t.total);
+    if (t.descNiver>0) h += `<p class="parc-rule">Desconto de aniversário válido uma vez por ano, no mês do aniversário.</p>`;
+    return h;
   }
 
   /* ---------- detalhe do produto ---------- */
