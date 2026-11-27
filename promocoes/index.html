@@ -168,6 +168,17 @@ footer.foot{color:var(--muted);font-size:12.5px;padding-block:8px 24px;display:g
 .mini-step button{border:0;width:28px;height:28px;border-radius:50%;background:var(--surface);color:var(--primary);font-weight:800}
 .mini-step output{min-width:18px;text-align:center;font-weight:700;font-size:13px}
 
+.parc{border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;display:grid;gap:10px}
+.parc-head{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.parc-head span{background:var(--primary-soft);color:var(--primary-deep);font-weight:700;font-size:12px;padding:3px 9px;border-radius:var(--r-pill)}
+.parc-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.popt{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-sm);padding:8px 6px;display:grid;gap:2px;text-align:center}
+.popt b{font-size:13px}
+.popt span{font-size:12.5px;color:var(--muted)}
+.popt[aria-pressed="true"]{border-color:var(--primary);background:var(--primary-soft)}
+.popt[aria-pressed="true"] b,.popt[aria-pressed="true"] span{color:var(--primary-deep)}
+.parc-note,.parc-rule{margin:0;font-size:12.5px;color:var(--muted)}
+.parc-tip{margin:0;font-size:13px;background:var(--primary-soft);color:var(--primary-deep);border-radius:var(--r-sm);padding:8px 10px}
 .totals{background:var(--surface-2);border-radius:var(--r-md);padding:12px 14px;display:grid;gap:4px;font-size:14px}
 .totals div{display:flex;justify-content:space-between}
 .totals .big{font-family:var(--f-head);font-weight:800;font-size:18px}
@@ -233,7 +244,7 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
       <span class="qty num" id="cartQty">0</span>
     </span>
-    <span class="txt"><small>Minha cestinha</small><b class="num" id="cartTotal">R$ 0,00</b></span>
+    <span class="txt"><small id="cartSub">Total da cestinha</small><b class="num" id="cartTotal">R$ 0,00</b></span>
     <span class="go">Ver pedido →</span>
   </button>
 </div>
@@ -407,6 +418,10 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
     return {total,economia:cheio-total,n};
   }
   function salvar(){ store.set("vitrine.cesta",cesta); }
+  const PARC = (CFG.parcelamento||[{min:300,max:4},{min:400,max:6},{min:500,max:7}]).slice().sort((a,b)=>a.min-b.min);
+  function maxParcelas(total){ let m=1; PARC.forEach(f=>{ if(total>=f.min-0.004) m=Math.max(m,f.max); }); return m; }
+  function proximaFaixa(total){ return PARC.find(f=>total<f.min-0.004 && f.max>maxParcelas(total)); }
+  function parcelaEscolhida(total){ const mx=maxParcelas(total); return Math.min(Math.max(1,cliente.parc||1),mx); }
   function mudar(id,d){
     const atual = cesta[id]||0, novo = Math.max(0,atual+d);
     if(novo) cesta[id]=novo; else delete cesta[id];
@@ -420,6 +435,8 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
     $("#cartbar").hidden = t.n===0;
     $("#cartQty").textContent = t.n;
     $("#cartTotal").textContent = brl.format(t.total);
+    const mx = maxParcelas(t.total);
+    $("#cartSub").textContent = mx>1 ? `Total · ou até ${mx}x de ${brl.format(t.total/mx)}` : "Total da cestinha";
   }
   function mensagem(){
     const itens = itensCesta(), t = totais();
@@ -435,13 +452,29 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
       });
       m += `\n`;
     });
-    m += `*Total: ${brl.format(t.total)}*`;
+    m += `*Valor total: ${brl.format(t.total)}* (${t.n} ${t.n===1?"item":"itens"})`;
     if (t.economia>0.009) m += `\nEconomia: ${brl.format(t.economia)}`;
+    const np = parcelaEscolhida(t.total), mx = maxParcelas(t.total);
+    m += np>1 ? `\n*Pagamento: ${np}x de ${brl.format(t.total/np)}*` : `\n*Pagamento: à vista*`;
+    if (mx>1 && np<mx) m += ` (pode parcelar em até ${mx}x)`;
     if (cliente.nome.trim()) m += `\n\nNome: ${cliente.nome.trim()}`;
     if (cliente.obs.trim()) m += `\nObservação: ${cliente.obs.trim()}`;
     return m;
   }
   function linkPedido(){ return `https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent(mensagem())}`; }
+  function blocoParcelas(total){
+    const mx = maxParcelas(total), np = parcelaEscolhida(total), prox = proximaFaixa(total);
+    let h = `<div class="parc"><div class="parc-head"><b>Forma de pagamento</b>${mx>1?`<span>até ${mx}x</span>`:""}</div>`;
+    if (mx>1){
+      h += `<div class="parc-opts">` + Array.from({length:mx},(_,i)=>i+1).map(n=>
+        `<button class="popt" aria-pressed="${n===np}" data-parc="${n}"><b>${n===1?"À vista":n+"x"}</b><span class="num">${n===1?brl.format(total):brl.format(total/n)}</span></button>`).join("") + `</div>`;
+    } else {
+      h += `<p class="parc-note">Pagamento à vista.</p>`;
+    }
+    if (prox) h += `<p class="parc-tip">Faltam <b class="num">${brl.format(prox.min-total)}</b> para parcelar em até <b>${prox.max}x</b>.</p>`;
+    h += `<p class="parc-rule">Parcelamento: a partir de ${PARC.map(f=>`${brl.format(f.min).replace(",00","")} em até ${f.max}x`).join(" · ")}</p></div>`;
+    return h;
+  }
   function renderCesta(){
     const itens = itensCesta(), t = totais();
     if(!itens.length){
@@ -461,9 +494,10 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
         <div><span>${t.n} ${t.n===1?"item":"itens"}</span><span class="big">${brl.format(t.total)}</span></div>
         ${t.economia>0.009?`<div class="save"><span>Você economiza</span><span>${brl.format(t.economia)}</span></div>`:""}
       </div>
+      ${blocoParcelas(t.total)}
       ${temImperdivel?`<div class="notice warn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg><span>Seu pedido tem ofertas imperdíveis. ${esc(primeiroNome)} vai confirmar se ainda há estoque.</span></div>`:""}
       <label class="field" for="cliNome">Seu nome<input id="cliNome" type="text" placeholder="Como você quer ser chamada" value="${esc(cliente.nome)}" autocomplete="name"></label>
-      <label class="field" for="cliObs">Observação (opcional)<textarea id="cliObs" rows="2" placeholder="Ex.: cor do batom, forma de pagamento, entrega">${esc(cliente.obs)}</textarea></label>`;
+      <label class="field" for="cliObs">Observação (opcional)<textarea id="cliObs" rows="2" placeholder="Ex.: cor do batom, cartão ou Pix, entrega">${esc(cliente.obs)}</textarea></label>`;
     $("#cActions").innerHTML = `
       <a class="btn wa block" id="enviar" href="${fones?esc(linkPedido()):"#"}" target="_blank" rel="noopener" ${fones?"":'aria-disabled="true"'}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.2.1-.1 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3a2.6 2.6 0 0 0-.8 1.9 4.5 4.5 0 0 0 1 2.4 10.3 10.3 0 0 0 4 3.5c1.5.6 2 .7 2.8.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.4-.2Z"/></svg>
@@ -532,6 +566,7 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
     if (el.hasAttribute("data-close")){ fechar(); return; }
     if (el.dataset.copy){ const v=el.dataset.copy; (navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>toast("Código copiado"),()=>toast("Código: "+v)); return; }
     if (el.id==="openCart"){ renderCesta(); abrir($("#sheetCesta")); return; }
+    if (el.dataset.parc){ cliente.parc=+el.dataset.parc; store.set("vitrine.cliente",cliente); renderCesta(); return; }
     if (el.id==="verMais"){ limite+=40; renderGrid(); return; }
     if (el.id==="esvaziar"){ cesta={}; salvar(); renderGrid(); renderCartBar(); renderCesta(); toast("Cestinha esvaziada"); return; }
     if (el.id==="limpar"){ state.q=""; $("#q").value=""; state.marca="Todas"; state.categoria="Todas"; render(); return; }
