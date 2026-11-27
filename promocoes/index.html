@@ -89,6 +89,8 @@ select.sort{height:34px;border-radius:var(--r-pill);border:1px solid var(--line)
 /* Avisos */
 .notice{display:flex;gap:10px;align-items:flex-start;border-radius:var(--r-md);padding:12px 14px;font-size:13.5px;line-height:1.45}
 .notice svg{flex:none;margin-top:1px}
+.notice.cashnote{background:var(--warn-soft);color:var(--ink)}
+.notice.cashnote svg{color:var(--star)}
 .notice.info{background:var(--primary-soft);color:var(--primary-deep)}
 .notice.warn{background:var(--warn-soft);color:var(--warn)}
 .notice b{font-weight:700}
@@ -347,6 +349,25 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
   const marcasPresentes = MARCAS.filter(m=>produtos.some(p=>p.marca===m));
   $("#subtitulo").textContent = "Promoções " + marcasPresentes.join(" · ");
   const fones = CFG.whatsapp && !/^5500+$/.test(CFG.whatsapp);
+  /* Saldo de cashback enviado pela vendedora num link personalizado (?cb=...) */
+  function lerSaldo(){
+    try{
+      const q = new URLSearchParams(location.search).get("cb");
+      if (q){
+        const j = JSON.parse(decodeURIComponent(escape(atob(q.replace(/-/g,"+").replace(/_/g,"/")))));
+        if (j && typeof j.s==="number" && isFinite(j.s) && j.s>=0 && j.s<100000 && typeof j.n==="string")
+          store.set("vitrine.saldo",{n:j.n.slice(0,40),s:Math.round(j.s*100)/100,v:/^\d{4}-\d{2}-\d{2}$/.test(j.v)?j.v:"",d:/^\d{4}-\d{2}-\d{2}$/.test(j.d)?j.d:""});
+        try{ history.replaceState(null,"",location.pathname+location.hash); }catch(e){}
+      }
+    }catch(e){}
+    const s = store.get("vitrine.saldo",null);
+    if (!s || !(s.s>0)) return null;
+    const hojeISO = new Date().toISOString().slice(0,10);
+    if (s.v && s.v < hojeISO) return null;
+    return s;
+  }
+  const SALDO = lerSaldo();
+  const fmtDMA = iso => iso ? iso.slice(8,10)+"/"+iso.slice(5,7) : "";
 
   /* ---------- ícone de produto (quando ainda não há foto) ---------- */
   const ICONES = {
@@ -362,6 +383,7 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
   /* ---------- avisos ---------- */
   function renderAvisos(){
     const n = [];
+    if (SALDO) n.push(`<div class="notice cashnote"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z"/></svg><span><b>Oi, ${esc(SALDO.n)}! Você tem ${brl.format(SALDO.s)} de cashback.</b> ${SALDO.v?`Use até ${fmtDMA(SALDO.v)}. `:""}É só marcar “usar meu cashback” na cestinha.</span></div>`);
     if (CFG.exemplo) n.push(`<div class="notice info"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><span><b>Produtos de exemplo.</b> Os itens e preços desta versão são só para demonstração. Eles serão trocados pelos da revista do mês.</span></div>`);
     if (state.aba==="promo") n.push(`<div class="notice warn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg><span><b>Ofertas imperdíveis acabam rápido.</b> Itens com o selo de oferta imperdível têm estoque limitado. Confirme a disponibilidade com ${esc(primeiroNome)} antes de fechar o pedido.</span></div>`);
     $("#notices").innerHTML = n.join("");
@@ -437,9 +459,10 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
     for (const {p,q} of itensCesta()){ total+=p.precoFinal*q; cheio+=p.preco*q; n+=q; }
     const r2 = v => Math.round(v*100)/100;
     const descNiver = ehMesNiver() ? r2(total*NIVER.pct/100) : 0;
-    const final = r2(total-descNiver);
+    const usoCash = (cliente.usarCash && SALDO) ? r2(Math.min(SALDO.s, total-descNiver)) : 0;
+    const final = r2(total-descNiver-usoCash);
     const cashback = final >= CASH.min-0.004 ? r2(final*CASH.pct/100) : 0;
-    return {subtotal:total,total:final,descNiver,cashback,economia:cheio-final,n};
+    return {subtotal:total,total:final,descNiver,usoCash,cashback,economia:cheio-final,n};
   }
   const CASH = Object.assign({min:200,pct:2,validadeDias:90},CFG.cashback||{});
   const NIVER = Object.assign({pct:5},CFG.aniversario||{});
@@ -480,11 +503,13 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
       });
       m += `\n`;
     });
-    if (t.descNiver>0) m += `Subtotal: ${brl.format(t.subtotal)}\nDesconto de aniversário (${NIVER.pct}%): -${brl.format(t.descNiver)}\n`;
+    if (t.descNiver>0||t.usoCash>0) m += `Subtotal: ${brl.format(t.subtotal)}\n`;
+    if (t.descNiver>0) m += `Desconto de aniversário (${NIVER.pct}%): -${brl.format(t.descNiver)}\n`;
+    if (t.usoCash>0) m += `Cashback usado: -${brl.format(t.usoCash)} (saldo de ${brl.format(SALDO.s)}${SALDO.d?" informado em "+fmtDMA(SALDO.d):""})\n`;
     m += `*Valor total: ${brl.format(t.total)}* (${t.n} ${t.n===1?"item":"itens"})`;
     if (t.economia>0.009) m += `\nEconomia: ${brl.format(t.economia)}`;
     if (t.cashback>0) m += `\n*Cashback a receber: ${brl.format(t.cashback)}* (${CASH.pct}%)`;
-    if (cliente.usarCash) m += `\n*Quero usar meu saldo de cashback neste pedido*`;
+    if (cliente.usarCash && !SALDO) m += `\n*Quero usar meu saldo de cashback neste pedido*`;
     if (niverValido(cliente.niver)) m += `\nAniversário: ${cliente.niver}`;
     const np = parcelaEscolhida(t.total), mx = maxParcelas(t.total);
     m += np>1 ? `\n*Pagamento: ${np}x de ${brl.format(t.total/np)}*` : `\n*Pagamento: à vista*`;
@@ -526,7 +551,7 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
       ${temImperdivel?`<div class="notice warn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg><span>Seu pedido tem ofertas imperdíveis. ${esc(primeiroNome)} vai confirmar se ainda há estoque.</span></div>`:""}
       <label class="field" for="cliNome">Seu nome<input id="cliNome" type="text" placeholder="Como você quer ser chamada" value="${esc(cliente.nome)}" autocomplete="name"></label>
       <label class="field" for="cliNiver">Seu aniversário (dia/mês)<input id="cliNiver" type="text" inputmode="numeric" maxlength="5" placeholder="dd/mm" value="${esc(cliente.niver||"")}"><small class="hint">No mês do seu aniversário você ganha ${NIVER.pct}% de desconto.</small></label>
-      <label class="check" for="cliCash"><input id="cliCash" type="checkbox" ${cliente.usarCash?"checked":""}><span>Quero usar meu saldo de cashback neste pedido<small>${esc(primeiroNome)} confirma o seu saldo pelo WhatsApp.</small></span></label>
+      <label class="check" for="cliCash"><input id="cliCash" type="checkbox" ${cliente.usarCash?"checked":""}><span>${SALDO?`Usar meu cashback de ${brl.format(SALDO.s)}`:"Quero usar meu saldo de cashback neste pedido"}<small>${SALDO?`Desconta do total deste pedido. ${esc(primeiroNome)} confere o saldo.`:`${esc(primeiroNome)} confirma o seu saldo pelo WhatsApp.`}</small></span></label>
       <label class="field" for="cliObs">Observação (opcional)<textarea id="cliObs" rows="2" placeholder="Ex.: cor do batom, cartão ou Pix, entrega">${esc(cliente.obs)}</textarea></label>`;
     $("#cActions").innerHTML = `
       <a class="btn wa block" id="enviar" href="${fones?esc(linkPedido()):"#"}" target="_blank" rel="noopener" ${fones?"":'aria-disabled="true"'}>
@@ -537,7 +562,7 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
     const atualizar = ()=>{ store.set("vitrine.cliente",cliente); const a=$("#enviar"); if(a&&fones) a.href=linkPedido(); };
     $("#cliNome").addEventListener("input",e=>{cliente.nome=e.target.value;atualizar();});
     $("#cliObs").addEventListener("input",e=>{cliente.obs=e.target.value;atualizar();});
-    $("#cliCash").addEventListener("change",e=>{cliente.usarCash=e.target.checked;atualizar();});
+    $("#cliCash").addEventListener("change",e=>{cliente.usarCash=e.target.checked;atualizar(); $("#resumo").innerHTML = resumoHTML(totais()); renderCartBar();});
     $("#cliNiver").addEventListener("input",e=>{
       let v=e.target.value.replace(/\D/g,"").slice(0,4);
       if(v.length>2) v=v.slice(0,2)+"/"+v.slice(2);
@@ -547,7 +572,9 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
   }
   function resumoHTML(t){
     let h = `<div class="totals num">`;
-    if (t.descNiver>0) h += `<div><span>Subtotal</span><span>${brl.format(t.subtotal)}</span></div><div class="save"><span>Desconto de aniversário (${NIVER.pct}%)</span><span>-${brl.format(t.descNiver)}</span></div>`;
+    if (t.descNiver>0||t.usoCash>0) h += `<div><span>Subtotal</span><span>${brl.format(t.subtotal)}</span></div>`;
+    if (t.descNiver>0) h += `<div class="save"><span>Desconto de aniversário (${NIVER.pct}%)</span><span>-${brl.format(t.descNiver)}</span></div>`;
+    if (t.usoCash>0) h += `<div class="save"><span>Cashback usado</span><span>-${brl.format(t.usoCash)}</span></div>`;
     h += `<div><span>${t.n} ${t.n===1?"item":"itens"}</span><span class="big">${brl.format(t.total)}</span></div>`;
     if (t.economia>0.009) h += `<div class="save"><span>Você economiza</span><span>${brl.format(t.economia)}</span></div>`;
     h += `</div>`;
