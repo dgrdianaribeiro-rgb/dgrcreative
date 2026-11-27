@@ -200,13 +200,45 @@
   .el-msg{margin-top:14px;padding:14px;border-radius:14px;background:rgba(255,154,61,.08);border:1px solid rgba(255,154,61,.25);color:#f1e2ff}
 
   .oraculo{perspective:900px;max-width:330px;margin:0 auto}
-  .carta{position:relative;height:210px;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,1.3,.5,1);cursor:pointer;animation:flutua 4s ease-in-out infinite}
+  .flut{animation:flutua 4s ease-in-out infinite}
+  .carta{position:relative;height:210px;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,1.3,.5,1);cursor:pointer}
   .carta.virada{transform:rotateY(180deg)}
   .carta .face{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;place-items:center;text-align:center;padding:20px;border:1px solid var(--borda)}
   .carta .frente{background:repeating-conic-gradient(from 0deg,#3a1166 0 10deg,#2a0c4a 10deg 20deg);font-family:'Cinzel',serif;font-size:18px;color:var(--dourado);box-shadow:0 0 30px rgba(123,44,191,.5)}
   .carta .frente span{display:block;font-size:44px;line-height:1;margin-bottom:8px;animation:gira 8s linear infinite}
   .carta .verso{transform:rotateY(180deg);background:linear-gradient(150deg,#ff9a3d,#ff2e63 60%,#7b2cbf);color:#fff;font-weight:700;font-size:17px;text-shadow:0 1px 6px rgba(0,0,0,.3)}
 
+  /* escolha 1 ou 2 pessoas */
+  .escolha{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:5px;margin:0 auto 18px;max-width:420px;border-radius:99px;background:rgba(20,6,31,.6);border:1px solid var(--borda)}
+  .escolha .modo{position:relative;z-index:1;font:inherit;font-weight:800;font-size:15px;color:var(--suave);background:none;border:0;border-radius:99px;padding:12px 10px;cursor:pointer;transition:color .3s,transform .2s}
+  .escolha .modo:active{transform:scale(.94)}
+  .escolha .modo.on{color:#2a0c1a}
+  .escolha .bolhaModo{position:absolute;z-index:0;top:5px;bottom:5px;border-radius:99px;background:linear-gradient(90deg,var(--dourado),var(--laranja),var(--vermelho));box-shadow:0 6px 20px rgba(255,46,99,.45);transition:left .45s cubic-bezier(.3,1.4,.5,1),width .45s cubic-bezier(.3,1.4,.5,1)}
+  .bloco2{animation:entra .5s cubic-bezier(.2,.8,.2,1)}
+  .divisor{display:flex;align-items:center;gap:12px;margin:8px 0 18px;font-family:'Cinzel',serif;color:var(--dourado);font-size:17px}
+  .divisor::before,.divisor::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--borda),transparent)}
+  .divisor span{animation:bate 1.4s ease-in-out infinite;color:var(--vermelho)}
+  /* chamada para comparar */
+  .cta-compat{margin:18px auto 0;max-width:560px;padding:18px;border-radius:22px;text-align:center;background:linear-gradient(135deg,rgba(255,46,99,.22),rgba(123,44,191,.3));border:1px solid rgba(255,46,99,.45);position:relative;overflow:hidden}
+  .cta-compat::before{content:"♡";position:absolute;left:-10px;top:-24px;font-size:110px;color:rgba(255,46,99,.13);animation:bate 2s ease-in-out infinite;pointer-events:none}
+  .cta-compat h4{margin:0 0 4px;font-family:'Cinzel',serif;font-size:19px}
+  .cta-compat p{margin:0 0 14px;color:var(--suave);font-size:14px}
+  .cta-compat .acoes{margin-top:0}
+  /* afinidades */
+  .afins{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+  .afim{position:relative;border-radius:20px;padding:16px 14px;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid var(--borda);transition:transform .3s cubic-bezier(.3,1.5,.5,1),box-shadow .3s;overflow:hidden}
+  .afim:hover{transform:translateY(-5px) rotate(-1deg);box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 0 1px var(--cor)}
+  .afim .gl{font-size:40px;line-height:1;color:var(--cor);text-shadow:0 0 22px var(--cor);display:inline-block;animation:flutua 3.5s ease-in-out infinite}
+  .afim h4{margin:6px 0 2px;font-family:'Cinzel',serif;font-size:18px}
+  .afim .pct{font-weight:900;font-size:22px}
+  .afim .med{height:6px;border-radius:99px;background:rgba(255,255,255,.08);margin:6px 0 10px;overflow:hidden}
+  .afim .med i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--dourado),var(--laranja),var(--vermelho));transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+  .afim p{margin:0 0 12px;font-size:13.5px;color:#e3d2f3;text-align:left}
+  .afim .btn{padding:9px 12px;font-size:13px;width:100%}
+  .afim.top::after{content:"✦ par cósmico";position:absolute;top:10px;right:-34px;transform:rotate(35deg);background:linear-gradient(90deg,var(--laranja),var(--vermelho));color:#fff;font-size:10px;font-weight:800;padding:3px 34px;letter-spacing:.05em}
+  .trios{display:grid;gap:8px;margin:14px auto 0;max-width:520px}
+  .trios div{padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:14px;text-align:center}
+  .trios b{color:var(--dourado)}
   .compat-score{text-align:center;margin:10px 0 18px}
   .anel{width:190px;height:190px;margin:0 auto;position:relative}
   .anel svg{width:100%;height:100%;transform:rotate(-90deg)}
@@ -243,6 +275,11 @@
     </header>
 
     <form class="painel" id="form" autocomplete="off" novalidate>
+      <div class="escolha" id="escolhaModo" role="tablist" aria-label="Quantas pessoas">
+        <span class="bolhaModo" id="modoBolha"></span>
+        <button type="button" class="modo on" data-modo="novo">✦ Uma pessoa</button>
+        <button type="button" class="modo" data-modo="dupla">♡ Duas juntas</button>
+      </div>
       <h2 id="formTitulo" class="cinzel" style="margin:0 0 16px;font-size:20px;text-align:center">De quem é esse céu?</h2>
       <div class="campo">
         <label for="nome">Nome</label>
@@ -264,6 +301,30 @@
         <input type="text" id="cidade" placeholder="Comece a digitar… ex.: Fortaleza" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugestoes">
         <div class="sugestoes oculto" id="sugestoes" role="listbox"></div>
         <div class="cidade-ok" id="cidadeOk"></div>
+      </div>
+      <div id="bloco2" class="bloco2 oculto">
+        <div class="divisor"><span>♡</span> Segunda pessoa <span>♡</span></div>
+        <div class="campo">
+          <label for="nome2">Nome</label>
+          <input type="text" id="nome2" placeholder="Ex.: João" maxlength="40">
+        </div>
+        <div class="linha">
+          <div class="campo">
+            <label for="data2">Data de nascimento</label>
+            <input type="date" id="data2" min="1900-01-01" max="2100-12-31">
+          </div>
+          <div class="campo">
+            <label for="hora2">Hora</label>
+            <input type="time" id="hora2">
+            <label class="check"><input type="checkbox" id="semHora2"> Não sei o horário</label>
+          </div>
+        </div>
+        <div class="campo">
+          <label for="cidade2">Cidade onde nasceu</label>
+          <input type="text" id="cidade2" placeholder="Comece a digitar…" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugestoes2">
+          <div class="sugestoes oculto" id="sugestoes2" role="listbox"></div>
+          <div class="cidade-ok" id="cidadeOk2"></div>
+        </div>
       </div>
       <div class="erro" id="erro" role="alert"></div>
       <button class="btn full" type="submit" id="btnRevelar">Revelar o céu ✦</button>
@@ -421,6 +482,73 @@ function relacaoEl(e1, e2){
   if (par === 'Ar+Fogo' || par === 'Terra+Água') return 'complementa';
   if (par === 'Fogo+Terra' || par === 'Ar+Água') return 'aprendizado';
   return 'desafio';
+}
+
+/* Signos que combinam: cruza o Sol de cada signo com Sol, Lua, Vênus e Descendente da pessoa */
+function afinidades(m){
+  const PTS = {igual:95, complementa:86, aprendizado:62, desafio:48};
+  const base = [['Sun',.35,'seu Sol'],['Venus',.3,'sua Vênus'],['Moon',.25,'sua Lua']];
+  const desc = m.temHora ? signoDe(m.asc + 180) : null;
+  const lista = SIGNOS.map(S => {
+    let soma = 0, peso = 0; const bons = [], ruins = [];
+    base.forEach(([k,w,rot]) => {
+      const sg = m.pos[k].signo, r = relacaoEl(S.el, sg.el);
+      soma += PTS[r] * w; peso += w;
+      if (r === 'igual' || r === 'complementa') bons.push(`${rot} em ${sg.nome}`); else ruins.push(`${rot} em ${sg.nome}`);
+    });
+    let pct = soma / peso, extra = '';
+    if (desc && S === desc) { pct += 6; extra = ` É o signo do seu Descendente: exatamente o tipo que te atrai e te completa.`; }
+    if (S === m.pos.Venus.signo) { pct += 4; extra += ` É o signo da sua Vênus: esse jeito de amar te encanta.`; }
+    if (S === m.pos.Sun.signo) extra += ` Mesmo signo solar: espelho total — vocês se entendem, mas também se reconhecem nos defeitos.`;
+    pct = Math.min(99, Math.round(pct));
+    let txt;
+    if (bons.length === 3) txt = `${S.nome} (${S.el}) conversa com ${bons.join(', ')} — combinação natural e leve.`;
+    else if (bons.length) txt = `${S.nome} (${S.el}) se encaixa com ${bons.join(' e ')}${ruins.length ? `, e mexe com ${ruins.join(' e ')}` : ''}.`;
+    else txt = `${S.nome} (${S.el}) mexe com ${ruins.join(', ')}: ritmos bem diferentes do seu.`;
+    return {s:S, pct, txt: `<b style="color:var(--dourado)">${S.pal.join(" · ")}</b><br>` + txt + extra};
+  }).sort((a,b) => b.pct - a.pct);
+  return {melhores: lista.slice(0,4), desafios: lista.slice(-2).reverse()};
+}
+
+/* Sinastria: aspectos entre os dois mapas */
+const PAR_SIN = {
+  'Moon-Sun':'um dos laços mais clássicos de casal: um ilumina, o outro acolhe',
+  'Mars-Venus':'química e atração física',
+  'Moon-Moon':'o jeito de sentir e de cuidar',
+  'Mercury-Mercury':'a conversa e o jeito de pensar',
+  'Sun-Sun':'as essências e a forma de brilhar',
+  'Moon-Venus':'carinho, ternura e afeto',
+  'Sun-Venus':'admiração e encanto',
+  'Mars-Mars':'a energia, o ritmo e as brigas',
+  'Mars-Sun':'impulso e iniciativa juntos',
+  'Mars-Moon':'emoção e reação — intensidade',
+  'Venus-Venus':'o gosto, o estilo e o jeito de amar',
+  'Mercury-Moon':'entender o que o outro sente',
+  'Mercury-Sun':'a troca de ideias e o apoio mental',
+  'Mercury-Venus':'palavras doces e afinidade de gostos',
+  'Mars-Mercury':'debates afiados',
+  'ASC-Sun':'reconhecimento à primeira vista',
+  'ASC-Moon':'sensação de estar em casa um com o outro',
+  'ASC-Venus':'atração imediata pela aparência e pelo jeito',
+  'ASC-Mars':'magnetismo e desafio'
+};
+const TXT_SIN = {
+  'conjunção':'se fundem: sensação forte de familiaridade, como se já se conhecessem',
+  'trígono':'fluem com facilidade: aqui a relação é leve e natural',
+  'sextil':'se estimulam: uma boa parceria que cresce com convivência',
+  'quadratura':'dão faísca: atrito que atrai e desafia — pede diálogo',
+  'oposição':'atração dos opostos: vocês se completam e se espelham'
+};
+function sinastria(a, b){
+  const ks = ['Sun','Moon','Mercury','Venus','Mars'];
+  const pts = m => { const l = ks.map(k => ({k, n:PL[k].n, lon:m.pos[k].lon})); if (m.temHora) l.push({k:'ASC', n:'Ascendente', lon:m.asc}); return l; };
+  const A = pts(a), B = pts(b), res = [];
+  A.forEach(x => B.forEach(y => {
+    const chave = [x.k, y.k].sort().join('-'); if (!PAR_SIN[chave]) return;
+    const d0 = norm360(x.lon - y.lon), dist = d0 > 180 ? 360 - d0 : d0;
+    ASPECTOS.forEach(asp => { const o = Math.abs(dist - asp.ang), orb = asp.ang === 60 ? 4 : 6; if (o <= orb) res.push({x, y, asp, o, tema:PAR_SIN[chave], peso:(orb - o) + (/Sun|Moon/.test(chave) ? 2 : 0) + (chave === 'Mars-Venus' ? 2 : 0)}); });
+  }));
+  return res.sort((p,q) => q.peso - p.peso).slice(0, 7);
 }
 
 /* A leitura que junta tudo */
@@ -608,9 +736,11 @@ function renderResultado(m){
     </div>
     <div class="mandala" id="mandala">${mandalaSVG(m)}</div>
     <p class="dica">✦ toque nos planetas, signos e casas da mandala ✦</p>
-    <div class="detalhe" id="detalhe"><span class="sub">Seu trio principal</span><h4>${resumo}</h4><p>Toque em qualquer símbolo da mandala pra ver o que ele significa no seu mapa.</p></div>`;
+    <div class="detalhe" id="detalhe"><span class="sub">Seu trio principal</span><h4>${resumo}</h4><p>Toque em qualquer símbolo da mandala pra ver o que ele significa no seu mapa.</p></div>
+    <div class="cta-compat rv"><h4 class="grad">E com quem você combina?</h4><p>Veja os signos que mais se conectam com o seu mapa ou compare com uma pessoa de verdade.</p>
+      <div class="acoes"><button class="btn" id="ctaComparar">Comparar com alguém ♡</button><button class="btn ghost" id="ctaAfins">Signos que combinam ✦</button></div></div>`;
 
-  const abas = [['quem','Quem você é'],['planetas','Planetas'],['casas','Casas'],['angulos','Ângulos'],['conexoes','Conexões'],['elementos','Elementos']];
+  const abas = [['quem','Quem você é'],['afins','Combina com você'],['planetas','Planetas'],['casas','Casas'],['angulos','Ângulos'],['conexoes','Conexões'],['elementos','Elementos']];
   h += `<nav class="abas" id="abas"><div class="trilho"><span class="bolha" id="bolha"></span>${abas.map(([k,n],i) => `<button class="aba${i?'':' on'}" data-aba="${k}">${n}</button>`).join('')}</div></nav>`;
 
   /* ---- Quem você é ---- */
@@ -624,6 +754,22 @@ function renderResultado(m){
   if (asc) h += cardAstro('Ascendente · como te veem', asc, asc.asc, `<div class="nota">${grauTxt(m.asc)} de ${asc.nome} · regente: ${PL[asc.regK].n} em ${m.pos[asc.regK].signo.nome}, Casa ${m.pos[asc.regK].casa}</div>`);
   else h += `<article class="astro rv"><div class="glifo">?</div><div class="rot">Ascendente · como te veem</div><h3 class="cinzel">Mistério…</h3><p>O Ascendente muda a cada ~2 horas, então precisa do horário de nascimento. Dica: costuma estar na certidão de nascimento ou na caderneta da maternidade.</p></article>`;
   h += `</div></div>`;
+
+  /* ---- Combina com você ---- */
+  const af = afinidades(m);
+  const cardAfim = (x, top) => `<div class="afim rv${top ? ' top' : ''}" style="--cor:${COR_EL[x.s.el]}">
+      <span class="gl">${x.s.g+VS}</span><h4>${x.s.nome}</h4>
+      <div class="pct grad">${x.pct}%</div><div class="med"><i data-w="${x.pct}"></i></div>
+      <p>${x.txt}</p>
+      <button class="btn ghost" data-comparar="${SIGNOS.indexOf(x.s)}">Comparar com alguém de ${x.s.nome}</button></div>`;
+  h += `<div class="painelAba" id="aba-afins">
+    <div class="secao"><h3 class="cinzel grad">Os signos que mais combinam com você</h3><p>Cruzamos seu Sol, sua Lua, sua Vênus${m.temHora ? ' e seu Descendente' : ''} com o Sol de cada signo</p></div>
+    <div class="afins">${af.melhores.map((x,i) => cardAfim(x, i === 0)).join('')}</div>
+    <div class="secao"><h3 class="cinzel grad">Desafios que ensinam</h3><p>Química diferente: dá faísca, pede paciência — e pode ser transformador</p></div>
+    <div class="afins">${af.desafios.map(x => cardAfim(x)).join('')}</div>
+    <p style="text-align:center;color:var(--suave);font-size:13px;margin-top:16px">Isso olha só o signo solar da outra pessoa. Pra uma leitura de verdade, compare os dois mapas completos ♡</p>
+    <div class="acoes" style="grid-template-columns:1fr"><button class="btn" id="afinsComparar">Comparar com alguém ♡</button></div>
+  </div>`;
 
   /* ---- Planetas ---- */
   h += `<div class="painelAba" id="aba-planetas"><div class="secao"><h3 class="cinzel grad">Seus planetas</h3><p>O signo mostra <b>como</b>; a casa mostra <b>onde</b>, em que área da vida</p></div><div class="lista">`;
@@ -694,7 +840,7 @@ function renderResultado(m){
 
   /* ---- Oráculo e ações ---- */
   h += `<div class="secao rv"><h3 class="cinzel grad">Carta do oráculo</h3><p>Toque na carta e receba um recado do cosmos</p></div>
-    <div class="oraculo rv"><div class="carta" id="carta" role="button" tabindex="0" aria-label="Virar carta do oráculo"><div class="face frente"><div><span>✦</span>Toque para revelar</div></div><div class="face verso" id="cartaVerso"></div></div></div>
+    <div class="oraculo rv"><div class="flut"><div class="carta" id="carta" role="button" tabindex="0" aria-label="Virar carta do oráculo"><div class="face frente"><div><span>✦</span>Toque para revelar</div></div><div class="face verso" id="cartaVerso"></div></div></div></div>
     <div class="acoes" style="margin-top:30px">
       <button class="btn" id="btnCompartilhar">Compartilhar meu mapa ↗</button>
       <button class="btn ghost" id="btnCompat">Comparar com alguém ♡</button>
@@ -718,6 +864,10 @@ function renderResultado(m){
   $('#btnCompartilhar').onclick = () => compartilhar(linkDe(p), `Meu céu: ${resumo} ✦ Descubra o seu:`);
   $('#btnZap').onclick = () => window.open('https://wa.me/?text=' + encodeURIComponent(`✦ ${p.n} — ${resumo}\nDescubra o seu mapa: ${linkDe(p)}`), '_blank');
   $('#btnCompat').onclick = () => abrirForm('compat');
+  $('#ctaComparar').onclick = () => abrirForm('compat');
+  $('#afinsComparar').onclick = () => abrirForm('compat');
+  $('#ctaAfins').onclick = () => abrirAba('afins');
+  $$('[data-comparar]').forEach(b => b.onclick = () => abrirForm('compat', SIGNOS[+b.dataset.comparar]));
   $('#btnNovo').onclick = () => { history.replaceState(null,'',location.pathname); abrirForm('novo'); };
 }
 
@@ -736,6 +886,7 @@ function abrirAba(k, rolar = true){
   const bolha = $('#bolha'); bolha.style.left = b.offsetLeft + 'px'; bolha.style.width = b.offsetWidth + 'px';
   b.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   const painel = $('#aba-' + k); revelar(painel);
+  if (k === 'afins') setTimeout(() => painel.querySelectorAll('.med i').forEach(i => i.style.width = i.dataset.w + '%'), 250);
   if (k === 'elementos') setTimeout(() => painel.querySelectorAll('.barra i').forEach(i => i.style.width = i.dataset.w + '%'), 150);
   if (rolar) { const y = $('#abas').getBoundingClientRect().top + scrollY - 4; if (scrollY > y + 10 || scrollY < y - 400) scrollTo({top:y, behavior:'smooth'}); }
 }
@@ -798,7 +949,8 @@ function renderCompat(a, b){
   const linha = (g, t, sa, sb, r) => `<div class="pl rv"><div class="g">${g}</div><div><b>${t}: ${sa.nome} ${sa.g+VS} × ${sb.nome} ${sb.g+VS}</b><div class="t">${r.txt}</div></div></div>`;
   const C = 2 * Math.PI * 80;
   let h = `<div class="ola"><span class="selo">Combinação cósmica</span>
-    <div class="compat-par" style="margin-top:14px"><span class="grad">${esc(a.p.n)}</span><span class="x">♡</span><span class="grad">${esc(b.p.n)}</span></div></div>
+    <div class="compat-par" style="margin-top:14px"><span class="grad">${esc(a.p.n)}</span><span class="x">♡</span><span class="grad">${esc(b.p.n)}</span></div>
+    <div class="trios">${[a,b].map(m => `<div><b>${esc(primeiro(m.p.n))}:</b> ☉ ${m.pos.Sun.signo.nome} · ☽ ${m.pos.Moon.signo.nome}${m.temHora ? ' · ↑ ' + signoDe(m.asc).nome : ''} · ♀ ${m.pos.Venus.signo.nome}</div>`).join('')}</div></div>
     <div class="painel compat-score">
       <div class="anel"><svg viewBox="0 0 200 200"><defs><linearGradient id="ga" x1="0" x2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset=".5" stop-color="#ff9a3d"/><stop offset="1" stop-color="#ff2e63"/></linearGradient></defs>
         <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="14"/>
@@ -812,6 +964,7 @@ function renderCompat(a, b){
       ${linha('♀'+VS, `Química (Vênus de ${na} × Marte de ${nb})`, a.pos.Venus.signo, b.pos.Mars.signo, rv1)}
       ${linha('♂'+VS, `Química (Vênus de ${nb} × Marte de ${na})`, b.pos.Venus.signo, a.pos.Mars.signo, rv2)}
     </div>
+    ${(() => { const sn = sinastria(a, b); if (!sn.length) return ''; return `<div class="secao rv"><h3 class="cinzel grad">Onde os dois céus se tocam</h3><p>Os encontros mais fortes entre os planetas de um e do outro</p></div><div class="lista">${sn.map(z => `<div class="pl rv"><div class="g" style="color:${z.asp.cor}">${z.asp.s+VS}</div><div><b>${z.x.n} de ${na} ${z.asp.s+VS} ${z.y.n} de ${nb}</b><span class="mini" style="color:${z.asp.cor}">${z.asp.n} · ${z.tema}</span><div class="t">${cap(TXT_SIN[z.asp.n])}.</div></div></div>`).join('')}</div>`; })()}
     <p style="text-align:center;color:var(--suave);font-size:13px;margin-top:14px">Lembrete das estrelas: o céu mostra tendências; quem constrói a relação são vocês. ♡</p>
     <div class="acoes">
       <button class="btn" id="cCompartilhar">Compartilhar ↗</button>
@@ -854,80 +1007,110 @@ async function compartilhar(url, texto){
 /* =====================================================================
    FORMULÁRIO + BUSCA DE CIDADE
    ===================================================================== */
-let cidadeSel = null, modo = 'novo';
-function abrirForm(m){
-  modo = m; cidadeSel = null;
-  $('#form').reset(); $('#hora').disabled = false; $('#cidadeOk').textContent = ''; $('#erro').textContent = '';
-  $('#formTitulo').textContent = m === 'compat' ? `Com quem ${primeiro(mapaAtual.p.n)} vai combinar?` : 'De quem é esse céu?';
-  $('#btnRevelar').textContent = m === 'compat' ? 'Ver a combinação ♡' : 'Revelar o céu ✦';
+let modo = 'novo', signoAlvo = null;
+function abrirForm(m, signo){
+  modo = m; signoAlvo = signo || null;
+  $('#form').reset(); ['', '2'].forEach(s => { $('#hora'+s).disabled = false; $('#cidadeOk'+s).textContent = ''; CAMPOS[s].sel = null; });
+  $('#erro').textContent = '';
+  const dupla = m === 'dupla';
+  $('#escolhaModo').classList.toggle('oculto', m === 'compat');
+  $$('.modo').forEach(b => b.classList.toggle('on', b.dataset.modo === (dupla ? 'dupla' : 'novo')));
+  $('#bloco2').classList.toggle('oculto', !dupla);
+  $('#formTitulo').textContent = m === 'compat' ? (signo ? `Quem de ${signo.nome} ${signo.g+VS} você quer comparar com ${primeiro(mapaAtual.p.n)}?` : `Com quem ${primeiro(mapaAtual.p.n)} vai combinar?`) : dupla ? 'Primeira pessoa ✦' : 'De quem é esse céu?';
+  $('#btnRevelar').textContent = m === 'novo' ? 'Revelar o céu ✦' : 'Ver a combinação ♡';
   $('#btnCancelarCompat').classList.toggle('oculto', m !== 'compat');
   mostrar('#telaForm');
+  requestAnimationFrame(posicionarModo);
   setTimeout(() => $('#nome').focus(), 350);
 }
+function posicionarModo(){ const b = $('.modo.on'), bo = $('#modoBolha'); if (b && bo && b.offsetWidth) { bo.style.left = b.offsetLeft + 'px'; bo.style.width = b.offsetWidth + 'px'; } }
+$$('.modo').forEach(b => b.onclick = () => {
+  const dupla = b.dataset.modo === 'dupla'; modo = dupla ? 'dupla' : 'novo';
+  $$('.modo').forEach(x => x.classList.toggle('on', x === b)); posicionarModo();
+  $('#bloco2').classList.toggle('oculto', !dupla);
+  $('#formTitulo').textContent = dupla ? 'Primeira pessoa ✦' : 'De quem é esse céu?';
+  $('#btnRevelar').textContent = dupla ? 'Ver a combinação ♡' : 'Revelar o céu ✦';
+  $('#erro').textContent = '';
+});
+addEventListener('resize', posicionarModo); requestAnimationFrame(posicionarModo);
 $('#btnCancelarCompat').onclick = () => renderResultado(mapaAtual);
-$('#semHora').onchange = e => { $('#hora').disabled = e.target.checked; if (e.target.checked) $('#hora').value = ''; };
+['', '2'].forEach(s => $('#semHora'+s).onchange = e => { $('#hora'+s).disabled = e.target.checked; if (e.target.checked) $('#hora'+s).value = ''; });
 
-const inpCidade = $('#cidade'), boxSug = $('#sugestoes');
-let buscaTimer, buscaId = 0;
 const rotuloCidade = c => c.nome + (c.uf ? ', ' + c.uf : '') + (c.pais ? ' · ' + c.pais : '');
-function mostrarSug(lista){
-  if (!lista.length) { boxSug.classList.add('oculto'); inpCidade.setAttribute('aria-expanded','false'); return; }
-  boxSug.innerHTML = lista.map((c,i) => `<button type="button" role="option" data-i="${i}">${esc(c.nome)} <small>${esc([c.uf, c.pais].filter(Boolean).join(' · '))}</small></button>`).join('');
-  boxSug.classList.remove('oculto'); inpCidade.setAttribute('aria-expanded','true');
-  boxSug.querySelectorAll('button').forEach(b => b.onclick = () => escolherCidade(lista[+b.dataset.i]));
-}
-function escolherCidade(c){
-  cidadeSel = c; inpCidade.value = rotuloCidade(c); boxSug.classList.add('oculto'); inpCidade.setAttribute('aria-expanded','false');
-  $('#cidadeOk').textContent = `✓ ${c.lat.toFixed(2)}°, ${c.lon.toFixed(2)}° · fuso ${c.tz.replace('_',' ')}`;
-}
 const locais = q => { const s = semAcento(q); return CIDADES.filter(c => semAcento(c.nome).startsWith(s) || semAcento(c.nome).includes(' ' + s)).slice(0,5); };
-inpCidade.addEventListener('input', () => {
-  cidadeSel = null; $('#cidadeOk').textContent = '';
-  const q = inpCidade.value.trim(); clearTimeout(buscaTimer);
-  if (q.length < 2) { mostrarSug([]); return; }
-  mostrarSug(locais(q));
-  buscaTimer = setTimeout(async () => {
-    const id = ++buscaId;
-    try {
-      const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=8&language=pt&format=json`);
-      const j = await r.json(); if (id !== buscaId) return;
-      const on = (j.results || []).filter(x => x.timezone).map(x => ({nome:x.name, uf:x.admin1 || '', pais:x.country || '', lat:x.latitude, lon:x.longitude, tz:x.timezone}));
-      if (on.length) mostrarSug(on);
-    } catch(e) { /* sem internet: ficam as cidades locais */ }
-  }, 300);
-});
-inpCidade.addEventListener('keydown', e => {
-  if (e.key === 'ArrowDown') { const b = boxSug.querySelector('button'); if (b) { e.preventDefault(); b.focus(); } }
-  if (e.key === 'Enter' && !boxSug.classList.contains('oculto')) { const b = boxSug.querySelector('button'); if (b) { e.preventDefault(); b.click(); } }
-});
-boxSug.addEventListener('keydown', e => {
-  const bs = [...boxSug.querySelectorAll('button')], i = bs.indexOf(document.activeElement);
-  if (e.key === 'ArrowDown' && i < bs.length - 1) { e.preventDefault(); bs[i+1].focus(); }
-  if (e.key === 'ArrowUp') { e.preventDefault(); (i > 0 ? bs[i-1] : inpCidade).focus(); }
-  if (e.key === 'Escape') { boxSug.classList.add('oculto'); inpCidade.focus(); }
-});
-document.addEventListener('click', e => { if (!e.target.closest('.campo')) boxSug.classList.add('oculto'); });
+function campoCidade(s){
+  const inp = $('#cidade'+s), box = $('#sugestoes'+s), ok = $('#cidadeOk'+s), st = {sel:null};
+  let timer, id = 0;
+  const mostrarSug = lista => {
+    if (!lista.length) { box.classList.add('oculto'); inp.setAttribute('aria-expanded','false'); return; }
+    box.innerHTML = lista.map((c,i) => `<button type="button" role="option" data-i="${i}">${esc(c.nome)} <small>${esc([c.uf, c.pais].filter(Boolean).join(' · '))}</small></button>`).join('');
+    box.classList.remove('oculto'); inp.setAttribute('aria-expanded','true');
+    box.querySelectorAll('button').forEach(b => b.onclick = () => escolher(lista[+b.dataset.i]));
+  };
+  const escolher = c => {
+    st.sel = c; inp.value = rotuloCidade(c); box.classList.add('oculto'); inp.setAttribute('aria-expanded','false');
+    ok.textContent = `✓ ${c.lat.toFixed(2)}°, ${c.lon.toFixed(2)}° · fuso ${c.tz.replace('_',' ')}`;
+  };
+  inp.addEventListener('input', () => {
+    st.sel = null; ok.textContent = '';
+    const q = inp.value.trim(); clearTimeout(timer);
+    if (q.length < 2) { mostrarSug([]); return; }
+    mostrarSug(locais(q));
+    timer = setTimeout(async () => {
+      const meu = ++id;
+      try {
+        const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=8&language=pt&format=json`);
+        const j = await r.json(); if (meu !== id) return;
+        const on = (j.results || []).filter(x => x.timezone).map(x => ({nome:x.name, uf:x.admin1 || '', pais:x.country || '', lat:x.latitude, lon:x.longitude, tz:x.timezone}));
+        if (on.length) mostrarSug(on);
+      } catch(e) { /* sem internet: ficam as cidades locais */ }
+    }, 300);
+  });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { const b = box.querySelector('button'); if (b) { e.preventDefault(); b.focus(); } }
+    if (e.key === 'Enter' && !box.classList.contains('oculto')) { const b = box.querySelector('button'); if (b) { e.preventDefault(); b.click(); } }
+  });
+  box.addEventListener('keydown', e => {
+    const bs = [...box.querySelectorAll('button')], i = bs.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown' && i < bs.length - 1) { e.preventDefault(); bs[i+1].focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); (i > 0 ? bs[i-1] : inp).focus(); }
+    if (e.key === 'Escape') { box.classList.add('oculto'); inp.focus(); }
+  });
+  return st;
+}
+const CAMPOS = {'': campoCidade(''), '2': campoCidade('2')};
+document.addEventListener('click', e => { const c = e.target.closest('.campo'); $$('.sugestoes').forEach(b => { if (!c || !c.contains(b)) b.classList.add('oculto'); }); });
+
+function lerBloco(s, quem){
+  const n = $('#nome'+s).value.trim(), d = $('#data'+s).value, semHora = $('#semHora'+s).checked, h = $('#hora'+s).value, cid = CAMPOS[s].sel;
+  if (!n) return `Qual é o nome${quem}? ✦`;
+  if (!d) return `Falta a data de nascimento${quem}.`;
+  const ano = +d.slice(0,4); if (ano < 1900 || ano > 2100) return 'Use uma data entre 1900 e 2100.';
+  if (!semHora && !h) return `Coloque o horário${quem} — ou marque "Não sei o horário".`;
+  if (!cid) return `Escolha a cidade${quem} na lista que aparece ao digitar.`;
+  return {n, d, h: semHora ? '' : h, c: rotuloCidade(cid).split(' · ')[0], la: cid.lat, lo: cid.lon, tz: cid.tz};
+}
 
 const FRASES = ['Consultando as estrelas…','Alinhando os planetas…','Desenhando as casas…','Calculando o ascendente…','Lendo a Lua…','Conectando os aspectos…'];
 $('#form').addEventListener('submit', e => {
   e.preventDefault();
-  const n = $('#nome').value.trim(), d = $('#data').value, semHora = $('#semHora').checked, h = $('#hora').value;
   const erro = msg => { $('#erro').textContent = msg; const f = $('#form'); f.classList.remove('treme'); void f.offsetWidth; f.classList.add('treme'); };
-  if (!n) return erro('Qual é o nome? ✦');
-  if (!d) return erro('Falta a data de nascimento.');
-  const ano = +d.slice(0,4); if (ano < 1900 || ano > 2100) return erro('Use uma data entre 1900 e 2100.');
-  if (!semHora && !h) return erro('Coloque o horário — ou marque "Não sei o horário".');
-  if (!cidadeSel) return erro('Escolha a cidade na lista que aparece ao digitar.');
+  const dupla = modo === 'dupla';
+  const p = lerBloco('', dupla ? ' da primeira pessoa' : '');
+  if (typeof p === 'string') return erro(p);
+  let p2 = null;
+  if (dupla) { p2 = lerBloco('2', ' da segunda pessoa'); if (typeof p2 === 'string') return erro(p2); }
   $('#erro').textContent = '';
-  const p = {n, d, h: semHora ? '' : h, c: rotuloCidade(cidadeSel).split(' · ')[0], la: cidadeSel.lat, lo: cidadeSel.lon, tz: cidadeSel.tz};
   $('#mandalaLoad').innerHTML = mandalaSVG(null, {id:'L'});
+  $('#msgCarregando').textContent = modo === 'novo' ? FRASES[0] : 'Cruzando os dois céus…';
   mostrar('#telaCarregando');
   let i = 0; const iv = setInterval(() => $('#msgCarregando').textContent = FRASES[++i % FRASES.length], 420);
   setTimeout(() => {
     clearInterval(iv);
     try {
       const m = calcularMapa(p);
-      if (modo === 'compat' && mapaAtual) { history.replaceState(null,'',linkDe(mapaAtual.p, p)); renderCompat(mapaAtual, m); }
+      if (dupla) { mapaAtual = m; history.replaceState(null,'',linkDe(p, p2)); renderCompat(m, calcularMapa(p2)); }
+      else if (modo === 'compat' && mapaAtual) { history.replaceState(null,'',linkDe(mapaAtual.p, p)); renderCompat(mapaAtual, m); }
       else { history.replaceState(null,'',linkDe(p)); renderResultado(m); }
     } catch(err) { console.error(err); mostrar('#telaForm'); erro('Ops, as estrelas se embaralharam. Confira os dados e tente de novo.'); }
   }, 2000);
