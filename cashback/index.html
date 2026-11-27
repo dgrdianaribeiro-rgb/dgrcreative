@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#def7fe">
+<link rel="icon" href="../promocoes/logo.png">
+<link rel="apple-touch-icon" href="../promocoes/icone.png">
+<title>Cashback Diana's Store</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Painel privado de cashback: resumo no topo, aniversariantes, lista de clientes e ficha da cliente em painel. Mesma identidade do app. */
+:root{
+  --bg:#eef9fd; --surface:#ffffff; --surface-2:#e3f4fa; --line:#cfe9f2; --sky:#def7fe; --sky-2:#99d4e6;
+  --ink:#1f2459; --muted:#5c6690;
+  --primary:#5560d0; --primary-ink:#ffffff; --primary-soft:#e6e8fb; --primary-deep:#3a42a6;
+  --star:#fbc646; --star-soft:#fff2c9; --warn:#9a5b00; --bad:#b4233c; --bad-soft:#fde7ea; --ok:#11795a; --ok-soft:#ddf5ec;
+  --shadow:0 1px 2px rgba(40,60,140,.06),0 6px 20px rgba(40,60,140,.08);
+  --r-lg:22px; --r-md:16px; --r-sm:12px; --r-pill:999px;
+  --f-head:'Fredoka','Nunito',ui-rounded,system-ui,sans-serif;
+  --f-body:'Nunito',ui-rounded,system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1630; --surface:#141f3d; --surface-2:#1b2850; --line:#26365f; --sky:#16244a; --sky-2:#2b4a7a;
+  --ink:#eaf2ff; --muted:#a3b2d6; --primary:#929af5; --primary-ink:#0f1438; --primary-soft:#262f66; --primary-deep:#c3c8ff;
+  --star-soft:#3a2d0d; --warn:#f8cf63; --bad:#ff8a9c; --bad-soft:#3d1520; --ok:#5fd6a7; --ok-soft:#123528;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0c1630; --surface:#141f3d; --surface-2:#1b2850; --line:#26365f; --sky:#16244a; --sky-2:#2b4a7a;
+  --ink:#eaf2ff; --muted:#a3b2d6; --primary:#929af5; --primary-ink:#0f1438; --primary-soft:#262f66; --primary-deep:#c3c8ff;
+  --star-soft:#3a2d0d; --warn:#f8cf63; --bad:#ff8a9c; --bad-soft:#3d1520; --ok:#5fd6a7; --ok-soft:#123528;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark;}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;margin:0;padding-bottom:40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--sky)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+.wrap{max-width:960px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.num{font-variant-numeric:tabular-nums}
+header{background:var(--sky);border-bottom:1px solid var(--line)}
+header .wrap{padding-block:18px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-family:var(--f-head);font-weight:700;font-size:22px;color:var(--primary-deep);line-height:1.15}
+header p{margin:2px 0 0;color:var(--muted);font-size:13px}
+h2{font-family:var(--f-head);font-weight:600;font-size:18px;margin:0}
+.btn{border:0;border-radius:var(--r-pill);height:42px;padding:0 18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-size:14.5px;white-space:nowrap}
+.btn.primary{background:var(--primary);color:var(--primary-ink)}
+.btn.soft{background:var(--primary-soft);color:var(--primary-deep)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.btn.wa{background:#1fa855;color:#fff}
+.btn.danger{background:var(--bad-soft);color:var(--bad)}
+.btn.sm{height:34px;padding:0 12px;font-size:13px}
+.btn[disabled]{opacity:.5;pointer-events:none}
+main{display:grid;gap:20px;padding-block:20px}
+.status{border-radius:var(--r-md);padding:12px 14px;font-size:14px;background:var(--primary-soft);color:var(--primary-deep)}
+.status.bad{background:var(--bad-soft);color:var(--bad)}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(min-width:720px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.kpi{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:14px 16px;display:grid;gap:2px;min-width:0}
+.kpi span{font-size:12.5px;color:var(--muted);font-weight:600}
+.kpi b{font-family:var(--f-head);font-size:22px;font-weight:600}
+.kpi small{font-size:12px;color:var(--muted)}
+.kpi.hl{background:var(--primary);color:var(--primary-ink)}
+.kpi.hl span,.kpi.hl small{color:inherit;opacity:.85}
+.kpi.warn b{color:var(--warn)}
+.card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:16px;display:grid;gap:12px;min-width:0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-pill);padding:6px 12px;font-size:13px;font-weight:600}
+.chip.niver{background:var(--star-soft);border-color:transparent}
+.search{width:100%;height:44px;border-radius:var(--r-pill);border:1px solid var(--line);background:var(--surface-2);padding:0 16px;outline:none}
+.search:focus{border-color:var(--primary);background:var(--surface)}
+.list{display:grid}
+.cli{all:unset;cursor:pointer;display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}
+.cli:last-child{border-bottom:0}
+.cli:focus-visible{outline:3px solid var(--primary);border-radius:var(--r-sm)}
+.ava{width:40px;height:40px;border-radius:14px;background:var(--primary-soft);color:var(--primary-deep);display:grid;place-items:center;font-family:var(--f-head);font-weight:700}
+.cli .t{min-width:0}
+.cli .t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cli .t small{color:var(--muted);font-size:12.5px}
+.cli .r{text-align:right;display:grid;gap:2px}
+.cli .r b{font-family:var(--f-head);font-weight:600}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;border-radius:var(--r-pill);padding:2px 8px}
+.pill.warn{background:var(--star-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.empty{text-align:center;color:var(--muted);padding:24px 8px}
+.empty b{display:block;color:var(--ink);font-family:var(--f-head);font-size:17px;margin-bottom:4px}
+.rules{font-size:13px;color:var(--muted);margin:0}
+/* painel lateral */
+.scrim{position:fixed;inset:0;background:rgba(6,16,36,.45);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--surface);border-radius:26px 26px 0 0;max-height:92vh;display:flex;flex-direction:column;max-width:620px;margin:0 auto;box-shadow:0 -10px 40px rgba(6,16,36,.2)}
+@media(min-width:700px){.sheet{bottom:24px;border-radius:26px}}
+.sheet .head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px 8px}
+.sheet .head h2{font-size:20px}
+.x{border:0;width:38px;height:38px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;flex:none}
+.sheet .body{overflow-y:auto;padding:4px 20px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:14px}
+.big{background:var(--sky);border-radius:var(--r-md);padding:14px 16px;display:grid;gap:2px}
+.big span{font-size:13px;color:var(--muted);font-weight:600}
+.big b{font-family:var(--f-head);font-size:30px;font-weight:600;color:var(--primary-deep)}
+.big small{font-size:12.5px;color:var(--muted)}
+.mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mini div{background:var(--surface-2);border-radius:var(--r-sm);padding:8px 10px;display:grid}
+.mini span{font-size:11.5px;color:var(--muted);font-weight:600}
+.mini b{font-size:14px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.actions .full{grid-column:1/-1}
+form.f{display:grid;gap:10px;background:var(--surface-2);border-radius:var(--r-md);padding:14px}
+.f label{display:grid;gap:4px;font-size:13px;font-weight:700;color:var(--muted)}
+.f input,.f select{height:42px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-sm);padding:0 12px;font-size:15px;font-weight:500;color:var(--ink);outline:none;width:100%}
+.f input:focus{border-color:var(--primary)}
+.f .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f .calc{font-size:13.5px;color:var(--primary-deep);font-weight:600}
+.f .err{font-size:13px;color:var(--bad);font-weight:600}
+.hist{display:grid}
+.mv{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.mv:last-child{border-bottom:0}
+.mv small{color:var(--muted);font-size:12.5px}
+.mv .v{text-align:right;font-weight:700}
+.mv .v.in{color:var(--ok)}
+.mv .v.out{color:var(--bad)}
+.mv .del{grid-column:1/-1;justify-self:start;border:0;background:none;color:var(--muted);font-size:12px;padding:0;text-decoration:underline}
+.mv .del.sure{color:var(--bad);font-weight:700}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r-pill);font-weight:700;font-size:14px;z-index:60;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div>
+      <h1>Cashback Diana's Store</h1>
+      <p>Painel da vendedora · os dados ficam salvos neste aparelho</p>
+    </div>
+    <div class="chips">
+      <button class="btn primary" id="novaCli" disabled>+ Nova cliente</button>
+      <button class="btn soft" id="exportar">Salvar backup</button>
+      <label class="btn ghost" for="importar" style="cursor:pointer">Restaurar backup<input id="importar" type="file" accept="application/json,.json" hidden></label>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="status" id="status">Carregando seus dados…</div>
+
+  <section class="kpis" aria-label="Resumo">
+    <div class="kpi hl"><span>Saldo em aberto</span><b class="num" id="kSaldo">R$ 0,00</b><small id="kSaldoN">0 clientes com saldo</small></div>
+    <div class="kpi warn"><span>Vence em 30 dias</span><b class="num" id="kVence">R$ 0,00</b><small id="kVenceN">ninguém perto de vencer</small></div>
+    <div class="kpi"><span id="kMesLbl">Gerado no mês</span><b class="num" id="kGerado">R$ 0,00</b><small class="num" id="kVendas">vendas: R$ 0,00</small></div>
+    <div class="kpi"><span>Usado no mês</span><b class="num" id="kUsado">R$ 0,00</b><small class="num" id="kVencido">já vencido (total): R$ 0,00</small></div>
+  </section>
+
+  <section class="card" id="niverCard" hidden>
+    <h2>Aniversariantes do mês</h2>
+    <div class="chips" id="nivers"></div>
+  </section>
+
+  <section class="card">
+    <div class="row"><h2>Clientes</h2>
+      <select id="ordem" class="btn ghost sm" aria-label="Ordenar clientes" style="padding:0 10px">
+        <option value="saldo">Maior saldo</option><option value="vence">Vence primeiro</option><option value="recente">Compra mais recente</option><option value="total">Quem mais compra</option><option value="nome">Nome</option>
+      </select>
+    </div>
+    <input id="busca" class="search" type="search" placeholder="Buscar por nome ou telefone" aria-label="Buscar cliente">
+    <div class="list" id="lista"></div>
+  </section>
+
+  <p class="rules" id="regras"></p>
+  <p class="rules"><b>Importante:</b> os dados ficam guardados só neste navegador e neste aparelho. Use sempre o mesmo celular, não limpe os dados do navegador e toque em “Salvar backup” toda semana. Para trocar de aparelho, salve o backup aqui e use “Restaurar backup” no novo.</p>
+</main>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sTitle" hidden>
+  <div class="head"><h2 id="sTitle">Cliente</h2><button class="x" id="fechar" aria-label="Fechar">✕</button></div>
+  <div class="body" id="sBody"></div>
+</section>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  /* Regras do programa: as mesmas do app das clientes. */
+  const REGRA = { min:200, pct:2, validadeDias:90, niverPct:5 };
+  const APP_URL = "https://dgrdianaribeiro-rgb.github.io/dgrcreative/promocoes/";
+  const LOJA = "Diana's Store";
+
+  const brl = new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"});
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const r2 = v => Math.round(v*100)/100;
+  const hojeISO = () => { const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+  const addDias = (iso,n) => { const [y,m,d]=iso.split("-").map(Number); const t=new Date(y,m-1,d+n); return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0"); };
+  const fmtD = iso => iso ? iso.slice(8,10)+"/"+iso.slice(5,7)+"/"+iso.slice(2,4) : "";
+  const fmtDM = iso => iso ? iso.slice(8,10)+"/"+iso.slice(5,7) : "";
+  const soDig = s => String(s||"").replace(/\D/g,"");
+  const waNum = t => { const d=soDig(t); return d.length>=12 ? d : "55"+d; };
+  const fmtTel = t => { const d=soDig(t).replace(/^55(?=\d{10,11}$)/,""); return d.length===11?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length===10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:t; };
+  const parseValor = s => { const v=parseFloat(String(s).replace(/\s|R\$/g,"").replace(/\./g,"").replace(",",".")); return isFinite(v)?r2(v):NaN; };
+  let tt; const toast = m => { const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,1800); };
+
+  $("#regras").textContent = `Regras: compras a partir de ${brl.format(REGRA.min)} geram ${REGRA.pct}% de cashback, válido por ${REGRA.validadeDias} dias e usado da compra mais antiga para a mais nova. Aniversário: ${REGRA.niverPct}% de desconto no mês do aniversário.`;
+
+  let db = null, clientes = [], movs = [], aberta = null;
+  let okCli=false, okMov=false;
+
+  /* ---------- cálculo do saldo (FIFO com vencimento) ---------- */
+  function contaDe(cid){
+    const hoje = hojeISO();
+    const ms = movs.filter(m=>m.clienteId===cid).sort((a,b)=> a.data<b.data?-1:a.data>b.data?1:(a.tipo==="compra"?-1:1) || (a.criadoEm||0)-(b.criadoEm||0));
+    const creditos = []; let total=0, gerado=0, usado=0, ultima=null;
+    for (const m of ms){
+      if (m.tipo==="compra"){
+        total+=m.valor; ultima=m.data;
+        if (m.cashback>0){ creditos.push({resto:m.cashback,vence:m.venceEm}); gerado+=m.cashback; }
+      } else if (m.tipo==="uso"){
+        let falta=m.valor; usado+=m.valor;
+        for (const c of creditos){ if(falta<=0) break; if(c.vence<m.data||c.resto<=0) continue; const t=Math.min(c.resto,falta); c.resto=r2(c.resto-t); falta=r2(falta-t); }
+      }
+    }
+    let saldo=0, vencido=0, vence30=0, proxVence=null; const lim=addDias(hoje,30);
+    for (const c of creditos){ if(c.resto<=0) continue;
+      if (c.vence<hoje) vencido+=c.resto; else { saldo+=c.resto; if(!proxVence||c.vence<proxVence) proxVence=c.vence; if(c.vence<=lim) vence30+=c.resto; } }
+    return {saldo:r2(saldo),vencido:r2(vencido),vence30:r2(vence30),proxVence,total:r2(total),gerado:r2(gerado),usado:r2(usado),ultima,movs:ms};
+  }
+
+  /* ---------- tela principal ---------- */
+  function render(){
+    if (!okCli || !okMov) return;
+    const hoje=hojeISO(), mes=hoje.slice(0,7);
+    const contas = clientes.map(c=>({c,a:contaDe(c.id)}));
+    const comSaldo = contas.filter(x=>x.a.saldo>0);
+    const venc = contas.filter(x=>x.a.vence30>0);
+    $("#kSaldo").textContent = brl.format(comSaldo.reduce((s,x)=>s+x.a.saldo,0));
+    $("#kSaldoN").textContent = comSaldo.length===1?"1 cliente com saldo":`${comSaldo.length} clientes com saldo`;
+    $("#kVence").textContent = brl.format(venc.reduce((s,x)=>s+x.a.vence30,0));
+    $("#kVenceN").textContent = venc.length ? (venc.length===1?"1 cliente para avisar":`${venc.length} clientes para avisar`) : "ninguém perto de vencer";
+    const doMes = movs.filter(m=>m.data&&m.data.slice(0,7)===mes);
+    $("#kMesLbl").textContent = "Gerado em "+new Date().toLocaleDateString("pt-BR",{month:"long"});
+    $("#kGerado").textContent = brl.format(doMes.filter(m=>m.tipo==="compra").reduce((s,m)=>s+(m.cashback||0),0));
+    $("#kVendas").textContent = "vendas: "+brl.format(doMes.filter(m=>m.tipo==="compra").reduce((s,m)=>s+m.valor,0));
+    $("#kUsado").textContent = brl.format(doMes.filter(m=>m.tipo==="uso").reduce((s,m)=>s+m.valor,0));
+    $("#kVencido").textContent = "já vencido (total): "+brl.format(contas.reduce((s,x)=>s+x.a.vencido,0));
+
+    const mm = hoje.slice(5,7);
+    const nivers = clientes.filter(c=>c.niver && c.niver.slice(3,5)===mm).sort((a,b)=>a.niver.localeCompare(b.niver));
+    $("#niverCard").hidden = !nivers.length;
+    $("#nivers").innerHTML = nivers.map(c=>`<button class="chip niver" data-cli="${esc(c.id)}">★ ${esc(c.nome)} · ${esc(c.niver)}</button>`).join("");
+
+    const q = $("#busca").value.trim().toLowerCase(), qd=soDig(q);
+    let l = contas.filter(x=>!q || x.c.nome.toLowerCase().includes(q) || (qd && soDig(x.c.telefone).includes(qd)));
+    const o=$("#ordem").value;
+    l.sort((A,B)=> o==="saldo"? B.a.saldo-A.a.saldo : o==="vence"? (A.a.proxVence||"9999").localeCompare(B.a.proxVence||"9999") : o==="recente"? (B.a.ultima||"").localeCompare(A.a.ultima||"") : o==="total"? B.a.total-A.a.total : A.c.nome.localeCompare(B.c.nome,"pt"));
+    $("#lista").innerHTML = !clientes.length
+      ? `<div class="empty"><b>Nenhuma cliente ainda</b>Toque em “+ Nova cliente” para cadastrar a primeira. Depois registre as compras dela e o saldo de cashback é calculado sozinho.</div>`
+      : !l.length ? `<div class="empty"><b>Ninguém encontrado</b>Tente outro nome ou telefone.</div>`
+      : l.map(({c,a})=>`<button class="cli" data-cli="${esc(c.id)}">
+          <span class="ava">${esc((c.nome||"?").trim().charAt(0).toUpperCase())}</span>
+          <span class="t"><b>${esc(c.nome)}</b><small>${a.ultima?"Última compra "+fmtD(a.ultima):"Sem compras"} · ${brl.format(a.total)} comprados</small></span>
+          <span class="r"><b class="num">${brl.format(a.saldo)}</b>${a.vence30>0?`<span class="pill warn">vence ${fmtDM(a.proxVence)}</span>`:a.saldo>0?`<span class="pill ok">até ${fmtDM(a.proxVence)}</span>`:""}</span>
+        </button>`).join("");
+    if (aberta) renderFicha();
+  }
+
+  /* ---------- ficha da cliente ---------- */
+  let modo = null, apagar = null;
+  function linkApp(c,a){
+    const dados = {n:c.nome.split(" ")[0], s:a.saldo, v:a.proxVence||"", d:hojeISO()};
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(dados)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+    return APP_URL+"?cb="+b64;
+  }
+  function msgSaldo(c,a){
+    const nome=c.nome.split(" ")[0];
+    if (a.saldo>0) return `Oi, ${nome}! ✨ Você tem *${brl.format(a.saldo)} de cashback* na ${LOJA} para usar na sua próxima compra.` + (a.vence30>0 ? `\nAtenção: ${brl.format(a.vence30)} vence${a.vence30<a.saldo?" já":""} em ${fmtD(a.proxVence)}.` : `\nVálido até ${fmtD(a.proxVence)}.`) + `\n\nVeja as promoções e o seu saldo aqui: ${linkApp(c,a)}`;
+    return `Oi, ${nome}! ✨ Na ${LOJA}, compras a partir de ${brl.format(REGRA.min)} ganham ${REGRA.pct}% de cashback para usar na próxima compra.\n\nVeja as promoções: ${APP_URL}`;
+  }
+  function renderFicha(){
+    const c = clientes.find(x=>x.id===aberta); if(!c){ fecharSheet(); return; }
+    const a = contaDe(c.id);
+    $("#sTitle").textContent = c.nome;
+    let h = `<div class="big"><span>Saldo de cashback</span><b class="num">${brl.format(a.saldo)}</b><small>${a.saldo>0?`Válido até ${fmtD(a.proxVence)}${a.vence30>0?` · ${brl.format(a.vence30)} vence nos próximos 30 dias`:""}`:"Sem saldo no momento"}</small></div>
+      <div class="mini num"><div><span>Comprou</span><b>${brl.format(a.total)}</b></div><div><span>Ganhou</span><b>${brl.format(a.gerado)}</b></div><div><span>Usou</span><b>${brl.format(a.usado)}</b></div></div>
+      <div class="row" style="font-size:13.5px;color:var(--muted)"><span>${c.telefone?"WhatsApp "+esc(fmtTel(c.telefone)):"Sem telefone"}</span><span>${c.niver?"Aniversário "+esc(c.niver):""}</span></div>`;
+    if (modo==="compra") h += formCompra();
+    else if (modo==="uso") h += formUso(a);
+    else if (modo==="editar") h += formCliente(c);
+    else h += `<div class="actions">
+        <button class="btn primary" data-modo="compra">Registrar compra</button>
+        <button class="btn soft" data-modo="uso" ${a.saldo>0?"":"disabled"}>Usar cashback</button>
+        ${c.telefone?`<a class="btn wa full" target="_blank" rel="noopener" href="https://wa.me/${waNum(c.telefone)}?text=${encodeURIComponent(msgSaldo(c,a))}">Enviar saldo no WhatsApp</a>`:""}
+        <button class="btn ghost" id="copiarLink">Copiar link do app</button>
+        <button class="btn ghost" data-modo="editar">Editar dados</button>
+      </div>`;
+    h += `<h2 style="font-size:16px">Histórico</h2><div class="hist">${a.movs.length? a.movs.slice().reverse().map(m=>`<div class="mv">
+        <span>${m.tipo==="compra"?"Compra de "+brl.format(m.valor):"Usou cashback"}${m.obs?` <small>· ${esc(m.obs)}</small>`:""}</span>
+        <span class="v num ${m.tipo==="compra"?"in":"out"}">${m.tipo==="compra"?(m.cashback>0?"+"+brl.format(m.cashback):"sem cashback"):"−"+brl.format(m.valor)}</span>
+        <small>${fmtD(m.data)}${m.tipo==="compra"&&m.cashback>0?` · vence ${fmtD(m.venceEm)}`:""}</small><span></span>
+        <button class="del ${apagar===m.id?"sure":""}" data-del="${esc(m.id)}">${apagar===m.id?"Toque de novo para excluir":"Excluir lançamento"}</button>
+      </div>`).join("") : `<p class="rules">Nenhum lançamento ainda.</p>`}</div>`;
+    $("#sBody").innerHTML = h;
+    ligarForm(c,a);
+  }
+  function formCompra(){
+    return `<form class="f" id="fCompra"><h2 style="font-size:16px">Nova compra</h2>
+      <div class="two"><label>Valor pago<input id="fValor" inputmode="decimal" placeholder="0,00" autocomplete="off" required></label>
+      <label>Data<input id="fData" type="date" value="${hojeISO()}" required></label></div>
+      <label>Observação (opcional)<input id="fObs" placeholder="Ex.: pedido ciclo 16"></label>
+      <div class="calc" id="fCalc">Abaixo de ${brl.format(REGRA.min)} não gera cashback.</div>
+      <div class="err" id="fErr"></div>
+      <div class="actions"><button class="btn ghost" type="button" data-modo="">Cancelar</button><button class="btn primary" type="submit">Salvar compra</button></div></form>`;
+  }
+  function formUso(a){
+    return `<form class="f" id="fUso"><h2 style="font-size:16px">Usar cashback</h2>
+      <div class="two"><label>Valor usado<input id="fValor" inputmode="decimal" value="${a.saldo.toFixed(2).replace(".",",")}" required></label>
+      <label>Data<input id="fData" type="date" value="${hojeISO()}" required></label></div>
+      <div class="calc">Saldo disponível: ${brl.format(a.saldo)}</div>
+      <div class="err" id="fErr"></div>
+      <div class="actions"><button class="btn ghost" type="button" data-modo="">Cancelar</button><button class="btn primary" type="submit">Descontar</button></div></form>`;
+  }
+  function formCliente(c){
+    c = c||{nome:"",telefone:"",niver:""};
+    return `<form class="f" id="fCli">${c.id?"":`<h2 style="font-size:16px">Nova cliente</h2>`}
+      <label>Nome<input id="cNome" value="${esc(c.nome)}" autocomplete="off" required></label>
+      <div class="two"><label>WhatsApp com DDD<input id="cTel" inputmode="tel" placeholder="(85) 99999-9999" value="${esc(c.telefone?fmtTel(c.telefone):"")}"></label>
+      <label>Aniversário<input id="cNiver" inputmode="numeric" maxlength="5" placeholder="dd/mm" value="${esc(c.niver||"")}"></label></div>
+      <div class="err" id="fErr"></div>
+      <div class="actions">${c.id?`<button class="btn ghost" type="button" data-modo="">Cancelar</button>`:`<button class="btn ghost" type="button" id="cancelNova">Cancelar</button>`}<button class="btn primary" type="submit">Salvar</button></div>
+      ${c.id?`<button class="btn danger sm" type="button" id="apagarCli">${apagar==="cli"?"Toque de novo para apagar cliente e histórico":"Apagar cliente"}</button>`:""}</form>`;
+  }
+  function ligarForm(c,a){
+    const v=$("#fValor");
+    if ($("#fCompra")){
+      v.focus();
+      v.addEventListener("input",()=>{ const x=parseValor(v.value); $("#fCalc").textContent = !isFinite(x)?`Abaixo de ${brl.format(REGRA.min)} não gera cashback.` : x>=REGRA.min ? `Gera ${brl.format(r2(x*REGRA.pct/100))} de cashback (${REGRA.pct}%), válido por ${REGRA.validadeDias} dias.` : `Faltam ${brl.format(REGRA.min-x)} para gerar cashback.`; });
+      $("#fCompra").addEventListener("submit",async e=>{ e.preventDefault();
+        const x=parseValor(v.value), d=$("#fData").value;
+        if(!(x>0)){ $("#fErr").textContent="Digite o valor pago, por exemplo 250,00."; return; }
+        const cb = x>=REGRA.min ? r2(x*REGRA.pct/100) : 0;
+        await salvarMov({clienteId:c.id,tipo:"compra",valor:x,cashback:cb,data:d,venceEm:addDias(d,REGRA.validadeDias),obs:$("#fObs").value.trim().slice(0,120)}, cb>0?`Compra salva · +${brl.format(cb)} de cashback`:"Compra salva");
+      });
+    }
+    if ($("#fUso")){
+      $("#fUso").addEventListener("submit",async e=>{ e.preventDefault();
+        const x=parseValor(v.value), d=$("#fData").value;
+        if(!(x>0)){ $("#fErr").textContent="Digite o valor usado."; return; }
+        if(x>a.saldo+0.004){ $("#fErr").textContent=`O saldo disponível é ${brl.format(a.saldo)}.`; return; }
+        await salvarMov({clienteId:c.id,tipo:"uso",valor:x,cashback:0,data:d,venceEm:"",obs:""},`Descontado ${brl.format(x)} do saldo`);
+      });
+    }
+    if ($("#fCli")) ligarFormCli(c);
+    const cp=$("#copiarLink"); if(cp) cp.addEventListener("click",()=>{ const t=linkApp(c,a); (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast("Link copiado"),()=>{ toast("Não deu para copiar"); }); });
+  }
+  function ligarFormCli(c){
+    const n=$("#cNiver");
+    n.addEventListener("input",()=>{ let x=soDig(n.value).slice(0,4); if(x.length>2) x=x.slice(0,2)+"/"+x.slice(2); n.value=x; });
+    $("#fCli").addEventListener("submit",async e=>{ e.preventDefault();
+      const nome=$("#cNome").value.trim().slice(0,80), tel=soDig($("#cTel").value), niver=n.value.trim();
+      if(!nome){ $("#fErr").textContent="Digite o nome da cliente."; return; }
+      if(tel && (tel.length<10||tel.length>13)){ $("#fErr").textContent="Confira o WhatsApp: DDD e número, por exemplo (85) 99999-9999."; return; }
+      if(niver && !/^(0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])$/.test(niver)){ $("#fErr").textContent="Aniversário no formato dia/mês, por exemplo 15/03."; return; }
+      try{
+        if (c && c.id){ await db.doc("clientes/"+c.id).set({nome,telefone:tel,niver,criadoEm:c.criadoEm||Date.now()}); modo=null; toast("Dados salvos"); renderFicha(); }
+        else { const ref=db.collection("clientes").doc(); await ref.set({nome,telefone:tel,niver,criadoEm:Date.now()}); toast("Cliente cadastrada"); abrir(ref.id); }
+      }catch(err){ $("#fErr").textContent=msgErro(err); }
+    });
+    const cn=$("#cancelNova"); if(cn) cn.addEventListener("click",fecharSheet);
+    const ap=$("#apagarCli"); if(ap) ap.addEventListener("click",async()=>{
+      if(apagar!=="cli"){ apagar="cli"; renderFicha(); return; }
+      try{ for(const m of movs.filter(m=>m.clienteId===c.id)) await db.doc("movimentos/"+m.id).delete(); await db.doc("clientes/"+c.id).delete(); toast("Cliente apagada"); fecharSheet(); }catch(err){ toast(msgErro(err)); }
+    });
+  }
+  async function salvarMov(m,ok){
+    try{ await db.collection("movimentos").doc().set(Object.assign(m,{criadoEm:Date.now()})); modo=null; toast(ok); renderFicha(); }
+    catch(err){ const e=$("#fErr"); if(e) e.textContent=msgErro(err); }
+  }
+  const msgErro = e => e&&e.code==="quota_exceeded" ? "O espaço do painel acabou. Apague clientes antigas para liberar." : "Não consegui salvar agora. Confira a internet e tente de novo.";
+
+  function abrir(id){ aberta=id; modo=null; apagar=null; $("#scrim").hidden=false; $("#sheet").hidden=false; document.body.style.overflow="hidden"; renderFicha(); }
+  function novaCliente(){ aberta=null; modo=null; apagar=null; $("#sTitle").textContent="Nova cliente"; $("#sBody").innerHTML=formCliente(null); $("#scrim").hidden=false; $("#sheet").hidden=false; document.body.style.overflow="hidden"; ligarFormCli(null); $("#cNome").focus(); }
+  function fecharSheet(){ aberta=null; modo=null; apagar=null; $("#scrim").hidden=true; $("#sheet").hidden=true; document.body.style.overflow=""; }
+
+  document.addEventListener("click",e=>{
+    const el=e.target.closest("[data-cli],[data-modo],[data-del]"); if(!el) return;
+    if (el.dataset.cli){ abrir(el.dataset.cli); return; }
+    if (el.dataset.modo!==undefined){ modo=el.dataset.modo||null; apagar=null; renderFicha(); return; }
+    if (el.dataset.del){ const id=el.dataset.del; if(apagar!==id){ apagar=id; renderFicha(); return; }
+      db.doc("movimentos/"+id).delete().then(()=>{ apagar=null; toast("Lançamento excluído"); renderFicha(); },err=>toast(msgErro(err))); }
+  });
+  $("#fechar").addEventListener("click",fecharSheet);
+  $("#scrim").addEventListener("click",fecharSheet);
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") fecharSheet(); });
+  $("#busca").addEventListener("input",render);
+  $("#ordem").addEventListener("change",render);
+  $("#novaCli").addEventListener("click",novaCliente);
+
+  /* ---------- dados ---------- */
+
+  /* ---------- armazenamento no aparelho (versão GitHub) ---------- */
+  function bancoLocal(){
+    const KEY="dianas-cashback-v1";
+    let dados; try{ dados=JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ dados={}; }
+    dados.clientes=dados.clientes||{}; dados.movimentos=dados.movimentos||{};
+    const subs={clientes:[],movimentos:[]};
+    const snap=c=>({docs:Object.entries(dados[c]).map(([id,d])=>({id,exists:true,data:()=>d})),metadata:{fromCache:false,hasPendingWrites:false}});
+    const gravar=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(dados)); }catch(e){ throw {code:"quota_exceeded"}; } };
+    const avisar=c=>subs[c].forEach(f=>f(snap(c)));
+    const ref=(c,id)=>({id,set:async d=>{ dados[c][id]=JSON.parse(JSON.stringify(d)); gravar(); avisar(c); },delete:async()=>{ delete dados[c][id]; gravar(); avisar(c); }});
+    const novoId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+    window.addEventListener("storage",e=>{ if(e.key===KEY){ try{ const n=JSON.parse(e.newValue)||{}; dados.clientes=n.clientes||{}; dados.movimentos=n.movimentos||{}; avisar("clientes"); avisar("movimentos"); }catch(_){} } });
+    return {
+      collection:c=>({doc:id=>ref(c,id||novoId()),onSnapshot:f=>{ subs[c].push(f); setTimeout(()=>f(snap(c)),0); return ()=>{}; }}),
+      doc:path=>{ const [c,id]=path.split("/"); return ref(c,id); },
+      exportar:()=>JSON.stringify({app:"dianas-cashback",versao:1,salvoEm:new Date().toISOString(),clientes:dados.clientes,movimentos:dados.movimentos},null,1),
+      importar:txt=>{ const j=JSON.parse(txt); if(!j||j.app!=="dianas-cashback"||typeof j.clientes!=="object"||typeof j.movimentos!=="object") throw new Error("arquivo"); dados.clientes=j.clientes; dados.movimentos=j.movimentos; gravar(); avisar("clientes"); avisar("movimentos"); return Object.keys(j.clientes).length; }
+    };
+  }
+  async function iniciar(){
+    try{ localStorage.setItem("dianas-teste","1"); localStorage.removeItem("dianas-teste"); }catch(e){ $("#status").className="status bad"; $("#status").textContent="Este navegador não deixa salvar dados (aba anônima?). Abra o painel numa aba normal."; return; }
+    db = bancoLocal();
+    $("#exportar").addEventListener("click",()=>{
+      const blob=new Blob([db.exportar()],{type:"application/json"}); const a=document.createElement("a");
+      a.href=URL.createObjectURL(blob); a.download="backup-cashback-"+hojeISO()+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);
+      toast("Backup salvo nos downloads");
+    });
+    $("#importar").addEventListener("change",async e=>{
+      const f=e.target.files&&e.target.files[0]; if(!f) return;
+      try{ const n=db.importar(await f.text()); toast(`Backup restaurado: ${n} clientes`); }catch(err){ toast("Esse arquivo não é um backup do painel"); }
+      e.target.value="";
+    });
+    const timer=setTimeout(()=>{ if(!(okCli&&okMov)) $("#status").textContent="Ainda carregando… se demorar, confira a internet."; },10000);
+    const pronto=()=>{ if(okCli&&okMov){ clearTimeout(timer); $("#status").hidden=true; $("#novaCli").disabled=false; render(); } };
+    const falhou=e=>{ clearTimeout(timer); $("#status").hidden=false; $("#status").className="status bad"; $("#status").textContent="Não consegui ler os dados agora. Feche e abra o painel de novo."; };
+    db.collection("clientes").onSnapshot(s=>{ clientes=s.docs.map(d=>Object.assign({id:d.id},d.data())); if(!s.metadata.fromCache) okCli=true; pronto(); render(); },falhou);
+    db.collection("movimentos").onSnapshot(s=>{ movs=s.docs.map(d=>Object.assign({id:d.id},d.data())); if(!s.metadata.fromCache) okMov=true; pronto(); render(); },falhou);
+  }
+  iniciar();
+})();
+</script>
+</body>
+</html>
