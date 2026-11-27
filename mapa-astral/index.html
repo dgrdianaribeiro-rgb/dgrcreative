@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mapa Relâmpago ✦ leitura astral</title>
+<meta name="description" content="Descubra seu Sol, Lua e Ascendente em 1 minuto. Coloque data, hora e cidade de nascimento e receba uma leitura rápida do seu mapa astral.">
+<meta property="og:title" content="Mapa Relâmpago ✦ leitura astral em 1 minuto">
+<meta property="og:description" content="Sol, Lua, Ascendente e planetas — descubra o seu e compare com quem você quiser.">
+<meta name="theme-color" content="#1a0830">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23ff9a3d'/><stop offset='1' stop-color='%23ff2e63'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='%232a0c4a'/><path d='M50 12 L58 42 L88 50 L58 58 L50 88 L42 58 L12 50 L42 42Z' fill='url(%23g)'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14061f; --bg2:#2a0c4a; --roxo:#7b2cbf; --lilas:#c08cff;
+    --laranja:#ff9a3d; --vermelho:#ff2e63; --dourado:#ffd27a;
+    --texto:#f7ecff; --suave:#cdb6e6; --card:rgba(255,255,255,.06); --borda:rgba(255,210,122,.22);
+    --fogo:#ff5a3c; --terra:#f0b24a; --ar:#c08cff; --agua:#5f8bff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  html{background:#14061f}
+  body{
+    min-height:100vh; color:var(--texto); font-family:'Manrope',system-ui,sans-serif; line-height:1.55;
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  /* estrelas */
+  .ceu{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;background:radial-gradient(900px 600px at 85% -10%, rgba(255,46,99,.35), transparent 60%),radial-gradient(800px 600px at -10% 30%, rgba(123,44,191,.55), transparent 60%),radial-gradient(700px 500px at 60% 110%, rgba(255,154,61,.28), transparent 60%),linear-gradient(180deg,#14061f 0%, #1d0833 50%, #14061f 100%)}
+  .ceu i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.7;animation:pisca var(--d,3s) ease-in-out infinite;animation-delay:var(--a,0s)}
+  @keyframes pisca{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:1;transform:scale(1.3)}}
+  .ceu .cometa{width:120px;height:2px;background:linear-gradient(90deg,#fff,transparent);opacity:0;transform:rotate(-25deg);animation:cometa 9s linear infinite}
+  @keyframes cometa{0%{opacity:0;translate:0 0}3%{opacity:.9}10%{opacity:0;translate:-420px 200px}100%{opacity:0;translate:-420px 200px}}
+
+  main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:28px 16px 80px}
+  h1,h2,h3,.cinzel{font-family:'Cinzel',serif;letter-spacing:.04em}
+  .grad{background:linear-gradient(90deg,var(--dourado),var(--laranja) 35%,var(--vermelho) 70%,var(--lilas));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .topo{text-align:center;margin:18px 0 26px}
+  .topo .selo{display:inline-block;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--dourado);border:1px solid var(--borda);padding:6px 14px;border-radius:99px;background:rgba(255,210,122,.06)}
+  .topo h1{font-size:clamp(34px,8vw,58px);line-height:1.05;margin:16px 0 10px;font-weight:900}
+  .topo p{color:var(--suave);margin:0 auto;max-width:520px}
+  .orbita{width:120px;height:120px;margin:22px auto 0;position:relative}
+  .orbita::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(255,210,122,.45);animation:gira 18s linear infinite}
+  .orbita .sol{position:absolute;inset:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffe1a1,var(--laranja) 45%,var(--vermelho));box-shadow:0 0 40px rgba(255,120,60,.8),0 0 90px rgba(255,46,99,.5)}
+  .orbita .lua{position:absolute;top:-6px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--lilas);box-shadow:0 0 14px var(--lilas);transform-origin:7px 66px;animation:gira 6s linear infinite}
+  @keyframes gira{to{transform:rotate(360deg)}}
+
+  .painel{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid var(--borda);border-radius:24px;padding:22px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  label{display:block;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dourado);margin:0 0 6px}
+  .campo{margin-bottom:16px;position:relative}
+  input[type=text],input[type=date],input[type=time]{
+    width:100%;font:inherit;font-size:16px;color:var(--texto);background:rgba(20,6,31,.6);border:1px solid rgba(192,140,255,.35);border-radius:14px;padding:13px 14px;outline:none;color-scheme:dark;transition:border-color .2s, box-shadow .2s}
+  input:focus{border-color:var(--laranja);box-shadow:0 0 0 3px rgba(255,154,61,.25)}
+  input:disabled{opacity:.4}
+  .linha{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--suave);margin-top:8px;cursor:pointer;text-transform:none;letter-spacing:0;font-weight:500}
+  .check input{accent-color:var(--laranja);width:18px;height:18px}
+  .sugestoes{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:#24093f;border:1px solid var(--borda);border-radius:14px;overflow:hidden;z-index:20;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+  .sugestoes button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--texto);font:inherit;padding:11px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06)}
+  .sugestoes button:hover,.sugestoes button:focus{background:rgba(255,154,61,.15);outline:none}
+  .sugestoes small{color:var(--suave)}
+  .cidade-ok{font-size:13px;color:#9ff0c0;margin-top:6px;min-height:18px}
+  .erro{color:#ff8fa8;font-size:14px;margin:4px 0 12px;min-height:20px}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:800;font-size:16px;border:0;border-radius:99px;padding:15px 24px;cursor:pointer;color:#2a0c1a;background:linear-gradient(90deg,var(--dourado),var(--laranja),var(--vermelho));box-shadow:0 10px 30px rgba(255,46,99,.35);transition:transform .15s, box-shadow .15s;text-decoration:none}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(255,46,99,.5)}
+  .btn:active{transform:translateY(0)}
+  .btn.full{width:100%}
+  .btn.ghost{background:rgba(255,255,255,.06);color:var(--texto);border:1px solid var(--borda);box-shadow:none}
+  .btn.ghost:hover{background:rgba(255,154,61,.14)}
+  .acoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+
+  /* carregando */
+  .carregando{text-align:center;padding:60px 0}
+  .carregando .roda{width:150px;height:150px;margin:0 auto 20px;border-radius:50%;border:2px solid rgba(255,210,122,.25);border-top-color:var(--laranja);border-right-color:var(--vermelho);animation:gira 1s linear infinite;display:grid;place-items:center;font-size:40px}
+  .carregando p{font-family:'Cinzel',serif;font-size:18px;color:var(--dourado)}
+
+  /* resultado */
+  .ola{text-align:center;margin:4px 0 22px}
+  .ola h2{font-size:clamp(26px,6vw,40px);margin:6px 0 4px}
+  .ola .dados{color:var(--suave);font-size:14px}
+  .vibe{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0 4px}
+  .vibe span{padding:6px 14px;border-radius:99px;font-weight:700;font-size:14px;background:rgba(255,154,61,.14);border:1px solid rgba(255,154,61,.4);color:var(--dourado)}
+
+  .big3{display:grid;gap:14px;margin:22px 0}
+  .astro{position:relative;border-radius:22px;padding:20px 20px 18px 92px;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid var(--borda);overflow:hidden;opacity:0;transform:translateY(16px);animation:sobe .6s ease forwards}
+  .astro::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,var(--cor,rgba(255,154,61,.35)),transparent 70%);opacity:.5}
+  @keyframes sobe{to{opacity:1;transform:none}}
+  .astro .glifo{position:absolute;left:18px;top:20px;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:30px;background:rgba(0,0,0,.25);border:1px solid var(--cor,var(--borda));color:var(--cor,var(--dourado));text-shadow:0 0 18px var(--cor)}
+  .astro .rot{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--suave);font-weight:700}
+  .astro h3{margin:2px 0 4px;font-size:22px}
+  .astro .tags{font-size:12.5px;color:var(--dourado);margin-bottom:8px;opacity:.9}
+  .astro p{margin:0;color:#eadcf8}
+  .astro .nota{margin-top:8px;font-size:13px;color:var(--suave);font-style:italic}
+
+  .secao{margin:34px 0 14px;text-align:center}
+  .secao h3{font-size:20px;margin:0}
+  .secao p{margin:4px 0 0;color:var(--suave);font-size:14px}
+
+  .roda-mapa{max-width:440px;margin:0 auto}
+  .roda-mapa svg{width:100%;height:auto;display:block;filter:drop-shadow(0 0 30px rgba(123,44,191,.5))}
+
+  .planetas{display:grid;gap:10px}
+  .pl{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:14px;border-radius:16px;background:var(--card);border:1px solid rgba(255,255,255,.08)}
+  .pl .g{font-size:24px;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(0,0,0,.25);color:var(--dourado)}
+  .pl b{display:block}
+  .pl b em{font-style:normal;font-size:12px;color:var(--laranja);margin-left:6px;font-weight:700}
+  .pl span{color:#e3d2f3;font-size:15px}
+
+  .elementos{display:grid;gap:10px}
+  .el{display:grid;grid-template-columns:78px 1fr 28px;gap:10px;align-items:center;font-weight:700;font-size:14px}
+  .el .barra{height:12px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+  .el .barra i{display:block;height:100%;border-radius:99px;width:0;transition:width 1.2s ease}
+  .el-msg{margin-top:14px;padding:14px;border-radius:14px;background:rgba(255,154,61,.08);border:1px solid rgba(255,154,61,.25);color:#f1e2ff}
+
+  .oraculo{perspective:900px;max-width:330px;margin:0 auto}
+  .carta{position:relative;height:200px;transform-style:preserve-3d;transition:transform .8s;cursor:pointer}
+  .carta.virada{transform:rotateY(180deg)}
+  .carta .face{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;place-items:center;text-align:center;padding:20px;border:1px solid var(--borda)}
+  .carta .frente{background:repeating-conic-gradient(from 0deg,#3a1166 0 10deg,#2a0c4a 10deg 20deg);font-family:'Cinzel',serif;font-size:18px;color:var(--dourado)}
+  .carta .frente span{display:block;font-size:44px;line-height:1;margin-bottom:8px}
+  .carta .verso{transform:rotateY(180deg);background:linear-gradient(150deg,#ff9a3d,#ff2e63 60%,#7b2cbf);color:#fff;font-weight:700;font-size:17px;text-shadow:0 1px 6px rgba(0,0,0,.3)}
+
+  .compat-score{text-align:center;margin:10px 0 18px}
+  .compat-score .num{font-family:'Cinzel',serif;font-size:64px;font-weight:900;line-height:1}
+  .compat-par{display:flex;justify-content:center;align-items:center;gap:14px;font-family:'Cinzel',serif;font-size:20px;flex-wrap:wrap}
+  .compat-par .x{color:var(--vermelho);font-size:26px}
+
+  .rodape{text-align:center;color:var(--suave);font-size:12.5px;margin-top:40px;opacity:.8}
+  .rodape a{color:var(--dourado)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#2a0c4a;border:1px solid var(--borda);color:var(--texto);padding:12px 18px;border-radius:99px;z-index:50;transition:transform .3s;font-weight:600;font-size:14px;max-width:calc(100% - 32px);text-align:center;opacity:0;visibility:hidden}
+  .toast.on{opacity:1;visibility:visible}
+  .toast.on{transform:translateX(-50%) translateY(0)}
+  .oculto{display:none !important}
+  @media (max-width:520px){
+    .linha{grid-template-columns:1fr}
+    .acoes{grid-template-columns:1fr}
+    .astro{padding:84px 16px 16px 16px}
+    .astro .glifo{top:16px;left:16px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}.astro{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="ceu" id="ceu" aria-hidden="true"></div>
+
+<main>
+  <!-- ============ FORMULÁRIO ============ -->
+  <section id="telaForm">
+    <header class="topo">
+      <span class="selo">✦ leitura astral ✦</span>
+      <h1 class="grad">Mapa Relâmpago</h1>
+      <p>Seu Sol, sua Lua e seu Ascendente em menos de um minuto. Coloque os dados de nascimento e deixe o céu falar.</p>
+      <div class="orbita" aria-hidden="true"><div class="sol"></div><div class="lua"></div></div>
+    </header>
+
+    <form class="painel" id="form" autocomplete="off" novalidate>
+      <h2 id="formTitulo" class="cinzel" style="margin:0 0 16px;font-size:20px;text-align:center">De quem é esse céu?</h2>
+      <div class="campo">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" placeholder="Ex.: Diana" maxlength="40" required>
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label for="data">Data de nascimento</label>
+          <input type="date" id="data" min="1900-01-01" max="2100-12-31" required>
+        </div>
+        <div class="campo">
+          <label for="hora">Hora</label>
+          <input type="time" id="hora">
+          <label class="check"><input type="checkbox" id="semHora"> Não sei o horário</label>
+        </div>
+      </div>
+      <div class="campo">
+        <label for="cidade">Cidade onde nasceu</label>
+        <input type="text" id="cidade" placeholder="Comece a digitar… ex.: Fortaleza" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugestoes">
+        <div class="sugestoes oculto" id="sugestoes" role="listbox"></div>
+        <div class="cidade-ok" id="cidadeOk"></div>
+      </div>
+      <div class="erro" id="erro" role="alert"></div>
+      <button class="btn full" type="submit" id="btnRevelar">Revelar o céu ✦</button>
+      <button class="btn ghost full oculto" type="button" id="btnCancelarCompat" style="margin-top:10px">Voltar</button>
+    </form>
+  </section>
+
+  <!-- ============ CARREGANDO ============ -->
+  <section id="telaCarregando" class="carregando oculto" aria-live="polite">
+    <div class="roda">✦</div>
+    <p id="msgCarregando">Consultando as estrelas…</p>
+  </section>
+
+  <!-- ============ RESULTADO ============ -->
+  <section id="telaResultado" class="oculto"></section>
+
+  <!-- ============ COMPATIBILIDADE ============ -->
+  <section id="telaCompat" class="oculto"></section>
+
+  <p class="rodape">Posições calculadas com precisão astronômica a partir da data, hora e cidade.<br>Feito com ✦ para diversão e autoconhecimento.</p>
+</main>
+<div class="toast" id="toast"></div>
+
+<script src="astronomy.min.js"></script>
+<script>
+/* =====================================================================
+   DADOS DOS SIGNOS
+   ===================================================================== */
+const SIGNOS = [
+ {nome:'Áries', g:'♈', el:'Fogo', mod:'Cardinal', reg:'Marte', datas:'21/03 a 19/04', pal:['corajoso','intenso','pioneiro'],
+  sol:'Você nasceu pra começar coisas. Tem uma faísca que acende antes de qualquer plano — e é isso que te faz abrir caminhos onde os outros só veem parede. Impaciente? Um pouco. Mas ninguém tira de você a coragem de ir primeiro.',
+  lua:'Suas emoções chegam quentes e rápidas: explode, resolve e segue em frente. Você fica em paz quando tem liberdade pra agir — ficar parado esperando é o que mais te consome por dentro.',
+  asc:'A primeira impressão é de energia: chega direto, olhar firme, parece que já está indo pra algum lugar. As pessoas te veem como alguém corajoso, às vezes intenso demais pro primeiro café.',
+  mer:'Fala rápido, pensa rápido e decide mais rápido ainda. Ótimo pra debate — só vale contar até três antes de mandar aquele áudio.',
+  ven:'No amor, gosta de conquista, química e iniciativa. Se não tem faísca, não tem graça.',
+  mar:'Marte em casa: ação pura. Você resolve no peito, compete pra ganhar e tem energia de largada.',
+  jup:'se arrisca e toma a dianteira', sat:'ter paciência sem apagar o próprio fogo'},
+ {nome:'Touro', g:'♉', el:'Terra', mod:'Fixo', reg:'Vênus', datas:'20/04 a 20/05', pal:['leal','sensorial','firme'],
+  sol:'Você é a calma que sustenta. Constrói devagar e não derruba fácil — seja uma carreira, um amor ou uma opinião. Ama o que é bom, bonito e gostoso, e sabe que o prazer também é sagrado. Teimosia? Você prefere chamar de constância.',
+  lua:'Emocionalmente você precisa de chão: rotina, conforto, uma comida boa e gente leal por perto. Demora a se abalar, mas quando se magoa, guarda.',
+  asc:'Passa uma presença tranquila e confiável, com algo de muito sensorial — a voz, o perfume, o estilo. Parece que nada te apressa (e geralmente nada apressa mesmo).',
+  mer:'Pensa com calma e fala com segurança. Quando forma uma opinião, é difícil mudar — mas ela raramente é rasa.',
+  ven:'Vênus em casa: amor com toque, presença e constância. Você demonstra carinho cuidando, alimentando, ficando.',
+  mar:'Sua força é a resistência. Demora pra arrancar, mas quando vai, não para — e ninguém te empurra.',
+  jup:'investe com paciência no que é concreto', sat:'soltar o que já não serve'},
+ {nome:'Gêmeos', g:'♊', el:'Ar', mod:'Mutável', reg:'Mercúrio', datas:'21/05 a 20/06', pal:['curioso','comunicativo','versátil'],
+  sol:'Sua mente é um navegador com 47 abas abertas — e você está lendo todas. Curiosidade é o seu combustível: conversa, aprende, conecta ideias e pessoas. Dizem que você muda muito; na verdade, você só se recusa a ser uma coisa só.',
+  lua:'Você processa o que sente falando, escrevendo, trocando ideia. Tédio é seu maior inimigo emocional — precisa de movimento e boa conversa pra se sentir bem.',
+  asc:'Chega leve, falante, com humor rápido e uma pergunta na ponta da língua. Parece mais jovem do que é e faz amizade até na fila do pão.',
+  mer:'Mercúrio em casa: comunicação é seu superpoder. Escreve, fala, vende, explica — e entende tudo de primeira.',
+  ven:'No amor, a mente vem primeiro. Precisa de papo bom, risada e alguém que nunca te deixe entediado.',
+  mar:'Age com agilidade e faz várias coisas ao mesmo tempo. Sua arma são as palavras — e você sabe usá-las.',
+  jup:'aprende, ensina e troca ideias', sat:'aprofundar em vez de só passar por cima'},
+ {nome:'Câncer', g:'♋', el:'Água', mod:'Cardinal', reg:'Lua', datas:'21/06 a 22/07', pal:['acolhedor','intuitivo','protetor'],
+  sol:'Você sente tudo — e transforma isso em cuidado. É quem lembra do aniversário, guarda a foto, faz o lar acontecer em qualquer lugar. Por fora pode parecer reservado, mas por dentro é um oceano inteiro de afeto e memória.',
+  lua:'Lua em casa: sua sensibilidade é profunda e intuitiva. Você sente o clima de um ambiente na hora e precisa de um ninho seguro pra recarregar.',
+  asc:'Passa acolhimento logo de cara: olhar doce, jeito protetor, uma timidez inicial. As pessoas sentem que podem confiar em você.',
+  mer:'Pensa com o coração e tem memória de elefante — principalmente pro que te emocionou (ou te magoou).',
+  ven:'Ama cuidando e quer se sentir em casa com alguém. Carinho de todo dia vale mais que qualquer grande gesto.',
+  mar:'Sua força aparece pra proteger quem você ama. Pode agir de forma indireta, mas quando é pela família, vira fera.',
+  jup:'cuida, acolhe e cria raízes', sat:'se proteger sem se fechar'},
+ {nome:'Leão', g:'♌', el:'Fogo', mod:'Fixo', reg:'Sol', datas:'23/07 a 22/08', pal:['radiante','generoso','criativo'],
+  sol:'Sol em casa: você nasceu pra brilhar e aquecer quem está por perto. Tem presença, coração enorme e talento natural pra criar, liderar e animar. Gosta de reconhecimento — e convenhamos, faz por merecer.',
+  lua:'Você se sente bem quando é visto e valorizado. Emoções intensas, dramáticas no melhor sentido, e uma lealdade que não cabe no peito.',
+  asc:'Impossível não notar: chega com estilo, sorriso e energia de protagonista. Passa confiança e calor humano.',
+  mer:'Fala com convicção e carisma — conta uma história como ninguém. Só cuidado com a dificuldade de admitir que errou.',
+  ven:'Ama com grandiosidade: presentes, declarações, romance de filme. E espera ser tratado como realeza também.',
+  mar:'Age com orgulho e coragem. Quando acredita em algo, defende com o coração inteiro e não desiste.',
+  jup:'se expressa, cria e se mostra', sat:'brilhar sem depender de plateia'},
+ {nome:'Virgem', g:'♍', el:'Terra', mod:'Mutável', reg:'Mercúrio', datas:'23/08 a 22/09', pal:['detalhista','prestativo','inteligente'],
+  sol:'Você enxerga o detalhe que todo mundo deixa passar — e sabe como melhorar. Prático, inteligente e prestativo, transforma caos em sistema. Seu amor aparece em gestos úteis: resolver, organizar, cuidar de quem ama.',
+  lua:'Você se acalma organizando: lista, rotina, tudo no lugar. Quando a ansiedade bate, a cabeça não desliga — descansar sem culpa é a sua magia a aprender.',
+  asc:'Passa uma imagem discreta, elegante e muito competente. Parece observar tudo antes de falar (e observa mesmo).',
+  mer:'Mercúrio em casa: mente analítica e precisa. Revisa, corrige e acha o erro de digitação no outdoor.',
+  ven:'Demonstra amor com atitudes: o café pronto, a ajuda no projeto, o lembrete do remédio. Precisa de alguém que valorize o cuidado nos detalhes.',
+  mar:'Trabalha com método e eficiência. Sua energia rende muito quando existe um plano bem feito.',
+  jup:'se dedica, aperfeiçoa e serve', sat:'aceitar que feito é melhor que perfeito'},
+ {nome:'Libra', g:'♎', el:'Ar', mod:'Cardinal', reg:'Vênus', datas:'23/09 a 22/10', pal:['charmoso','justo','elegante'],
+  sol:'Você vê os dois lados de tudo — e busca o ponto de equilíbrio. Charmoso, diplomático e com olho apurado pra beleza, deixa a vida mais elegante. Indecisão? É que você quer escolher com justiça.',
+  lua:'Você se sente bem quando as relações estão em paz. Briga e clima pesado te desestabilizam; beleza e boa companhia te devolvem o eixo.',
+  asc:'Chega com simpatia, gentileza e um estilo bonito. Sabe agradar, e as pessoas ficam à vontade com você na hora.',
+  mer:'Pensa pesando prós e contras e fala com tato. Ótimo mediador, péssimo pra escolher restaurante.',
+  ven:'Vênus em casa: romântico, charmoso, ama a vida a dois. Precisa de delicadeza, beleza e reciprocidade.',
+  mar:'Age em parceria e prefere negociar a brigar. Mas não se engane: diante de injustiça, você luta.',
+  jup:'se associa, negocia e cria beleza', sat:'dizer não sem culpa'},
+ {nome:'Escorpião', g:'♏', el:'Água', mod:'Fixo', reg:'Plutão e Marte', datas:'23/10 a 21/11', pal:['magnético','profundo','intenso'],
+  sol:'Você não faz nada pela metade. Intenso, magnético e profundo, enxerga o que está por trás das máscaras. Já renasceu algumas vezes nessa vida — e cada vez volta mais forte. Sua confiança se conquista.',
+  lua:'Emoções profundas e guardadas a sete chaves. Você sente tudo em dobro, precisa de lealdade total e não esquece uma traição.',
+  asc:'Passa mistério e um olhar que parece ler a alma. Pode intimidar no começo, mas atrai como ímã.',
+  mer:'Mente investigativa: descobre segredos, lê entrelinhas e vai até o fundo de qualquer assunto.',
+  ven:'Ama com paixão e entrega total. É tudo ou nada — morno não serve.',
+  mar:'Força estratégica e implacável. Você não desiste do que quer e sabe a hora exata de agir.',
+  jup:'mergulha fundo e se transforma', sat:'confiar e deixar ir'},
+ {nome:'Sagitário', g:'♐', el:'Fogo', mod:'Mutável', reg:'Júpiter', datas:'22/11 a 21/12', pal:['livre','otimista','aventureiro'],
+  sol:'Você é a flecha apontada pro horizonte. Otimista, divertido e sedento por sentido, quer viajar, aprender e viver tudo que a vida oferece. Sincero até demais — mas é dessa verdade que vem a sua graça.',
+  lua:'Você precisa de espaço e de algo em que acreditar. Quando se sente preso, a alma murcha; com uma aventura pela frente, tudo melhora.',
+  asc:'Chega rindo, com energia de quem acabou de voltar de viagem (ou está indo). Passa entusiasmo e franqueza.',
+  mer:'Pensa grande e fala sem filtro. Adora filosofar, ensinar e contar histórias — às vezes aumentando um pouquinho.',
+  ven:'No amor, quer um parceiro de aventura. Liberdade e bom humor são inegociáveis.',
+  mar:'Age com entusiasmo e fé. Ótimo pra começar projetos grandiosos — o desafio é manter o foco até o fim.',
+  jup:'viaja, estuda e acredita', sat:'se comprometer sem se sentir preso'},
+ {nome:'Capricórnio', g:'♑', el:'Terra', mod:'Cardinal', reg:'Saturno', datas:'22/12 a 19/01', pal:['ambicioso','responsável','resiliente'],
+  sol:'Você é quem chega ao topo da montanha — um passo firme de cada vez. Responsável, ambicioso e com um humor seco que pouca gente pega, constrói coisas que duram. E melhora com o tempo, igual vinho.',
+  lua:'Você guarda o que sente e resolve sozinho. Se sente seguro com controle e estrutura — mas também merece colo, viu?',
+  asc:'Passa seriedade, maturidade e competência. Parece mais velho quando jovem e mais jovem quando velho.',
+  mer:'Pensa de forma estratégica e prática. Fala pouco, mas cada palavra tem peso.',
+  ven:'Ama com compromisso e lealdade. Prova o amor com tempo, presença e planos de futuro.',
+  mar:'Marte exaltado: disciplina de atleta. Trabalha duro, aguenta pressão e não larga a meta.',
+  jup:'assume responsabilidades e constrói com disciplina', sat:'não medir seu valor só pelo que conquista'},
+ {nome:'Aquário', g:'♒', el:'Ar', mod:'Fixo', reg:'Urano e Saturno', datas:'20/01 a 18/02', pal:['original','independente','visionário'],
+  sol:'Você é do futuro. Original, independente e humanitário, pensa diferente e não tem medo de ser "estranho". Ama a humanidade — e às vezes precisa de distância das pessoas. Seus amigos são a sua família escolhida.',
+  lua:'Você processa emoções pela razão e precisa de liberdade até pra sentir. Pode parecer frio, mas é só um jeito diferente de amar.',
+  asc:'Chega com estilo único, ideias inesperadas e uma simpatia meio desapegada. Ninguém consegue te encaixar numa caixinha.',
+  mer:'Mente inventiva e visionária. Tem ideias geniais do nada e adora questionar o óbvio.',
+  ven:'No amor, precisa de amizade, liberdade e alguém que respeite a sua individualidade.',
+  mar:'Age por causas e ideais. Rebelde com motivo — e muito bom em quebrar regras ultrapassadas.',
+  jup:'inova, se conecta com grupos e pensa no coletivo', sat:'se abrir emocionalmente'},
+ {nome:'Peixes', g:'♓', el:'Água', mod:'Mutável', reg:'Netuno e Júpiter', datas:'19/02 a 20/03', pal:['sonhador','empático','artístico'],
+  sol:'Você é feito de sonho, arte e empatia. Sente o mundo inteiro na pele, tem uma intuição quase mágica e uma imaginação sem fronteiras. Parece distraído? É que você está em outro plano, captando coisas.',
+  lua:'Sensibilidade à flor da pele: você absorve as emoções do ambiente como esponja. Precisa de música, silêncio e momentos de fuga pra se limpar.',
+  asc:'Passa doçura, mistério e um olhar sonhador. As pessoas se abrem com você sem saber por quê.',
+  mer:'Pensa por imagens e intuições. Criativo e poético, entende até o que não foi dito.',
+  ven:'Vênus exaltada: amor romântico, devoto e incondicional. Você sonha com uma conexão de alma.',
+  mar:'Age guiado pela intuição e pela inspiração. Sua força é a sensibilidade — e a capacidade de se adaptar a qualquer maré.',
+  jup:'confia na intuição e se doa', sat:'colocar limites'}
+];
+const VS = '︎'; // força o símbolo em texto (não emoji)
+const COR_EL = {Fogo:'#ff5a3c', Terra:'#f0b24a', Ar:'#c08cff', 'Água':'#5f8bff'};
+const MSG_EL = {
+  Fogo:'Seu mapa pega fogo! Entusiasmo, coragem e iniciativa — você inspira e faz as coisas andarem.',
+  Terra:'Seu mapa tem os pés no chão: realismo, constância e mão na massa. Você transforma ideia em coisa real.',
+  Ar:'Seu mapa é puro vento: ideias, conversa e conexões. Sua mente está sempre em movimento.',
+  'Água':'Seu mapa é um oceano: intuição, emoção e profundidade. Você sente o que ninguém disse.'
+};
+const FALTA_EL = {
+  Fogo:'Pouco fogo: às vezes falta aquele empurrão — movimente o corpo e se dê permissão pra ousar.',
+  Terra:'Pouca terra: rotina e organização podem ser um desafio — pequenos rituais ajudam a aterrar.',
+  Ar:'Pouco ar: vale praticar falar o que sente e olhar as situações com mais distância.',
+  'Água':'Pouca água: as emoções podem ficar guardadas — deixe-se sentir sem pressa de resolver.'
+};
+const PLANETAS = [
+  {k:'Sun', n:'Sol', g:'☉'}, {k:'Moon', n:'Lua', g:'☽'}, {k:'Mercury', n:'Mercúrio', g:'☿'},
+  {k:'Venus', n:'Vênus', g:'♀'}, {k:'Mars', n:'Marte', g:'♂'}, {k:'Jupiter', n:'Júpiter', g:'♃'},
+  {k:'Saturn', n:'Saturno', g:'♄'}, {k:'Uranus', n:'Urano', g:'♅'}, {k:'Neptune', n:'Netuno', g:'♆'},
+  {k:'Pluto', n:'Plutão', g:'♇'}
+];
+const ORACULO = [
+  'O universo está te pedindo pra responder aquela mensagem. Sim, aquela.',
+  'Uma porta que parecia fechada vai abrir com um empurrãozinho seu.',
+  'Hoje a sua intuição está mais certa do que o seu medo.',
+  'Alguém está pensando em você agora — e é coisa boa.',
+  'Descanse sem culpa: até as estrelas têm dia nublado.',
+  'Um pequeno passo hoje vale mais que um plano perfeito pra amanhã.',
+  'Seu brilho incomoda quem não sabe brilhar. Continue.',
+  'Diga não pra uma coisa e sim pra você.',
+  'O dinheiro gosta de movimento: organize, cobre, ofereça.',
+  'Uma conversa sincera vai destravar algo que está parado há tempos.',
+  'Tem uma ideia sua que merece sair do papel este mês.',
+  'Proteja sua energia: nem todo mundo merece sua versão completa.',
+  'Algo que você perdeu volta de outro jeito, melhor.',
+  'Ria mais alto hoje. É ritual de proteção.',
+  'Você já é a pessoa que estava esperando chegar.',
+  'Peça ajuda. O universo adora mandar reforços quando você pede.'
+];
+
+/* Cidades locais (resultado instantâneo e reserva se a busca on-line falhar) */
+const CIDADES = [
+ ['São Paulo','SP','Brasil',-23.55,-46.63,'America/Sao_Paulo'],['Rio de Janeiro','RJ','Brasil',-22.91,-43.17,'America/Sao_Paulo'],
+ ['Belo Horizonte','MG','Brasil',-19.92,-43.94,'America/Sao_Paulo'],['Vitória','ES','Brasil',-20.32,-40.34,'America/Sao_Paulo'],
+ ['Curitiba','PR','Brasil',-25.43,-49.27,'America/Sao_Paulo'],['Florianópolis','SC','Brasil',-27.60,-48.55,'America/Sao_Paulo'],
+ ['Porto Alegre','RS','Brasil',-30.03,-51.23,'America/Sao_Paulo'],['Goiânia','GO','Brasil',-16.68,-49.25,'America/Sao_Paulo'],
+ ['Brasília','DF','Brasil',-15.79,-47.88,'America/Sao_Paulo'],['Campinas','SP','Brasil',-22.91,-47.06,'America/Sao_Paulo'],
+ ['Santos','SP','Brasil',-23.96,-46.33,'America/Sao_Paulo'],['Niterói','RJ','Brasil',-22.88,-43.10,'America/Sao_Paulo'],
+ ['Fortaleza','CE','Brasil',-3.72,-38.54,'America/Fortaleza'],['Natal','RN','Brasil',-5.79,-35.21,'America/Fortaleza'],
+ ['João Pessoa','PB','Brasil',-7.12,-34.86,'America/Fortaleza'],['Teresina','PI','Brasil',-5.09,-42.80,'America/Fortaleza'],
+ ['São Luís','MA','Brasil',-2.53,-44.30,'America/Fortaleza'],['Recife','PE','Brasil',-8.05,-34.88,'America/Recife'],
+ ['Maceió','AL','Brasil',-9.67,-35.74,'America/Maceio'],['Aracaju','SE','Brasil',-10.91,-37.07,'America/Maceio'],
+ ['Salvador','BA','Brasil',-12.97,-38.50,'America/Bahia'],['Feira de Santana','BA','Brasil',-12.27,-38.97,'America/Bahia'],
+ ['Belém','PA','Brasil',-1.46,-48.50,'America/Belem'],['Macapá','AP','Brasil',0.03,-51.07,'America/Belem'],
+ ['Palmas','TO','Brasil',-10.18,-48.33,'America/Araguaina'],['Manaus','AM','Brasil',-3.12,-60.02,'America/Manaus'],
+ ['Boa Vista','RR','Brasil',2.82,-60.67,'America/Boa_Vista'],['Porto Velho','RO','Brasil',-8.76,-63.90,'America/Porto_Velho'],
+ ['Rio Branco','AC','Brasil',-9.97,-67.81,'America/Rio_Branco'],['Cuiabá','MT','Brasil',-15.60,-56.10,'America/Cuiaba'],
+ ['Campo Grande','MS','Brasil',-20.47,-54.62,'America/Campo_Grande'],['Juazeiro do Norte','CE','Brasil',-7.21,-39.32,'America/Fortaleza'],
+ ['Caruaru','PE','Brasil',-8.28,-35.98,'America/Recife'],['Uberlândia','MG','Brasil',-18.92,-48.28,'America/Sao_Paulo'],
+ ['Lisboa','','Portugal',38.72,-9.14,'Europe/Lisbon'],['Porto','','Portugal',41.15,-8.61,'Europe/Lisbon'],
+ ['Nova York','NY','Estados Unidos',40.71,-74.01,'America/New_York'],['Miami','FL','Estados Unidos',25.76,-80.19,'America/New_York'],
+ ['Buenos Aires','','Argentina',-34.60,-58.38,'America/Argentina/Buenos_Aires'],['Luanda','','Angola',-8.84,13.23,'Africa/Luanda']
+].map(c=>({nome:c[0],uf:c[1],pais:c[2],lat:c[3],lon:c[4],tz:c[5]}));
+
+/* =====================================================================
+   UTILITÁRIOS
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const semAcento = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const norm360 = x => ((x % 360) + 360) % 360;
+const rad = d => d * Math.PI / 180, deg = r => r * 180 / Math.PI;
+const signoDe = lon => SIGNOS[Math.floor(norm360(lon) / 30)];
+const grauTxt = lon => { const g = norm360(lon) % 30; const gi = Math.floor(g); const m = Math.floor((g - gi) * 60); return `${gi}°${String(m).padStart(2,'0')}'`; };
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),2600); }
+
+/* Converte data/hora local de um fuso (IANA) em instante UTC, respeitando horário de verão histórico */
+function offsetMin(tz, utcMs){
+  const f = new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const p = {}; f.formatToParts(new Date(utcMs)).forEach(x => p[x.type] = x.value);
+  const comoUTC = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second);
+  return Math.round((comoUTC - utcMs) / 60000);
+}
+function localParaUTC(dataStr, horaStr, tz){
+  const [y,mo,d] = dataStr.split('-').map(Number); const [h,mi] = horaStr.split(':').map(Number);
+  const chute = Date.UTC(y, mo - 1, d, h, mi);
+  let off = offsetMin(tz, chute), utc = chute - off * 60000;
+  const off2 = offsetMin(tz, utc); if (off2 !== off) utc = chute - off2 * 60000;
+  return new Date(utc);
+}
+
+/* =====================================================================
+   CÁLCULO DO MAPA
+   ===================================================================== */
+function longitude(body, date){
+  const t = Astronomy.MakeTime(date);
+  if (body === 'Moon') return Astronomy.EclipticGeoMoon(t).lon;
+  if (body === 'Sun') return Astronomy.SunPosition(t).elon;
+  return Astronomy.Ecliptic(Astronomy.GeoVector(body, t, true)).elon;
+}
+function angulos(date, lat, lon){
+  const t = Astronomy.MakeTime(date);
+  const ramc = norm360(Astronomy.SiderealTime(t) * 15 + lon);
+  const eps = rad(Astronomy.e_tilt(t).tobl);
+  const r = rad(ramc), f = rad(lat);
+  const asc = norm360(deg(Math.atan2(Math.cos(r), -(Math.sin(r) * Math.cos(eps) + Math.tan(f) * Math.sin(eps)))));
+  const mc = norm360(deg(Math.atan2(Math.sin(r), Math.cos(r) * Math.cos(eps))));
+  return {asc, mc};
+}
+function calcularMapa(p){
+  const temHora = !!p.h;
+  const date = localParaUTC(p.d, temHora ? p.h : '12:00', p.tz);
+  const amanha = new Date(date.getTime() + 86400000);
+  const pos = {};
+  PLANETAS.forEach(pl => {
+    const l = longitude(pl.k, date);
+    let retro = false;
+    if (!['Sun','Moon'].includes(pl.k)) { let dl = norm360(longitude(pl.k, amanha) - l); retro = dl > 180; }
+    pos[pl.k] = {lon:l, signo:signoDe(l), retro};
+  });
+  const mapa = {p, date, temHora, pos};
+  if (temHora) Object.assign(mapa, angulos(date, p.la, p.lo));
+  else {
+    // Sem hora: confere se a Lua troca de signo ao longo do dia
+    const ini = localParaUTC(p.d, '00:00', p.tz), fim = localParaUTC(p.d, '23:59', p.tz);
+    const s1 = signoDe(longitude('Moon', ini)), s2 = signoDe(longitude('Moon', fim));
+    if (s1 !== s2) mapa.luaDuvida = [s1, s2];
+  }
+  return mapa;
+}
+
+/* =====================================================================
+   RODA DO MAPA (SVG)
+   ===================================================================== */
+function rodaSVG(m){
+  const ref = m.temHora ? m.asc : 0;
+  const ponto = (lon, r) => { const a = rad(180 + (lon - ref)); return [r * Math.cos(a), -r * Math.sin(a)]; };
+  let s = `<svg viewBox="-210 -210 420 420" role="img" aria-label="Roda do mapa astral">
+    <defs><radialGradient id="fundo"><stop offset="0" stop-color="#3a1166"/><stop offset="1" stop-color="#14061f"/></radialGradient></defs>
+    <circle r="205" fill="url(#fundo)" stroke="rgba(255,210,122,.5)" stroke-width="1.2"/>`;
+  for (let i = 0; i < 12; i++){
+    const sg = SIGNOS[i], cor = COR_EL[sg.el];
+    const [x1,y1] = ponto(i*30,195), [x2,y2] = ponto(i*30+30,195), [x3,y3] = ponto(i*30+30,150), [x4,y4] = ponto(i*30,150);
+    s += `<path d="M${x1} ${y1} A195 195 0 0 0 ${x2} ${y2} L${x3} ${y3} A150 150 0 0 1 ${x4} ${y4}Z" fill="${cor}" fill-opacity=".16" stroke="rgba(255,210,122,.35)" stroke-width=".8"/>`;
+    const [gx,gy] = ponto(i*30+15,172);
+    s += `<text x="${gx}" y="${gy}" text-anchor="middle" dominant-baseline="central" font-size="20" fill="${cor}">${sg.g+VS}</text>`;
+  }
+  for (let d = 0; d < 360; d += 5){ const [a,b] = ponto(d,150), [c,e] = ponto(d, d%30===0?140:145); s += `<line x1="${a}" y1="${b}" x2="${c}" y2="${e}" stroke="rgba(255,210,122,.4)" stroke-width=".7"/>`; }
+  s += `<circle r="150" fill="none" stroke="rgba(255,210,122,.45)"/><circle r="62" fill="rgba(20,6,31,.6)" stroke="rgba(255,210,122,.25)"/>`;
+  if (m.temHora){
+    const [a1,b1] = ponto(m.asc,150), [a2,b2] = ponto(m.asc+180,150), [m1,n1] = ponto(m.mc,150), [m2,n2] = ponto(m.mc+180,150);
+    s += `<line x1="${a1}" y1="${b1}" x2="${a2}" y2="${b2}" stroke="#ff9a3d" stroke-width="1.6"/>`;
+    s += `<line x1="${m1}" y1="${n1}" x2="${m2}" y2="${n2}" stroke="#ff2e63" stroke-width="1.2" stroke-dasharray="4 4"/>`;
+    const [ax,ay] = ponto(m.asc,128), [mx,my] = ponto(m.mc,128);
+    s += `<text x="${ax}" y="${ay}" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="800" fill="#ff9a3d" font-family="Manrope">ASC</text>`;
+    s += `<text x="${mx}" y="${my}" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="800" fill="#ff2e63" font-family="Manrope">MC</text>`;
+  }
+  // planetas, evitando sobreposição
+  const lista = PLANETAS.map(pl => ({...pl, lon:m.pos[pl.k].lon})).sort((a,b) => a.lon - b.lon);
+  let ultimo = -99, nivel = 0;
+  lista.forEach(pl => { nivel = (pl.lon - ultimo < 9) ? (nivel + 1) % 3 : 0; ultimo = pl.lon; pl.r = 118 - nivel * 22; });
+  lista.forEach(pl => {
+    const [x,y] = ponto(pl.lon, pl.r), [tx,ty] = ponto(pl.lon,150), [ux,uy] = ponto(pl.lon,141);
+    const cor = pl.k==='Sun' ? '#ffb347' : pl.k==='Moon' ? '#e9d6ff' : '#fff';
+    s += `<line x1="${tx}" y1="${ty}" x2="${ux}" y2="${uy}" stroke="${cor}" stroke-width="2"/>`;
+    s += `<circle cx="${x}" cy="${y}" r="12" fill="#1d0833" stroke="${cor}" stroke-opacity=".6"/>`;
+    s += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-size="15" fill="${cor}">${pl.g+VS}</text>`;
+  });
+  s += `<text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-size="26" fill="#ffd27a">✦</text></svg>`;
+  return s;
+}
+
+/* =====================================================================
+   TELAS
+   ===================================================================== */
+const telas = ['#telaForm','#telaCarregando','#telaResultado','#telaCompat'];
+function mostrar(id){ telas.forEach(t => $(t).classList.toggle('oculto', t !== id)); window.scrollTo({top:0, behavior:'smooth'}); }
+
+function dataBR(d){ const [y,m,dd] = d.split('-'); return `${dd}/${m}/${y}`; }
+
+function cardAstro(rot, sg, texto, extra, atraso){
+  return `<article class="astro" style="--cor:${COR_EL[sg.el]};animation-delay:${atraso}s">
+    <div class="glifo">${sg.g+VS}</div>
+    <div class="rot">${rot}</div>
+    <h3 class="cinzel">${sg.nome}</h3>
+    <div class="tags">${sg.el} · ${sg.mod} · regente ${sg.reg}</div>
+    <p>${texto}</p>${extra||''}
+  </article>`;
+}
+
+function contarElementos(m){
+  const cont = {Fogo:0, Terra:0, Ar:0, 'Água':0};
+  // pesos: Sol, Lua e Ascendente valem mais
+  const pesos = {Sun:3, Moon:3, Mercury:1, Venus:1, Mars:1, Jupiter:1, Saturn:1};
+  Object.entries(pesos).forEach(([k,w]) => cont[m.pos[k].signo.el] += w);
+  if (m.temHora) cont[signoDe(m.asc).el] += 3;
+  return cont;
+}
+
+let mapaAtual = null;
+function renderResultado(m){
+  mapaAtual = m;
+  const p = m.p, sol = m.pos.Sun.signo, lua = m.pos.Moon.signo, asc = m.temHora ? signoDe(m.asc) : null;
+  const pal = [sol.pal[0], lua.pal[1], (asc || m.pos.Venus.signo).pal[2]];
+  const resumo = `☉ ${sol.nome} · ☽ ${lua.nome}${asc ? ' · ↑ ' + asc.nome : ''}`;
+  let h = `<div class="ola">
+      <span class="selo cinzel" style="color:var(--dourado);font-size:13px;letter-spacing:.25em">O CÉU DE</span>
+      <h2 class="grad">${esc(p.n)}</h2>
+      <div class="dados">${dataBR(p.d)}${m.temHora ? ' às ' + p.h : ' · horário desconhecido'} · ${esc(p.c)}</div>
+      <div class="vibe">${pal.map(x => `<span>${x}</span>`).join('')}</div>
+    </div>
+    <div class="big3">`;
+  h += cardAstro('Sol · sua essência', sol, sol.sol, `<div class="nota">${grauTxt(m.pos.Sun.lon)} de ${sol.nome}</div>`, 0);
+  let notaLua = `<div class="nota">${grauTxt(m.pos.Moon.lon)} de ${lua.nome}</div>`;
+  if (m.luaDuvida) notaLua = `<div class="nota">Sem o horário exato, a Lua pode estar em ${m.luaDuvida[0].nome} ou ${m.luaDuvida[1].nome} — ela trocou de signo nesse dia. Descobrindo a hora, a leitura fica precisa.</div>`;
+  h += cardAstro('Lua · suas emoções', lua, lua.lua, notaLua, .15);
+  if (asc) h += cardAstro('Ascendente · como te veem', asc, asc.asc, `<div class="nota">${grauTxt(m.asc)} de ${asc.nome}</div>`, .3);
+  else h += `<article class="astro" style="animation-delay:.3s"><div class="glifo">?</div><div class="rot">Ascendente · como te veem</div><h3 class="cinzel">Mistério…</h3><p>O Ascendente muda a cada ~2 horas, então precisa do horário de nascimento. Dica: ele costuma estar na certidão de nascimento ou na caderneta da maternidade.</p></article>`;
+  h += `</div>`;
+
+  h += `<div class="secao"><h3 class="cinzel grad">A roda do seu céu</h3><p>Como os planetas estavam posicionados no instante em que você chegou</p></div>
+        <div class="roda-mapa">${rodaSVG(m)}</div>`;
+
+  h += `<div class="secao"><h3 class="cinzel grad">Seus planetas pessoais</h3><p>Como você pensa, ama, age, cresce e amadurece</p></div><div class="planetas">`;
+  const pessoais = [
+    ['Mercury','Mercúrio','mente e comunicação', s => s.mer],
+    ['Venus','Vênus','amor e prazer', s => s.ven],
+    ['Mars','Marte','ação e desejo', s => s.mar],
+    ['Jupiter','Júpiter','sorte e expansão', s => `Sua sorte cresce quando você ${s.jup}.`],
+    ['Saturn','Saturno','lições e maturidade', s => `Sua grande lição: ${s.sat}. Quando você domina isso, vira sua fortaleza.`]
+  ];
+  pessoais.forEach(([k,n,tema,fn]) => {
+    const pp = m.pos[k], g = PLANETAS.find(x => x.k === k).g;
+    h += `<div class="pl"><div class="g">${g+VS}</div><div><b>${n} em ${pp.signo.nome} ${pp.signo.g+VS}${pp.retro ? '<em>retrógrado</em>' : ''}</b><span><small style="color:var(--suave);text-transform:uppercase;letter-spacing:.08em;font-size:11px;font-weight:700">${tema}</small><br>${fn(pp.signo)}</span></div></div>`;
+  });
+  h += `</div>`;
+
+  const cont = contarElementos(m), total = Object.values(cont).reduce((a,b)=>a+b,0);
+  const ord = Object.entries(cont).sort((a,b) => b[1]-a[1]);
+  h += `<div class="secao"><h3 class="cinzel grad">Seu equilíbrio de elementos</h3><p>Sol, Lua e Ascendente pesam mais</p></div><div class="painel"><div class="elementos">`;
+  Object.entries(cont).forEach(([el,v]) => h += `<div class="el"><span style="color:${COR_EL[el]}">${el}</span><div class="barra"><i data-w="${Math.round(v/total*100)}" style="background:${COR_EL[el]}"></i></div><span>${Math.round(v/total*100)}%</span></div>`);
+  h += `</div><div class="el-msg">${MSG_EL[ord[0][0]]}${ord[3][1] <= 1 ? '<br><br>' + FALTA_EL[ord[3][0]] : ''}</div></div>`;
+
+  h += `<div class="secao"><h3 class="cinzel grad">Carta do oráculo</h3><p>Toque na carta e receba um recado do cosmos</p></div>
+    <div class="oraculo"><div class="carta" id="carta" role="button" tabindex="0" aria-label="Virar carta do oráculo"><div class="face frente"><div><span>✦</span>Toque para revelar</div></div><div class="face verso" id="cartaVerso"></div></div></div>`;
+
+  h += `<div class="acoes" style="margin-top:30px">
+      <button class="btn" id="btnCompartilhar">Compartilhar meu mapa ↗</button>
+      <button class="btn ghost" id="btnCompat">Comparar com alguém ♡</button>
+      <button class="btn ghost" id="btnZap">Mandar no WhatsApp</button>
+      <button class="btn ghost" id="btnNovo">Ver o céu de outra pessoa</button>
+    </div>`;
+  $('#telaResultado').innerHTML = h;
+  mostrar('#telaResultado');
+  setTimeout(() => document.querySelectorAll('.barra i').forEach(i => i.style.width = i.dataset.w + '%'), 200);
+
+  const carta = $('#carta');
+  const virar = () => {
+    if (carta.classList.contains('virada')) { carta.classList.remove('virada'); return; }
+    $('#cartaVerso').textContent = ORACULO[Math.floor(Math.random() * ORACULO.length)];
+    carta.classList.add('virada');
+  };
+  carta.onclick = virar; carta.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); virar(); } };
+  $('#btnCompartilhar').onclick = () => compartilhar(linkDe(p), `Meu céu: ${resumo} ✦ Descubra o seu:`);
+  $('#btnZap').onclick = () => window.open('https://wa.me/?text=' + encodeURIComponent(`✦ ${p.n} — ${resumo}\nDescubra o seu mapa: ${linkDe(p)}`), '_blank');
+  $('#btnCompat').onclick = () => abrirForm('compat');
+  $('#btnNovo').onclick = () => { history.replaceState(null,'',location.pathname); abrirForm('novo'); };
+}
+
+/* =====================================================================
+   COMPATIBILIDADE
+   ===================================================================== */
+function relacao(e1, e2){
+  if (e1 === e2) return {pts:95, txt:`Mesmo elemento (${e1}): vocês falam a mesma língua cósmica — entendimento quase imediato.`};
+  const par = [e1,e2].sort().join('+');
+  if (par === 'Ar+Fogo' || par === 'Terra+Água') return {pts:85, txt:`${e1} e ${e2} se alimentam: um dá força pro outro crescer.`};
+  if (par === 'Fogo+Terra' || par === 'Ar+Água') return {pts:65, txt:`${e1} e ${e2} têm ritmos diferentes — dá pra aprender muito um com o outro.`};
+  return {pts:52, txt:`${e1} e ${e2}: faísca garantida! Exige paciência, mas pode ser transformador.`};
+}
+function renderCompat(a, b){
+  const rs = relacao(a.pos.Sun.signo.el, b.pos.Sun.signo.el);
+  const rl = relacao(a.pos.Moon.signo.el, b.pos.Moon.signo.el);
+  const rv1 = relacao(a.pos.Venus.signo.el, b.pos.Mars.signo.el), rv2 = relacao(b.pos.Venus.signo.el, a.pos.Mars.signo.el);
+  const score = Math.round(rs.pts * .35 + rl.pts * .30 + (rv1.pts + rv2.pts) / 2 * .35);
+  const frase = score >= 85 ? 'Conexão de outras vidas ✦' : score >= 72 ? 'Combinação poderosa' : score >= 62 ? 'Parceria que faz crescer' : 'Química explosiva (no bom sentido)';
+  const linha = (t, sa, sb, r) => `<div class="pl"><div class="g">${t[0]}</div><div><b>${t[1]}: ${sa.nome} ${sa.g+VS} × ${sb.nome} ${sb.g+VS}</b><span>${r.txt}</span></div></div>`;
+  let h = `<div class="ola"><span class="cinzel" style="color:var(--dourado);font-size:13px;letter-spacing:.25em">COMBINAÇÃO CÓSMICA</span>
+    <div class="compat-par" style="margin-top:12px"><span class="grad">${esc(a.p.n)}</span><span class="x">♡</span><span class="grad">${esc(b.p.n)}</span></div></div>
+    <div class="painel compat-score"><div class="num grad">${score}%</div><div class="cinzel" style="font-size:18px;margin-top:6px">${frase}</div></div>
+    <div class="planetas">
+      ${linha(['☉'+VS,'Essência (Sol)'], a.pos.Sun.signo, b.pos.Sun.signo, rs)}
+      ${linha(['☽'+VS,'Emoções (Lua)'], a.pos.Moon.signo, b.pos.Moon.signo, rl)}
+      ${linha(['♀'+VS,`Química (Vênus de ${a.p.n.split(' ')[0]} × Marte de ${b.p.n.split(' ')[0]})`].map(esc), a.pos.Venus.signo, b.pos.Mars.signo, rv1)}
+      ${linha(['♂'+VS,`Química (Vênus de ${b.p.n.split(' ')[0]} × Marte de ${a.p.n.split(' ')[0]})`].map(esc), b.pos.Venus.signo, a.pos.Mars.signo, rv2)}
+    </div>
+    <p style="text-align:center;color:var(--suave);font-size:13px;margin-top:14px">Lembrete das estrelas: o céu mostra tendências, quem constrói a relação são vocês. ♡</p>
+    <div class="acoes">
+      <button class="btn" id="cCompartilhar">Compartilhar ↗</button>
+      <button class="btn ghost" id="cZap">Mandar no WhatsApp</button>
+      <button class="btn ghost" id="cVerB">Ver o mapa de ${esc(b.p.n.split(' ')[0])}</button>
+      <button class="btn ghost" id="cVoltar">Voltar pro mapa de ${esc(a.p.n.split(' ')[0])}</button>
+    </div>`;
+  $('#telaCompat').innerHTML = h;
+  mostrar('#telaCompat');
+  const url = linkDe(a, b), txt = `${a.p.n} ♡ ${b.p.n}: ${score}% de combinação cósmica ✦`;
+  $('#cCompartilhar').onclick = () => compartilhar(url, txt);
+  $('#cZap').onclick = () => window.open('https://wa.me/?text=' + encodeURIComponent(`${txt}\nVeja: ${url}`), '_blank');
+  $('#cVerB').onclick = () => { history.replaceState(null,'',linkDe(b.p)); renderResultado(b); };
+  $('#cVoltar').onclick = () => { history.replaceState(null,'',linkDe(a.p)); renderResultado(a); };
+}
+
+/* =====================================================================
+   LINKS E COMPARTILHAMENTO
+   ===================================================================== */
+function paramsDe(p, suf){ const o = {}; o['n'+suf]=p.n; o['d'+suf]=p.d; if (p.h) o['h'+suf]=p.h; o['c'+suf]=p.c; o['la'+suf]=p.la.toFixed(3); o['lo'+suf]=p.lo.toFixed(3); o['tz'+suf]=p.tz; return o; }
+function linkDe(p, q){
+  if (p.p) p = p.p; if (q && q.p) q = q.p;
+  const sp = new URLSearchParams(paramsDe(p,''));
+  if (q) Object.entries(paramsDe(q,'2')).forEach(([k,v]) => sp.set(k,v));
+  return location.origin + location.pathname + '?' + sp.toString();
+}
+function lerPessoa(sp, suf){
+  const n = sp.get('n'+suf), d = sp.get('d'+suf), la = parseFloat(sp.get('la'+suf)), lo = parseFloat(sp.get('lo'+suf)), tz = sp.get('tz'+suf);
+  if (!n || !/^\d{4}-\d{2}-\d{2}$/.test(d||'') || isNaN(la) || isNaN(lo) || !tz) return null;
+  try { new Intl.DateTimeFormat('en-US',{timeZone:tz}); } catch(e){ return null; }
+  const h = sp.get('h'+suf); return {n:n.slice(0,40), d, h: /^\d{2}:\d{2}$/.test(h||'') ? h : '', c:(sp.get('c'+suf)||'').slice(0,80), la, lo, tz};
+}
+async function compartilhar(url, texto){
+  if (navigator.share) { try { await navigator.share({title:'Mapa Relâmpago', text:texto, url}); return; } catch(e){ if (e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(texto + ' ' + url); toast('Link copiado! É só colar e mandar ✦'); }
+  catch(e){ prompt('Copie o link:', url); }
+}
+
+/* =====================================================================
+   FORMULÁRIO + BUSCA DE CIDADE
+   ===================================================================== */
+let cidadeSel = null, modo = 'novo';
+function abrirForm(m){
+  modo = m; cidadeSel = null;
+  $('#form').reset(); $('#hora').disabled = false; $('#cidadeOk').textContent = ''; $('#erro').textContent = '';
+  $('#formTitulo').textContent = m === 'compat' ? `Com quem ${mapaAtual.p.n.split(' ')[0]} vai combinar?` : 'De quem é esse céu?';
+  $('#btnRevelar').textContent = m === 'compat' ? 'Ver a combinação ♡' : 'Revelar o céu ✦';
+  $('#btnCancelarCompat').classList.toggle('oculto', m !== 'compat');
+  mostrar('#telaForm');
+  setTimeout(() => $('#nome').focus(), 350);
+}
+$('#btnCancelarCompat').onclick = () => renderResultado(mapaAtual);
+$('#semHora').onchange = e => { $('#hora').disabled = e.target.checked; if (e.target.checked) $('#hora').value = ''; };
+
+const inpCidade = $('#cidade'), boxSug = $('#sugestoes');
+let buscaTimer, buscaId = 0;
+function rotuloCidade(c){ return c.nome + (c.uf ? ', ' + c.uf : '') + (c.pais ? ' · ' + c.pais : ''); }
+function mostrarSug(lista){
+  if (!lista.length) { boxSug.classList.add('oculto'); inpCidade.setAttribute('aria-expanded','false'); return; }
+  boxSug.innerHTML = lista.map((c,i) => `<button type="button" role="option" data-i="${i}">${esc(c.nome)} <small>${esc([c.uf, c.pais].filter(Boolean).join(' · '))}</small></button>`).join('');
+  boxSug.classList.remove('oculto'); inpCidade.setAttribute('aria-expanded','true');
+  boxSug.querySelectorAll('button').forEach(b => b.onclick = () => escolherCidade(lista[+b.dataset.i]));
+}
+function escolherCidade(c){
+  cidadeSel = c; inpCidade.value = rotuloCidade(c); boxSug.classList.add('oculto'); inpCidade.setAttribute('aria-expanded','false');
+  $('#cidadeOk').textContent = `✓ ${c.lat.toFixed(2)}°, ${c.lon.toFixed(2)}° · fuso ${c.tz.replace('_',' ')}`;
+}
+function locais(q){ const s = semAcento(q); return CIDADES.filter(c => semAcento(c.nome).startsWith(s) || semAcento(c.nome).includes(' ' + s)).slice(0,5); }
+inpCidade.addEventListener('input', () => {
+  cidadeSel = null; $('#cidadeOk').textContent = '';
+  const q = inpCidade.value.trim(); clearTimeout(buscaTimer);
+  if (q.length < 2) { mostrarSug([]); return; }
+  const loc = locais(q); mostrarSug(loc);
+  buscaTimer = setTimeout(async () => {
+    const id = ++buscaId;
+    try {
+      const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=8&language=pt&format=json`);
+      const j = await r.json(); if (id !== buscaId) return;
+      const on = (j.results || []).filter(x => x.timezone).map(x => ({nome:x.name, uf:x.admin1 || '', pais:x.country || '', lat:x.latitude, lon:x.longitude, tz:x.timezone}));
+      if (on.length) mostrarSug(on);
+    } catch(e) { /* sem internet: ficam as cidades locais */ }
+  }, 300);
+});
+inpCidade.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { const b = boxSug.querySelector('button'); if (b) { e.preventDefault(); b.focus(); } }
+  if (e.key === 'Enter' && !boxSug.classList.contains('oculto')) { const b = boxSug.querySelector('button'); if (b) { e.preventDefault(); b.click(); } }
+});
+boxSug.addEventListener('keydown', e => {
+  const bs = [...boxSug.querySelectorAll('button')], i = bs.indexOf(document.activeElement);
+  if (e.key === 'ArrowDown' && i < bs.length - 1) { e.preventDefault(); bs[i+1].focus(); }
+  if (e.key === 'ArrowUp') { e.preventDefault(); (i > 0 ? bs[i-1] : inpCidade).focus(); }
+  if (e.key === 'Escape') { boxSug.classList.add('oculto'); inpCidade.focus(); }
+});
+document.addEventListener('click', e => { if (!e.target.closest('.campo')) boxSug.classList.add('oculto'); });
+
+const FRASES = ['Consultando as estrelas…','Alinhando os planetas…','Calculando seu ascendente…','Lendo a Lua…'];
+$('#form').addEventListener('submit', e => {
+  e.preventDefault();
+  const n = $('#nome').value.trim(), d = $('#data').value, semHora = $('#semHora').checked, h = $('#hora').value;
+  const erro = msg => { $('#erro').textContent = msg; };
+  if (!n) return erro('Qual é o nome? ✦');
+  if (!d) return erro('Falta a data de nascimento.');
+  const ano = +d.slice(0,4); if (ano < 1900 || ano > 2100) return erro('Use uma data entre 1900 e 2100.');
+  if (!semHora && !h) return erro('Coloque o horário — ou marque "Não sei o horário".');
+  if (!cidadeSel) return erro('Escolha a cidade na lista que aparece ao digitar.');
+  erro('');
+  const p = {n, d, h: semHora ? '' : h, c: rotuloCidade(cidadeSel).split(' · ')[0], la: cidadeSel.lat, lo: cidadeSel.lon, tz: cidadeSel.tz};
+  mostrar('#telaCarregando');
+  let i = 0; const iv = setInterval(() => $('#msgCarregando').textContent = FRASES[++i % FRASES.length], 450);
+  setTimeout(() => {
+    clearInterval(iv);
+    try {
+      const m = calcularMapa(p);
+      if (modo === 'compat' && mapaAtual) { history.replaceState(null,'',linkDe(mapaAtual.p, p)); renderCompat(mapaAtual, m); }
+      else { history.replaceState(null,'',linkDe(p)); renderResultado(m); }
+    } catch(err) { console.error(err); mostrar('#telaForm'); erro('Ops, as estrelas se embaralharam. Confira os dados e tente de novo.'); }
+  }, 1600);
+});
+
+/* =====================================================================
+   INÍCIO
+   ===================================================================== */
+(function ceu(){
+  const c = $('#ceu'); let h = '';
+  for (let i = 0; i < 90; i++) h += `<i style="left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--a:${Math.random()*4}s;${Math.random()<.15?'width:3px;height:3px;':''}"></i>`;
+  h += `<i class="cometa" style="left:80%;top:12%"></i>`;
+  c.innerHTML = h;
+})();
+(function iniciar(){
+  const sp = new URLSearchParams(location.search);
+  const a = lerPessoa(sp,''), b = lerPessoa(sp,'2');
+  try {
+    if (a && b) { const ma = calcularMapa(a); mapaAtual = ma; renderCompat(ma, calcularMapa(b)); return; }
+    if (a) { renderResultado(calcularMapa(a)); return; }
+  } catch(e) { console.error(e); }
+  mostrar('#telaForm');
+})();
+</script>
+</body>
+</html>
