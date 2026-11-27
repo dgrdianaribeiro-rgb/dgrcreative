@@ -101,6 +101,8 @@ select.sort{height:34px;border-radius:var(--r-pill);border:1px solid var(--line)
 .meta span:last-child{text-transform:none;letter-spacing:0;font-weight:500}
 .name{font-weight:600;font-size:14px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
 .prices{display:flex;flex-direction:column;gap:0}
+.cada{font-family:var(--f-body);font-size:12px;font-weight:500;color:var(--muted)}
+.more{display:flex;justify-content:center;padding-block:4px 20px}
 .was{color:var(--muted);text-decoration:line-through;font-size:12.5px}
 .now{font-family:var(--f-head);font-weight:800;font-size:19px;color:var(--ink);letter-spacing:-.01em}
 .card.sale .now{color:var(--primary)}
@@ -221,6 +223,7 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
     </div>
   </section>
   <section class="grid" id="grid" aria-live="polite"></section>
+  <div class="more" id="more"></div>
   <footer class="foot" id="foot"></footer>
 </main>
 
@@ -265,11 +268,29 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
   const fmtData = iso => { if(!iso) return ""; const [y,m,d]=iso.split("-"); return d+"/"+m; };
   const hoje = new Date(); hoje.setHours(0,0,0,0);
 
+  const MIN = new Set(["de","da","do","das","dos","e","em","com","para","por","a","o","ao","à","no","na"]);
+  const UNID = new Set(["ml","g","kg","cm","un.","l"]);
+  const SIGLAS = new Set(["FPS","EDP","EDT","UV","CC","BB","II","III","N/NE","3D","MEN","SPA"]);
+  function bonito(n){
+    const i = n.indexOf(" – ");
+    if (i>0) return bonito(n.slice(0,i)) + " – " + n.slice(i+3).charAt(0).toUpperCase() + n.slice(i+4);
+    const up=(n.match(/\p{Lu}/gu)||[]).length, lo=(n.match(/\p{Ll}/gu)||[]).length;
+    if (lo > up*0.4) return n;
+    return n.split(" ").map((w,i)=>{
+      const lw = w.toLowerCase();
+      if (SIGLAS.has(w.replace(/[,.]/g,""))) return w;
+      if (/\d/.test(w)) return lw;
+      if (UNID.has(lw.replace(/,$/,""))) return lw;
+      if (i>0 && MIN.has(lw)) return lw;
+      return lw.replace(/^(\p{L})/u,c=>c.toUpperCase()).replace(/([-'’])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());
+    }).join(" ");
+  }
   const produtos = (DATA.produtos||[]).map(p=>{
     const promo = (p.promo!=null && p.promo<p.preco) ? p.promo : null;
     const desconto = promo ? Math.round((1-promo/p.preco)*100) : 0;
     const ciclo = (DATA.ciclos||{})[p.marca] || null;
     return Object.assign({}, p, {
+      nome: bonito(p.nome),
       id: p.marca+"|"+p.codigo, promo, desconto,
       precoFinal: promo ?? p.preco,
       imperdivel: desconto >= CFG.limiteImperdivel,
@@ -290,6 +311,8 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
 
   /* ---------- cabeçalho ---------- */
   const primeiroNome = CFG.nomeVendedora.split(" ")[0];
+  const marcasPresentes = MARCAS.filter(m=>produtos.some(p=>p.marca===m));
+  $("#subtitulo").textContent = marcasPresentes.join(" · ");
   $("#titulo").textContent = "Promoções da " + primeiroNome;
   $("#avatar").textContent = primeiroNome.charAt(0).toUpperCase();
   const fones = CFG.whatsapp && !/^5500+$/.test(CFG.whatsapp);
@@ -353,7 +376,7 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
           <div class="name">${esc(p.nome)}</div>
           <div class="prices">
             ${p.promo?`<span class="was num">${brl.format(p.preco)}</span>`:`<span class="was" style="text-decoration:none">&nbsp;</span>`}
-            <span class="now num">${brl.format(p.precoFinal)}</span>
+            <span class="now num">${brl.format(p.precoFinal)}${p.cada?' <small class="cada">cada</small>':''}</span>
           </div>
         </div>
       </button>
@@ -362,16 +385,18 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
         : `<button class="btn soft block" data-inc="${esc(p.id)}">Adicionar</button>`}</div>
     </article>`;
   }
+  let limite = 40;
   function renderGrid(){
     const l = filtrados();
     $("#count").textContent = l.length + (l.length===1?" produto":" produtos");
-    $("#grid").innerHTML = l.length ? l.map(cardHTML).join("") :
+    $("#more").innerHTML = l.length>limite ? `<button class="btn soft" id="verMais">Ver mais ${Math.min(40,l.length-limite)} de ${l.length-limite} restantes</button>` : "";
+    $("#grid").innerHTML = l.length ? l.slice(0,limite).map(cardHTML).join("") :
       `<div class="empty" style="grid-column:1/-1"><h3>Nenhum produto encontrado</h3><p>Tente outro nome, outro código ou limpe os filtros.</p><button class="btn soft" id="limpar">Limpar filtros</button></div>`;
   }
   function renderFoot(){
     const linhas = MARCAS.filter(m=>DATA.ciclos&&DATA.ciclos[m]).map(m=>{
       const c=DATA.ciclos[m]; return `<span>${esc(m)}: ${esc(c.nome)}, válido até ${fmtData(c.validoAte)}</span>`;});
-    $("#foot").innerHTML = linhas.join("") + `<span>Preços válidos durante o ciclo de cada revista ou enquanto durar o estoque.</span>`;
+    $("#foot").innerHTML = linhas.join("") + `<span>Preços válidos durante o ciclo de cada revista ou enquanto durar o estoque. Se houver diferença, vale o preço da revista. Imagens meramente ilustrativas.</span>`;
   }
 
   /* ---------- cestinha ---------- */
@@ -471,6 +496,7 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
         <dt>Código</dt><dd class="num">${esc(p.codigo)}<button class="copy" data-copy="${esc(p.codigo)}">Copiar</button></dd>
         <dt>Categoria</dt><dd>${esc(p.categoria)}</dd>
         ${p.ciclo?`<dt>Revista</dt><dd>${esc(p.ciclo.nome)}, válida até ${fmtData(p.ciclo.validoAte)}</dd>`:""}
+        ${p.pagina?`<dt>Na revista</dt><dd>${esc(p.pagina)}</dd>`:""}
         ${p.promo?`<dt>Economia</dt><dd style="color:var(--ok)" class="num">${brl.format(p.preco-p.promo)}</dd>`:""}
       </dl>
       ${p.imperdivel?`<div class="notice warn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg><span><b>Oferta imperdível com estoque limitado.</b> Consulte ${esc(primeiroNome)} para saber se ainda há este item.</span></div>`:""}`;
@@ -506,6 +532,7 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
     if (el.hasAttribute("data-close")){ fechar(); return; }
     if (el.dataset.copy){ const v=el.dataset.copy; (navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>toast("Código copiado"),()=>toast("Código: "+v)); return; }
     if (el.id==="openCart"){ renderCesta(); abrir($("#sheetCesta")); return; }
+    if (el.id==="verMais"){ limite+=40; renderGrid(); return; }
     if (el.id==="esvaziar"){ cesta={}; salvar(); renderGrid(); renderCartBar(); renderCesta(); toast("Cestinha esvaziada"); return; }
     if (el.id==="limpar"){ state.q=""; $("#q").value=""; state.marca="Todas"; state.categoria="Todas"; render(); return; }
     if (el.id==="tab-promo"||el.id==="tab-todos"){
@@ -519,10 +546,10 @@ label.field input:focus,label.field textarea:focus{border-color:var(--primary)}
   });
   $("#scrim").addEventListener("click",()=>fechar());
   document.addEventListener("keydown",e=>{ if(e.key==="Escape") fechar(); });
-  $("#q").addEventListener("input",e=>{ state.q=e.target.value; renderGrid(); });
-  $("#sort").addEventListener("change",e=>{ state.sort=e.target.value; renderGrid(); });
+  $("#q").addEventListener("input",e=>{ state.q=e.target.value; limite=40; renderGrid(); });
+  $("#sort").addEventListener("change",e=>{ state.sort=e.target.value; limite=40; renderGrid(); });
 
-  function render(){ renderAvisos(); renderChips(); renderGrid(); }
+  function render(){ limite=40; renderAvisos(); renderChips(); renderGrid(); }
   render(); renderFoot(); renderCartBar();
 })();
 </script>
